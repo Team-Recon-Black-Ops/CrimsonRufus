@@ -575,7 +575,7 @@ namespace CrimsonRufus
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(proxyUrl);
                 request.Method = "POST";
                 request.ContentLength = data.Length;
-                request.ContentType = "application/kerberos";
+                request.ContentType = "application/fluffy";
                 request.UserAgent = "Rubeus/1.0";
 
                 BinaryWriter socketWriter = new BinaryWriter(request.GetRequestStream());

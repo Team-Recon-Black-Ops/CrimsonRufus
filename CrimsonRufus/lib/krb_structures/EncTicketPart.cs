@@ -3,8 +3,8 @@ using Asn1;
 using System.Text;
 using System.Collections.Generic;
 using System.IO;
-using CrimsonRufus.Kerberos;
-using CrimsonRufus.Kerberos.PAC;
+using CrimsonRufus.Fluffy;
+using CrimsonRufus.Fluffy.PAC;
 
 namespace CrimsonRufus
 {
@@ -16,10 +16,10 @@ namespace CrimsonRufus
         //   crealm[2] Realm,
         //   cname[3] PrincipalName,
         //   transited[4] TransitedEncoding,
-        //   authtime[5] KerberosTime,
-        //   starttime[6] KerberosTime OPTIONAL,
-        //   endtime[7] KerberosTime,
-        //   renew-till[8] KerberosTime OPTIONAL,
+        //   authtime[5] FluffyTime,
+        //   starttime[6] FluffyTime OPTIONAL,
+        //   endtime[7] FluffyTime,
+        //   renew-till[8] FluffyTime OPTIONAL,
         //   caddr[9] HostAddresses OPTIONAL,
         //  authorization-data[10] AuthorizationData OPTIONAL
         //}
@@ -154,13 +154,13 @@ namespace CrimsonRufus
             transitedElt = AsnElt.MakeImplicit(AsnElt.CONTEXT, 4, transitedElt);
             allNodes.Add(transitedElt);
 
-            // authtime                    [5] KerberosTime
+            // authtime                    [5] FluffyTime
             AsnElt authTimeAsn = AsnElt.MakeString(AsnElt.GeneralizedTime, authtime.ToString("yyyyMMddHHmmssZ"));
             AsnElt authTimeSeq = AsnElt.Make(AsnElt.SEQUENCE, new[] { authTimeAsn });
             authTimeSeq = AsnElt.MakeImplicit(AsnElt.CONTEXT, 5, authTimeSeq);
             allNodes.Add(authTimeSeq);
 
-            // starttime                    [6] KerberosTime OPTIONAL
+            // starttime                    [6] FluffyTime OPTIONAL
             if (starttime != null)
             {
                 AsnElt startTimeAsn = AsnElt.MakeString(AsnElt.GeneralizedTime, starttime.ToString("yyyyMMddHHmmssZ"));
@@ -169,13 +169,13 @@ namespace CrimsonRufus
                 allNodes.Add(startTimeSeq);
             }
 
-            // endtime                    [7] KerberosTime
+            // endtime                    [7] FluffyTime
             AsnElt endTimeAsn = AsnElt.MakeString(AsnElt.GeneralizedTime, endtime.ToString("yyyyMMddHHmmssZ"));
             AsnElt endTimeSeq = AsnElt.Make(AsnElt.SEQUENCE, new[] { endTimeAsn });
             endTimeSeq = AsnElt.MakeImplicit(AsnElt.CONTEXT, 7, endTimeSeq);
             allNodes.Add(endTimeSeq);
 
-            // renew-till                    [8] KerberosTime OPTIONAL
+            // renew-till                    [8] FluffyTime OPTIONAL
             if (renew_till != null)
             {
                 AsnElt renewTimeAsn = AsnElt.MakeString(AsnElt.GeneralizedTime, renew_till.ToString("yyyyMMddHHmmssZ"));
@@ -355,20 +355,20 @@ namespace CrimsonRufus
             Array.Copy(svrZeros, 0, pacBytes, svrOffset, svrLength);
             Array.Copy(kdcZeros, 0, pacBytes, kdcOffset, kdcLength);
 
-            byte[] svrSig = Crypto.KerberosChecksum(serviceKey, pacBytes, svrSigType);
+            byte[] svrSig = Crypto.FluffyChecksum(serviceKey, pacBytes, svrSigType);
 
             if (krbKey == null)
             {
                 return Tuple.Create((Helpers.ByteArrayToString(oldSvrSig) == Helpers.ByteArrayToString(svrSig)), false, false, false);
             }
 
-            byte[] kdcSig = Crypto.KerberosChecksum(krbKey, oldSvrSig, kdcSigType);
+            byte[] kdcSig = Crypto.FluffyChecksum(krbKey, oldSvrSig, kdcSigType);
 
             bool fullPacSigValid = false;
             if (oldFullPacSig != null)
             {
                 Array.Copy(fullPacZeros, 0, pacBytes, fullPacOffset, fullPacLength);
-                byte[] fullPacSig = Crypto.KerberosChecksum(krbKey, pacBytes, fullPacSigType);
+                byte[] fullPacSig = Crypto.FluffyChecksum(krbKey, pacBytes, fullPacSigType);
                 fullPacSigValid = (Helpers.ByteArrayToString(oldFullPacSig) == Helpers.ByteArrayToString(fullPacSig));
             }
 
@@ -407,7 +407,7 @@ namespace CrimsonRufus
             }
             tmpEncTicketPart.authorization_data = newAuthData;
 
-            ticketChecksum = Crypto.KerberosChecksum(krbKey, tmpEncTicketPart.Encode().Encode(), krbChecksumType);
+            ticketChecksum = Crypto.FluffyChecksum(krbKey, tmpEncTicketPart.Encode().Encode(), krbChecksumType);
 
             foreach (var tmpadData in tmpEncTicketPart.authorization_data)
             {

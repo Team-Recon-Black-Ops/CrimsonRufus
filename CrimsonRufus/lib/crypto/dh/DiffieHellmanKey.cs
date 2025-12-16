@@ -7,7 +7,7 @@ using System;
 using Asn1;
 using CrimsonRufus.Asn1;
 
-namespace Kerberos.NET.Crypto
+namespace Fluffy.NET.Crypto
 {
     public enum AsymmetricKeyType {
         Public,

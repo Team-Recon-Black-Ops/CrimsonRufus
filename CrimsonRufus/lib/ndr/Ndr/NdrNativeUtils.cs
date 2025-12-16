@@ -307,7 +307,7 @@ namespace CrimsonRufus.Ndr
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct RPC_DISPATCH_TABLE32 : IConvertToNative<RPC_DISPATCH_TABLE>
+    internal struct DispatchTableInfo32 : IConvertToNative<RPC_DISPATCH_TABLE>
     {
         public int DispatchTableCount;
         public IntPtr32 DispatchTable;
@@ -325,7 +325,7 @@ namespace CrimsonRufus.Ndr
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct RPC_SERVER_INTERFACE32 : IConvertToNative<RPC_SERVER_INTERFACE>
+    internal struct ServerInterfaceInfo32 : IConvertToNative<RPC_SERVER_INTERFACE>
     {
         public int Length;
         public RPC_SYNTAX_IDENTIFIER InterfaceId;
@@ -522,7 +522,7 @@ namespace CrimsonRufus.Ndr
         }
     }
 
-    [StructLayout(LayoutKind.Sequential), CrossBitnessType(typeof(RPC_DISPATCH_TABLE32))]
+    [StructLayout(LayoutKind.Sequential), CrossBitnessType(typeof(DispatchTableInfo32))]
     internal struct RPC_DISPATCH_TABLE
     {
         public int DispatchTableCount;
@@ -536,7 +536,7 @@ namespace CrimsonRufus.Ndr
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct RPC_PROTSEQ_ENDPOINT32 : IConvertToNative<RPC_PROTSEQ_ENDPOINT>
+    internal struct ProtocolEndpointInfo32 : IConvertToNative<RPC_PROTSEQ_ENDPOINT>
     {
         public IntPtr32 RpcProtocolSequence;
         public IntPtr32 Endpoint;
@@ -550,7 +550,7 @@ namespace CrimsonRufus.Ndr
         }
     }
 
-    [StructLayout(LayoutKind.Sequential), CrossBitnessType(typeof(RPC_PROTSEQ_ENDPOINT32))]
+    [StructLayout(LayoutKind.Sequential), CrossBitnessType(typeof(ProtocolEndpointInfo32))]
     internal struct RPC_PROTSEQ_ENDPOINT
     {
         public IntPtr RpcProtocolSequence;
@@ -575,7 +575,7 @@ namespace CrimsonRufus.Ndr
         }
     }
 
-    [StructLayout(LayoutKind.Sequential), CrossBitnessType(typeof(RPC_SERVER_INTERFACE32))]
+    [StructLayout(LayoutKind.Sequential), CrossBitnessType(typeof(ServerInterfaceInfo32))]
     internal struct RPC_SERVER_INTERFACE
     {
         public int Length;
@@ -618,7 +618,7 @@ namespace CrimsonRufus.Ndr
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct NDR_EXPR_DESC32 : IConvertToNative<NDR_EXPR_DESC>
+    internal struct ExpressionDescriptor32 : IConvertToNative<NDR_EXPR_DESC>
     {
         public IntPtr32 pOffset;
         public IntPtr32 pFormatExpr;
@@ -632,7 +632,7 @@ namespace CrimsonRufus.Ndr
         }
     }
 
-    [StructLayout(LayoutKind.Sequential), CrossBitnessType(typeof(NDR_EXPR_DESC32))]
+    [StructLayout(LayoutKind.Sequential), CrossBitnessType(typeof(ExpressionDescriptor32))]
     internal struct NDR_EXPR_DESC
     {
         public IntPtr pOffset;

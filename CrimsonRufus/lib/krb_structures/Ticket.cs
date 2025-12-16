@@ -2,7 +2,7 @@ using System;
 using Asn1;
 using System.Text;
 using System.Collections.Generic;
-using CrimsonRufus.Kerberos;
+using CrimsonRufus.Fluffy;
 
 namespace CrimsonRufus
 {
@@ -88,7 +88,7 @@ namespace CrimsonRufus
 
         public EncTicketPart Decrypt(byte[] serviceKey, byte[] asrepKey, bool noAdData = false, bool displayBlockOne = false) {
 
-            var decryptedTicket = Crypto.KerberosDecrypt((Interop.KERB_ETYPE)enc_part.etype, Interop.KRB_KEY_USAGE_AS_REP_TGS_REP, serviceKey, enc_part.cipher);
+            var decryptedTicket = Crypto.FluffyDecrypt((Interop.KERB_ETYPE)enc_part.etype, Interop.KRB_KEY_USAGE_AS_REP_TGS_REP, serviceKey, enc_part.cipher);
 
             if (displayBlockOne)
             {
@@ -103,7 +103,7 @@ namespace CrimsonRufus
             
             //AuthorizationData ad_win2k_pac = new AuthorizationData(Interop.AuthorizationDataType.AD_WIN2K_PAC, pacs.Encode());           
             //AuthorizationData ad_if_rel = new AuthorizationData(Interop.AuthorizationDataType.AD_IF_RELEVANT, ad_win2k_pac.Encode().Encode()); 
-            //enc_part.cipher = Crypto.KerberosEncrypt((Interop.KERB_ETYPE)enc_part.etype, Interop.KRB_KEY_USAGE_AS_REP_TGS_REP, serviceKey, ad_if_rel.Encode().Encode());              
+            //enc_part.cipher = Crypto.FluffyEncrypt((Interop.KERB_ETYPE)enc_part.etype, Interop.KRB_KEY_USAGE_AS_REP_TGS_REP, serviceKey, ad_if_rel.Encode().Encode());              
         }
 
 

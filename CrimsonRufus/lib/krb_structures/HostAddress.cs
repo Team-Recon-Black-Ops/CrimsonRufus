@@ -7,7 +7,7 @@ namespace CrimsonRufus
 {
     //Hostname::= SEQUENCE {
     //        name-type[0] Int32,
-    //        name-string[1] SEQUENCE OF KerberosString
+    //        name-string[1] SEQUENCE OF FluffyString
     //}
 
     public class HostAddress

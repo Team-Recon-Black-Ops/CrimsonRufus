@@ -1,4 +1,4 @@
-using Kerberos.NET.Crypto;
+using Fluffy.NET.Crypto;
 using System.Security.Cryptography;
 
 namespace CrimsonRufus {

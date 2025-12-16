@@ -9,7 +9,7 @@ namespace CrimsonRufus
     {
         //LastReq::=     SEQUENCE OF SEQUENCE {
         //        lr-type[0] Int32,
-        //        lr-value[1] KerberosTime
+        //        lr-value[1] FluffyTime
         //}
 
         public LastReq(AsnElt body)

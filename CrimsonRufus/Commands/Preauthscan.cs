@@ -11,7 +11,7 @@ namespace CrimsonRufus.Commands
 
         public void Execute(Dictionary<string, string> arguments)
         {
-            Console.WriteLine("[*] Action: Scan for accounts not requiring Kerberos Pre-Authentication\r\n");
+            Console.WriteLine("[*] Action: Scan for accounts not requiring Fluffy Pre-Authentication\r\n");
 
             List<string> users = new List<string>();
             string domain = null;

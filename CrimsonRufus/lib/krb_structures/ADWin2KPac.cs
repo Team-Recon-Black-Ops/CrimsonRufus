@@ -1,6 +1,6 @@
 using System;
 using Asn1;
-using CrimsonRufus.Kerberos;
+using CrimsonRufus.Fluffy;
 
 namespace CrimsonRufus
 {

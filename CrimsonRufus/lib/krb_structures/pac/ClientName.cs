@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace CrimsonRufus.Kerberos.PAC {
+namespace CrimsonRufus.Fluffy.PAC {
     public class ClientName : PacInfoBuffer {
         public ClientName(DateTime clientId, string name) {            
             ClientId =  new DateTime(

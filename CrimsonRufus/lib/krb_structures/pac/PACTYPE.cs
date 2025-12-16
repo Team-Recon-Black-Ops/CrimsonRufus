@@ -1,4 +1,4 @@
-using CrimsonRufus.Kerberos.PAC;
+using CrimsonRufus.Fluffy.PAC;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace CrimsonRufus.Kerberos {
+namespace CrimsonRufus.Fluffy {
 
     public class PACTYPE {        
         public int cBuffers;

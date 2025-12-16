@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -90,7 +90,7 @@
     <Compile Include="Commands\HarvestCommand.cs" />
     <Compile Include="Commands\Hash.cs" />
     <Compile Include="Commands\ICommand.cs" />
-    <Compile Include="Commands\Kerberoast.cs" />
+    <Compile Include="Commands\Fluffyroast.cs" />
     <Compile Include="Commands\Klist.cs" />
     <Compile Include="Commands\Monitor.cs" />
     <Compile Include="Commands\Preauthscan.cs" />
@@ -170,7 +170,7 @@
     <Compile Include="lib\krb_structures\pac\PACTYPE.cs" />
     <Compile Include="lib\krb_structures\pac\ClientName.cs" />
     <Compile Include="lib\krb_structures\pac\LogonInfo.cs" />
-    <Compile Include="lib\krb_structures\pac\Ndr\Kerberos_PAC.cs" />
+    <Compile Include="lib\krb_structures\pac\Ndr\Fluffy_PAC.cs" />
     <Compile Include="lib\krb_structures\pac\PacInfoBuffer.cs" />
     <Compile Include="lib\krb_structures\pac\SignatureData.cs" />
     <Compile Include="lib\krb_structures\pac\UpnDns.cs" />

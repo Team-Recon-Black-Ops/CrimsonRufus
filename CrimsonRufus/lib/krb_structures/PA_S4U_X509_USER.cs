@@ -23,11 +23,11 @@ namespace CrimsonRufus
             byte[] cksumBytes = null;
 
             if (eType == Interop.KERB_ETYPE.aes256_cts_hmac_sha1)
-                cksumBytes = Crypto.KerberosChecksum(key, userIDBytes, Interop.KERB_CHECKSUM_ALGORITHM.KERB_CHECKSUM_HMAC_SHA1_96_AES256, Interop.KRB_KEY_USAGE_PA_S4U_X509_USER);
+                cksumBytes = Crypto.FluffyChecksum(key, userIDBytes, Interop.KERB_CHECKSUM_ALGORITHM.KERB_CHECKSUM_HMAC_SHA1_96_AES256, Interop.KRB_KEY_USAGE_PA_S4U_X509_USER);
             if (eType == Interop.KERB_ETYPE.aes128_cts_hmac_sha1)
-                cksumBytes = Crypto.KerberosChecksum(key, userIDBytes, Interop.KERB_CHECKSUM_ALGORITHM.KERB_CHECKSUM_HMAC_SHA1_96_AES128, Interop.KRB_KEY_USAGE_PA_S4U_X509_USER);
+                cksumBytes = Crypto.FluffyChecksum(key, userIDBytes, Interop.KERB_CHECKSUM_ALGORITHM.KERB_CHECKSUM_HMAC_SHA1_96_AES128, Interop.KRB_KEY_USAGE_PA_S4U_X509_USER);
             if (eType == Interop.KERB_ETYPE.rc4_hmac)
-                cksumBytes = Crypto.KerberosChecksum(key, userIDBytes, Interop.KERB_CHECKSUM_ALGORITHM.KERB_CHECKSUM_RSA_MD4, Interop.KRB_KEY_USAGE_PA_S4U_X509_USER);
+                cksumBytes = Crypto.FluffyChecksum(key, userIDBytes, Interop.KERB_CHECKSUM_ALGORITHM.KERB_CHECKSUM_RSA_MD4, Interop.KRB_KEY_USAGE_PA_S4U_X509_USER);
 
             cksum = new Checksum(Interop.KERB_CHECKSUM_ALGORITHM.KERB_CHECKSUM_HMAC_SHA1_96_AES256, cksumBytes);
         }

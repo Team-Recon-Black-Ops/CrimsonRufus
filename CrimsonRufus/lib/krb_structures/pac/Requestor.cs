@@ -1,6 +1,6 @@
 using System.Security.Principal;
 
-namespace CrimsonRufus.Kerberos.PAC
+namespace CrimsonRufus.Fluffy.PAC
 {
     public class Requestor : PacInfoBuffer
     {

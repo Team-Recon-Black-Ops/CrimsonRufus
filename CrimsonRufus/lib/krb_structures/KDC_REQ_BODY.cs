@@ -15,9 +15,9 @@ namespace CrimsonRufus
         //                                -- Server's realm
         //                                -- Also client's in AS-REQ --,
         //    sname[3] PrincipalName OPTIONAL,
-        //    from[4] KerberosTime OPTIONAL,
-        //    till[5] KerberosTime,
-        //    rtime[6] KerberosTime OPTIONAL,
+        //    from[4] FluffyTime OPTIONAL,
+        //    till[5] FluffyTime,
+        //    rtime[6] FluffyTime OPTIONAL,
         //    nonce[7] UInt32,
         //            etype[8] SEQUENCE OF Int32 -- EncryptionType
         //                                        -- in preference order --,
@@ -165,17 +165,17 @@ namespace CrimsonRufus
             allNodes.Add(snameElt);
 
 
-            // from                    [4] KerberosTime OPTIONAL
+            // from                    [4] FluffyTime OPTIONAL
 
 
-            // till                    [5] KerberosTime
+            // till                    [5] FluffyTime
             AsnElt tillAsn = AsnElt.MakeString(AsnElt.GeneralizedTime, till.ToString("yyyyMMddHHmmssZ"));
             AsnElt tillSeq = AsnElt.Make(AsnElt.SEQUENCE, new[] { tillAsn });
             tillSeq = AsnElt.MakeImplicit(AsnElt.CONTEXT, 5, tillSeq);
             allNodes.Add(tillSeq);
 
 
-            // rtime                   [6] KerberosTime
+            // rtime                   [6] FluffyTime
             if (rtime.Year > 0001)
             {
                 AsnElt rtimeAsn = AsnElt.MakeString(AsnElt.GeneralizedTime, rtime.ToString("yyyyMMddHHmmssZ"));

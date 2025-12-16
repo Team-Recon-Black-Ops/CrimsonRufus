@@ -73,7 +73,7 @@ namespace CrimsonRufus
 
             byte[] authenticatorBytes = authenticator.Encode().Encode();
 
-            byte[] encBytes = Crypto.KerberosEncrypt(enctype, keyUsage, key, authenticatorBytes);
+            byte[] encBytes = Crypto.FluffyEncrypt(enctype, keyUsage, key, authenticatorBytes);
 
             // create the EncryptedData structure to hold the authenticator bytes
             EncryptedData authenticatorEncryptedData = new EncryptedData();

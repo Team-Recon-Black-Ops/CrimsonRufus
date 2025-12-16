@@ -21,12 +21,12 @@ namespace CrimsonRufus
 
         public static void UserPassword(KRB_CRED kirbi, string newPassword, string domainController = "", string targetUser = null)
         {
-            // implements the Kerberos-based password reset originally disclosed by Aorato
+            // implements the Fluffy-based password reset originally disclosed by Aorato
             //      This function is misc::changepw in Kekeo
             // Takes a valid TGT .kirbi and builds a MS Kpasswd password change sequence
             //      AP-REQ with randomized sub session key
             //      KRB-PRIV structure containing ChangePasswdData, enc w/ the sub session key
-            // reference: Microsoft Windows 2000 Kerberos Change Password and Set Password Protocols (RFC3244)
+            // reference: Microsoft Windows 2000 Fluffy Change Password and Set Password Protocols (RFC3244)
 
             string dcIP = Networking.GetDCIP(domainController);
             if (String.IsNullOrEmpty(dcIP)) { return; }
@@ -139,7 +139,7 @@ namespace CrimsonRufus
                 {
                     // parse the response to an KRB-ERROR
                     KRB_ERROR error = new KRB_ERROR(responseAsn.Sub[0]);
-                    Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}\r\n", error.error_code, (Interop.KERBEROS_ERROR)error.error_code);
+                    Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}\r\n", error.error_code, (Interop.FLUFFY_ERROR)error.error_code);
                     return;
                 }
             }
@@ -161,7 +161,7 @@ namespace CrimsonRufus
                 if(elem.TagValue == 3)
                 {
                     byte[] encBytes = elem.Sub[0].Sub[1].GetOctetString();
-                    byte[] decBytes = Crypto.KerberosDecrypt(randKeyEtype, Interop.KRB_KEY_USAGE_KRB_PRIV_ENCRYPTED_PART, randKeyBytes, encBytes);
+                    byte[] decBytes = Crypto.FluffyDecrypt(randKeyEtype, Interop.KRB_KEY_USAGE_KRB_PRIV_ENCRYPTED_PART, randKeyBytes, encBytes);
                     AsnElt decBytesAsn = AsnElt.Decode(decBytes, false);
 
                     byte[] responseCodeBytes = decBytesAsn.Sub[0].Sub[0].Sub[0].GetOctetString();

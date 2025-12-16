@@ -5,7 +5,7 @@
 
 using System;
 
-namespace Kerberos.NET.Crypto
+namespace Fluffy.NET.Crypto
 {
     public static class Oakley
     {

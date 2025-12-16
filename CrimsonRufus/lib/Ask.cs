@@ -5,8 +5,8 @@ using System.Linq;
 using Asn1;
 using CrimsonRufus.lib.Interop;
 using CrimsonRufus.Asn1;
-using CrimsonRufus.Kerberos;
-using CrimsonRufus.Kerberos.PAC;
+using CrimsonRufus.Fluffy;
+using CrimsonRufus.Fluffy.PAC;
 using System.Collections.Generic;
 using System.ComponentModel;
 using static CrimsonRufus.Interop;
@@ -21,11 +21,11 @@ namespace CrimsonRufus {
         }
     }
 
-    public class KerberosErrorException : RubeusException
+    public class FluffyErrorException : RubeusException
     {
         public KRB_ERROR krbError;
 
-        public KerberosErrorException(string message, KRB_ERROR krbError)
+        public FluffyErrorException(string message, KRB_ERROR krbError)
             : base(message)
         {
             this.krbError = krbError;
@@ -44,7 +44,7 @@ namespace CrimsonRufus {
                 {
                     preauth = NoPreAuthTGT(userName, domain, keyString, etype, domainController, outfile, ptt, luid, describe, true, proxyUrl, service, suppEtype, opsec, principalType);
                 }
-                catch (KerberosErrorException) { }
+                catch (FluffyErrorException) { }
             }
 
             try
@@ -58,12 +58,12 @@ namespace CrimsonRufus {
                     return InnerTGT(userHashASREQ, etype, outfile, ptt, domainController, luid, describe, true, opsec, servicekey, false, proxyUrl);
                 }
             }
-            catch (KerberosErrorException ex)
+            catch (FluffyErrorException ex)
             {
                 KRB_ERROR error = ex.krbError;
                 try
                 {
-                    Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}: {2}\r\n", error.error_code, (Interop.KERBEROS_ERROR)error.error_code, error.e_text);
+                    Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}: {2}\r\n", error.error_code, (Interop.FLUFFY_ERROR)error.error_code, error.e_text);
                     if(error.e_data[0].type == Interop.PADATA_TYPE.SUPERSEDED_BY_USER)
                     {
                         PA_SUPERSEDED_BY_USER obj = (PA_SUPERSEDED_BY_USER)error.e_data[0].value;
@@ -73,7 +73,7 @@ namespace CrimsonRufus {
                 }
                 catch
                 {
-                    Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}\r\n", error.error_code, (Interop.KERBEROS_ERROR)error.error_code);
+                    Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}\r\n", error.error_code, (Interop.FLUFFY_ERROR)error.error_code);
                 }
             }
             catch (RubeusException ex)
@@ -139,7 +139,7 @@ namespace CrimsonRufus {
             {
                 // parse the response to an KRB-ERROR
                 KRB_ERROR error = new KRB_ERROR(responseAsn.Sub[0]);
-                if (error.error_code == (int)Interop.KERBEROS_ERROR.KDC_ERR_PREAUTH_REQUIRED)
+                if (error.error_code == (int)Interop.FLUFFY_ERROR.KDC_ERR_PREAUTH_REQUIRED)
                 {
                     // Collect PA-ETYPE-INFO2 entries if present so the caller can derive keys with the correct salt
                     foreach (PA_DATA pa_data in (List<PA_DATA>)error.e_data)
@@ -213,7 +213,7 @@ namespace CrimsonRufus {
                 }
                 else
                 {
-                    throw new KerberosErrorException("", error);
+                    throw new FluffyErrorException("", error);
                 }
             }
             return false;
@@ -242,7 +242,7 @@ namespace CrimsonRufus {
                         }
                     }
                 }
-                catch (KerberosErrorException) { }
+                catch (FluffyErrorException) { }
             }
 
             if (string.IsNullOrEmpty(selectedSalt))
@@ -266,7 +266,7 @@ namespace CrimsonRufus {
                 Console.WriteLine("[*] Using salt: {0}", selectedSalt);
             }
 
-            string keyString = Crypto.KerberosPasswordHash(etype, password, selectedSalt);
+            string keyString = Crypto.FluffyPasswordHash(etype, password, selectedSalt);
 
             try
             {
@@ -275,12 +275,12 @@ namespace CrimsonRufus {
                 AS_REQ userHashASREQ = AS_REQ.NewASReq(userName, domain, keyString, etype, opsec, changepw, pac, service, suppEtype, principalType);
                 return InnerTGT(userHashASREQ, etype, outfile, ptt, domainController, luid, describe, true, opsec, servicekey, false, proxyUrl);
             }
-            catch (KerberosErrorException ex)
+            catch (FluffyErrorException ex)
             {
                 KRB_ERROR error = ex.krbError;
                 try
                 {
-                    Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}: {2}\r\n", error.error_code, (Interop.KERBEROS_ERROR)error.error_code, error.e_text);
+                    Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}: {2}\r\n", error.error_code, (Interop.FLUFFY_ERROR)error.error_code, error.e_text);
                     if (error.e_data[0].type == Interop.PADATA_TYPE.SUPERSEDED_BY_USER)
                     {
                         PA_SUPERSEDED_BY_USER obj = (PA_SUPERSEDED_BY_USER)error.e_data[0].value;
@@ -290,7 +290,7 @@ namespace CrimsonRufus {
                 }
                 catch
                 {
-                    Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}\r\n", error.error_code, (Interop.KERBEROS_ERROR)error.error_code);
+                    Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}\r\n", error.error_code, (Interop.FLUFFY_ERROR)error.error_code);
                 }
             }
             catch (RubeusException ex)
@@ -319,8 +319,8 @@ namespace CrimsonRufus {
         }
 
         //CCob (@_EthicalChaos_):
-        // Based on KerberosAsymmetricCredential::Get function from Kerberos.NET from here:
-        // https://github.com/dotnet/Kerberos.NET/blob/v4.5.0/Kerberos.NET/Credentials/KerberosAsymmetricCredential.cs
+        // Based on FluffyAsymmetricCredential::Get function from Fluffy.NET from here:
+        // https://github.com/dotnet/Fluffy.NET/blob/v4.5.0/Fluffy.NET/Credentials/FluffyAsymmetricCredential.cs
         // Additional functionality - If the certificate points to a file we assume PKCS12 certificate store 
         // with private key otherwise use users certificate store along with any smartcard that maybe present.
         public static X509Certificate2 FindCertificate(string certificate, string storePassword) {
@@ -374,9 +374,9 @@ namespace CrimsonRufus {
                 AS_REQ pkinitASREQ = AS_REQ.NewASReq(userName, domain, cert, agreement, etype, verifyCerts, service, changepw, principalType);
                 return InnerTGT(pkinitASREQ, etype, outfile, ptt, domainController, luid, describe, true, false, servicekey, getCredentials, proxyUrl);
 
-            } catch (KerberosErrorException ex) {
+            } catch (FluffyErrorException ex) {
                 KRB_ERROR error = ex.krbError;
-                Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}\r\n", error.error_code, (Interop.KERBEROS_ERROR)error.error_code);
+                Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}\r\n", error.error_code, (Interop.FLUFFY_ERROR)error.error_code);
             } catch (RubeusException ex) {
                 Console.WriteLine("\r\n" + ex.Message + "\r\n");
             }
@@ -474,7 +474,7 @@ namespace CrimsonRufus {
             {
                 // parse the response to an KRB-ERROR
                 KRB_ERROR error = new KRB_ERROR(responseAsn.Sub[0]);
-                throw new KerberosErrorException("", error);
+                throw new FluffyErrorException("", error);
             }
             else
             {
@@ -502,9 +502,9 @@ namespace CrimsonRufus {
                     throw new Win32Exception($"Failed to get LSA handle");
                 }
 
-                Interop.LSA_STRING_IN kerbString = new Interop.LSA_STRING_IN("kerberos");
+                Interop.LSA_STRING_IN kerbString = new Interop.LSA_STRING_IN("fluffy");
                 if(Interop.LsaLookupAuthenticationPackage(lsaHandle, ref kerbString, out authPackage) != 0) {
-                    throw new Win32Exception($"Failed to get Kerberos authentication package");
+                    throw new Win32Exception($"Failed to get Fluffy authentication package");
                 }
 
                 Console.WriteLine($"[=] Requesting service ticket via LSA authentication package {authPackage} using handle 0x{lsaHandle:x}");
@@ -618,7 +618,7 @@ namespace CrimsonRufus {
                 TGS_REP rep = new TGS_REP(responseAsn);
 
                 // KRB_KEY_USAGE_TGS_REP_EP_SESSION_KEY = 8
-                byte[] outBytes = Crypto.KerberosDecrypt(paEType, Interop.KRB_KEY_USAGE_TGS_REP_EP_SESSION_KEY, clientKey, rep.enc_part.cipher);
+                byte[] outBytes = Crypto.FluffyDecrypt(paEType, Interop.KRB_KEY_USAGE_TGS_REP_EP_SESSION_KEY, clientKey, rep.enc_part.cipher);
                 AsnElt ae = AsnElt.Decode(outBytes, false);
                 EncKDCRepPart encRepPart = new EncKDCRepPart(ae.Sub[0]);
 
@@ -711,7 +711,7 @@ namespace CrimsonRufus {
             {
                 // parse the response to an KRB-ERROR
                 KRB_ERROR error = new KRB_ERROR(responseAsn.Sub[0]);
-                Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}\r\n", error.error_code, (Interop.KERBEROS_ERROR)error.error_code);
+                Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}\r\n", error.error_code, (Interop.FLUFFY_ERROR)error.error_code);
             }
             else
             {
@@ -862,22 +862,22 @@ namespace CrimsonRufus {
             if (etype == Interop.KERB_ETYPE.des_cbc_md5)
             {
                 // KRB_KEY_USAGE_TGS_REP_EP_SESSION_KEY = 8
-                outBytes = Crypto.KerberosDecrypt(etype, Interop.KRB_KEY_USAGE_TGS_REP_EP_SESSION_KEY, key, rep.enc_part.cipher);
+                outBytes = Crypto.FluffyDecrypt(etype, Interop.KRB_KEY_USAGE_TGS_REP_EP_SESSION_KEY, key, rep.enc_part.cipher);
             }
             else if (etype == Interop.KERB_ETYPE.rc4_hmac)
             {
                 // KRB_KEY_USAGE_TGS_REP_EP_SESSION_KEY = 8
-                outBytes = Crypto.KerberosDecrypt(etype, Interop.KRB_KEY_USAGE_TGS_REP_EP_SESSION_KEY, key, rep.enc_part.cipher);
+                outBytes = Crypto.FluffyDecrypt(etype, Interop.KRB_KEY_USAGE_TGS_REP_EP_SESSION_KEY, key, rep.enc_part.cipher);
             }
             else if (etype == Interop.KERB_ETYPE.aes128_cts_hmac_sha1)
             {
                 // KRB_KEY_USAGE_AS_REP_EP_SESSION_KEY = 3
-                outBytes = Crypto.KerberosDecrypt(etype, Interop.KRB_KEY_USAGE_AS_REP_EP_SESSION_KEY, key, rep.enc_part.cipher);
+                outBytes = Crypto.FluffyDecrypt(etype, Interop.KRB_KEY_USAGE_AS_REP_EP_SESSION_KEY, key, rep.enc_part.cipher);
             }
             else if (etype == Interop.KERB_ETYPE.aes256_cts_hmac_sha1)
             {
                 // KRB_KEY_USAGE_AS_REP_EP_SESSION_KEY = 3
-                outBytes = Crypto.KerberosDecrypt(etype, Interop.KRB_KEY_USAGE_AS_REP_EP_SESSION_KEY, key, rep.enc_part.cipher);
+                outBytes = Crypto.FluffyDecrypt(etype, Interop.KRB_KEY_USAGE_AS_REP_EP_SESSION_KEY, key, rep.enc_part.cipher);
             }
             else
             {
@@ -889,7 +889,7 @@ namespace CrimsonRufus {
             try
             {
                 ae = AsnElt.Decode(outBytes, false);
-                // Make sure the data has expected value so we know decryption was successful (from kerberos spec: EncASRepPart ::= [APPLICATION 25] )
+                // Make sure the data has expected value so we know decryption was successful (from fluffy spec: EncASRepPart ::= [APPLICATION 25] )
                 if (ae.TagValue == 25)
                 {
                     decodeSuccess = true;
@@ -1072,7 +1072,7 @@ namespace CrimsonRufus {
                 {
                     // parse the response to an KRB-ERROR
                     KRB_ERROR error = new KRB_ERROR(u2uResponseAsn.Sub[0]);
-                    Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}\r\n", error.error_code, (Interop.KERBEROS_ERROR)error.error_code);
+                    Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}\r\n", error.error_code, (Interop.FLUFFY_ERROR)error.error_code);
                 }
                 else
                 {
@@ -1097,10 +1097,10 @@ namespace CrimsonRufus {
                     else
                         Console.WriteLine("[*] {0}: Pre-Auth Required", user);
                 }
-                catch (KerberosErrorException ex)
+                catch (FluffyErrorException ex)
                 {
                     KRB_ERROR error = ex.krbError;
-                    Console.WriteLine("[X] {0} returned error ({1}) : {2}", user, error.error_code, (Interop.KERBEROS_ERROR)error.error_code);
+                    Console.WriteLine("[X] {0} returned error ({1}) : {2}", user, error.error_code, (Interop.FLUFFY_ERROR)error.error_code);
                 }
             }
         }

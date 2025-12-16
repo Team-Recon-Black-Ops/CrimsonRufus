@@ -12,7 +12,7 @@ namespace CrimsonRufus
         /*
         KDC-PROXY-MESSAGE::= SEQUENCE {
         kerb-message [0] OCTET STRING,
-        target-domain [1] KerberosString OPTIONAL,
+        target-domain [1] FluffyString OPTIONAL,
         dclocator-hint [2] INTEGER OPTIONAL
         }
         */
@@ -65,7 +65,7 @@ namespace CrimsonRufus
             messageSeq = AsnElt.MakeImplicit(AsnElt.CONTEXT, 0, messageSeq);
             allNodes.Add(messageSeq);
 
-            // target-domain [1] KerberosString OPTIONAL,
+            // target-domain [1] FluffyString OPTIONAL,
             if (target_domain != null)
             {
                 AsnElt domainAsn = AsnElt.MakeString(AsnElt.UTF8String, target_domain);

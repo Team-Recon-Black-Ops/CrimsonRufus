@@ -259,16 +259,16 @@ namespace CrimsonRufus.Commands
                     {
                         Ask.NoPreAuthTGT(user, domain, hash, encType, dc, outfile, ptt, luid, true, true, proxyUrl, service, suppEncType, opsec, principalType);
                     }
-                    catch (KerberosErrorException ex)
+                    catch (FluffyErrorException ex)
                     {
                         KRB_ERROR error = ex.krbError;
                         try
                         {
-                            Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}: {2}\r\n", error.error_code, (Interop.KERBEROS_ERROR)error.error_code, error.e_text);
+                            Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}: {2}\r\n", error.error_code, (Interop.FLUFFY_ERROR)error.error_code, error.e_text);
                         }
                         catch
                         {
-                            Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}\r\n", error.error_code, (Interop.KERBEROS_ERROR)error.error_code);
+                            Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}\r\n", error.error_code, (Interop.FLUFFY_ERROR)error.error_code);
                         }
                     }
                 }

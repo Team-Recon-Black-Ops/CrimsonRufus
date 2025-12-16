@@ -25,15 +25,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-* typos for `kerberos` usage, changed from `/preauth` to `/nopreauth` (0xe7)
+* typos for `fluffy` usage, changed from `/preauth` to `/nopreauth` (0xe7)
 * parsing of _logoncount_ and _badpwdcount_ from LDAP with exception handling and set to 0 if exception happens (0xe7)
 
 ## [2.2.0]
 
 ### Added
 
-* `preauthscan` command to scan for accounts that do not require Kerberos pre-authentication
-* `/preauth` argument to the `kerberoast` command, to kerberoast with an account that does not require Kerberos pre-authentication
+* `preauthscan` command to scan for accounts that do not require Fluffy pre-authentication
+* `/preauth` argument to the `fluffyroast` command, to fluffyroast with an account that does not require Fluffy pre-authentication
 * `/nopreauth` flag to the `asktgt` command, to request a TGT without providing pre-authentication
 * `/service` argument to the `asktgt` command, to request service tickets using an AS-REQ
 
@@ -63,7 +63,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-* `KDC_ERR_SVC_UNAVAILABLE` KERBEROS_ERROR, added `KDC_ERR_MUST_USE_USER2USER` and `KDC_ERR_PATH_NOT_ACCEPTED` (@0xe7)
+* `KDC_ERR_SVC_UNAVAILABLE` FLUFFY_ERROR, added `KDC_ERR_MUST_USE_USER2USER` and `KDC_ERR_PATH_NOT_ACCEPTED` (@0xe7)
 
 ## [2.0.0] - 2021-08-04
 
@@ -71,7 +71,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Full PAC encoding/decoding (@CCob & @0xe7)
 * `golden` and `silver` commands for ticket forging with `/ldap` switch to automate retrieving PAC information (@CCob & @0xe7)
-* `Networking.GetLdapConnection` with LDAPS support using `LdapConnection` (for `kerberoast`/`asreproast`/`golden`/`silver`) (@0xe7)
+* `Networking.GetLdapConnection` with LDAPS support using `LdapConnection` (for `fluffyroast`/`asreproast`/`golden`/`silver`) (@0xe7)
 * `/getcredentials` for `asktgt` (sends U2U request and automatically extracts NT hash) (@0xe7)
 * `/u2u` for `asktgs` to send User-to-User requests (@0xe7)
 * `/targetuser` for `asktgs` for sending S4U2self requests (@0xe7)
@@ -79,8 +79,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `/targetuser` for `changepw` for changing the password of other users (upgraded `EncKrbPrivPart` to version **-128**) (@CCob)
 * `/servicekey`, `/krbkey` and `/asrepkey` to `describe` for showing PAC and verifying checksums (@CCob & @0xe7)
 * `/serviceuser` and `/servicedomain` to `describe` to create crackable "hashes" from **AES** encrypted tickets (@0xe7)
-* `/autoenterprise` now works with the kerberoasting `KerberosRequestorSecurityToken.GetRequest` method (@0xe7)
-* `/ldaps` to `kerberoast` and `asreproast` for querying LDAPS (@0xe7)
+* `/autoenterprise` now works with the fluffyroasting `FluffyRequestorSecurityToken.GetRequest` method (@0xe7)
+* `/ldaps` to `fluffyroast` and `asreproast` for querying LDAPS (@0xe7)
 * `/servicekey` to `asktgt` and `asktgs` to decrypt the EncTicketPart (@CCob & @0xe7)
 * `/krbkey` and `/krbenctype` to `asktgs` for verifying the KDCChecksum and TicketChecksum (@0xe7)
 * `/printargs` switch to `asktgs` for printing the arguments required for building a similar PAC with `golden` or `silver` (@0xe7)
@@ -97,7 +97,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 * Complete rewrite `AuthorizationData` sections (@0xe7)
-* Added `keyUsage`  argument to `Crypto.KerberosChecksum` to create `PA_S4U_X509_USER` checksum (@0xe7)
+* Added `keyUsage`  argument to `Crypto.FluffyChecksum` to create `PA_S4U_X509_USER` checksum (@0xe7)
 * Aliased `brute` to `spray` (@0xe7)
 * Changed `System.Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties().DomainName` to `System.DirectoryServices.ActiveDirectory.Domain.GetCurrentDomain().Name` for `asktgt` when automatically resolving the domain (works in more situations) (@0xe7)
 
@@ -117,7 +117,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-* Adapted/integrated the PR from @RiccardoAncarani for `/delay:MILLISECONDS` and `/jitter:%` (1-100) flags for `kerberoast`
+* Adapted/integrated the PR from @RiccardoAncarani for `/delay:MILLISECONDS` and `/jitter:%` (1-100) flags for `fluffyroast`
 * Rubeus.yar yara rule from FireEye's red team tool countermeasure repo
 
 ### Changed
@@ -126,21 +126,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-* few kerberoasting fixes
+* few fluffyroasting fixes
 
 
 ## [1.6.1] - 2020-12-09
 
 ### Added
 
-* /autoenterprise flag to automate retrying failed kerberoasting attempts (@0xe7)
+* /autoenterprise flag to automate retrying failed fluffyroasting attempts (@0xe7)
 * support for CVE-2020-17049 using the /bronzebit switch (@0xe7)
 * initial support for basic silver tickets, without a PAC (@0xe7)
 
 ### Fixed
 
-* Cross domain enterprise principal kerberoasting (@0xe7)
-* Kerberoasting using DC IP and supplying a TGT (@0xe7)
+* Cross domain enterprise principal fluffyroasting (@0xe7)
+* Fluffyroasting using DC IP and supplying a TGT (@0xe7)
 
 
 ## [1.6.0] - 2020-11-06
@@ -157,8 +157,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     * Added PA-DATA PA-PAC-OPTIONS to normal TGS-REQ when using `/opsec` (@0xe7)
 * Start of smartcard/PKINIT support (@CCob)
     * `/password` support
-* Support for `/spns` option when kerberoasting (@0xe7)
-* Support for NT-Enterprise principals for service ticket requests on both the `asktgs` and `kerberoast` commands (@0xe7)
+* Support for `/spns` option when fluffyroasting (@0xe7)
+* Support for NT-Enterprise principals for service ticket requests on both the `asktgs` and `fluffyroast` commands (@0xe7)
 * Support for modifying S4U2Self tickets to be able to impersonate any user on the requesting machine (@0xe7)
 * Cross-domain `s4u` / `asktgs` support (@0xe7)
 * `/runfor:X` flag for the `monitor` command (@G0ldenGunSec)
@@ -166,12 +166,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-* `kerberoast /user:X` now takes multiple comma separated values
+* `fluffyroast /user:X` now takes multiple comma separated values
 
 ### Fixed
 
 * Casing fix for AES key salts
-* Kerberoasting when using TGT to authenticate but not supplying SPNs (@0xe7)
+* Fluffyroasting when using TGT to authenticate but not supplying SPNs (@0xe7)
 * GetDCName() issue on non-domain-joined systems
 * Nonced randomized
 * Fixes for issues from non domain machines (@VbScrub)
@@ -197,7 +197,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * to **triage**/**klist**/**dump** actions
     * More flexible targeting with **/user**/**/LUID**/**/service**/**/server**/
 
-* to the **kerberoast** action
+* to the **fluffyroast** action
     * **/pwdsetafter**, **/pwdsetbefore**, and **/resultlimit** arguments for better targeting (from @pkb1s)
     * **/stats** flag to list statistics of user accounts without actually roasting them
     * **/ldapfilter** argument for adding custom LDAP filters to the user search query
@@ -216,7 +216,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 * LSA.cs got a complete overhaul for reusability and flexibility (thanks for the help @leechristensen !)
-* **kerberoast** action updated to exclude disabled accounts by default
+* **fluffyroast** action updated to exclude disabled accounts by default
 * **harvest** mode's **/interval** argument is now in seconds, to match **/monitor**
 * **harvest** / **/monitor** modes revamped
     * now no longer depend on searching the event logs for 4624 events
@@ -250,7 +250,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * **asktgt** action
     * Returned tickets now run through the **describe** command
 * **describe** action
-    * Kerberoast hash now only extracted from RC4_HMAC tickets
+    * Fluffyroast hash now only extracted from RC4_HMAC tickets
 
 
 ## [1.4.0] - 2019-02-16
@@ -260,12 +260,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     * hashes a given password to rc4_hmac form, and if /user and /domain supplied, calculates aes128_cts_hmac_sha1, aes256_cts_hmac_sha1, and des_cbc_md5 forms 
 
 ### Changed
-* **kerberoast** action
+* **fluffyroast** action
     * Fixed query that checks that rc4_hmac is flipped in msds-supportedencryption types, because "lol Microsoft"
 * **asktgt** action
     * /aes128 and /aes now supported for **/enctype** when used with **/password**
 * **crypto** 
-    * Replaced @qlemaire's PR of Kevin-Robertson' Get-KerberosAESKey hash code with @gentilkiwi's KERB_ECRYPT HashPassword approach
+    * Replaced @qlemaire's PR of Kevin-Robertson' Get-FluffyAESKey hash code with @gentilkiwi's KERB_ECRYPT HashPassword approach
 * **README**
     * added @elad_shamir into the references
 
@@ -273,12 +273,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.3.6] - 2019-02-14
 
 ### Added
-* **kerberoast** action
+* **fluffyroast** action
     * /rc4opsec option to use **tgtdeleg** and filter out AES-enabled accounts
     * /aes option to AES roast only AES-enabled accounts
 
 ### Changed
-* **kerberoast** action
+* **fluffyroast** action
     * Default user query searches for accounts with RC4 enabled
     * Default behavior when using the /tgtdeleg flag requests RC4 for ALL accounts (including AES)
     * Display "Supported ETypes" in enumerated output
@@ -286,29 +286,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     * Changed the default requested SPN from HOST/dc.domain.com to cifs/dc.domain.com
 
 ### Fixed
-* Kerberoast hash display for some option combinations
+* Fluffyroast hash display for some option combinations
 
 
 ## [1.3.5] - 2019-02-13
 
 ### Changed
-* **kerberoast** action
-    * now has /ticket option to use an existing TGT for Kerberoasting
-    * now has /usetgtdeleg option to use **tgtdeleg** option as the TGT for Kerberoasting
+* **fluffyroast** action
+    * now has /ticket option to use an existing TGT for Fluffyroasting
+    * now has /usetgtdeleg option to use **tgtdeleg** option as the TGT for Fluffyroasting
     * LDAP user search path and number of found users now output
 * **describe** action
-    * Kerberoast hash output now generated for service tickets
+    * Fluffyroast hash output now generated for service tickets
 
 ### Fixed
-* Kerberoast hash display but when /spn and /outfile were specified
-* Kerberoast samaccountname now properly put into hash output
+* Fluffyroast hash display but when /spn and /outfile were specified
+* Fluffyroast samaccountname now properly put into hash output
 
 
 ## [1.3.4] - 2019-02-12
 
 ### Changed
-* **kerberoast** action now has /domain and /dc like **asreproast** action
-* **kerberoast** and **asreproast** now properly work over domain trusts
+* **fluffyroast** action now has /domain and /dc like **asreproast** action
+* **fluffyroast** and **asreproast** now properly work over domain trusts
 * **triage** command now works for the current non-elevated user, outputting current LUID as well
 * Current LUID output also added for non-elevated **dump** and **klist** commands
 * Added Opsec section in README.md
@@ -331,11 +331,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.3.2] - 2019-02-06
 ### Added
-* **kerberoast** and **asreproast** actions
+* **fluffyroast** and **asreproast** actions
     * Added /outfile:X to output hashes to a file, one hash per line
 
 ### Changed
-* **asreproast** changed asreproast's default behavior to match **kerberoast**
+* **asreproast** changed asreproast's default behavior to match **fluffyroast**
 * Clustered the default output help menu around function (things were getting crowded)
 
 
@@ -387,7 +387,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 * **asktgs** action - takes /ptt:X, /dc:X, /ticket:X flags like asktgt, /service:X takes one or more SPN specifications
 * **tgtdeleg** action - reimplements @gentilkiwi's Kekeo tgt::deleg function
-    * uses the GSS-API Kerberos specification (RFC 4121) to request a "fake" delegation context that stores a KRB-CRED in the Authenticator Checksum. Combined with extracting the service session key from the local cache, this allows us to recover usable TGTs for the current user without elevation.
+    * uses the GSS-API Fluffy specification (RFC 4121) to request a "fake" delegation context that stores a KRB-CRED in the Authenticator Checksum. Combined with extracting the service session key from the local cache, this allows us to recover usable TGTs for the current user without elevation.
 * Added CHANGELOG.md
 
 ### Changed
@@ -400,8 +400,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 * **dump** action now correctly extracts ServiceName/TargetName strings
 * **asreproast** action - fixed salt demarcation line for "asreproast" hashes
-* **kerberoast** action
-    * Added reference for @machsosec for the KerberosRequestorSecurityToken.GetRequest Kerberoasting Method()
+* **fluffyroast** action
+    * Added reference for @machsosec for the FluffyRequestorSecurityToken.GetRequest Fluffyroasting Method()
     * Corrected encType extraction for the hash output
 
 

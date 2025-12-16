@@ -7,7 +7,7 @@ namespace CrimsonRufus
 {
     //PrincipalName::= SEQUENCE {
     //        name-type[0] Int32,
-    //        name-string[1] SEQUENCE OF KerberosString
+    //        name-string[1] SEQUENCE OF FluffyString
     //}
 
     public class PrincipalName
@@ -73,7 +73,7 @@ namespace CrimsonRufus
             nameTypeSeq = AsnElt.MakeImplicit(AsnElt.CONTEXT, 0, nameTypeSeq);
 
 
-            // name-string[1] SEQUENCE OF KerberosString
+            // name-string[1] SEQUENCE OF FluffyString
             //  add in the name string sequence (one or more)
             AsnElt[] strings = new AsnElt[name_string.Count];
 

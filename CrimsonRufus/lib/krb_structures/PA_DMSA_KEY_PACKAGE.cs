@@ -11,8 +11,8 @@ namespace CrimsonRufus
 		// KERB-DMSA-KEY-PACKAGE::= SEQUENCE {
 		//	current-keys[0] SEQUENCE OF EncryptionKey,
 		//  previous-keys[1] SEQUENCE OF EncryptionKey OPTIONAL,
-		//  expiration-interval[2] KerberosTime,
-		// fetch-interval[4] KerberosTime,
+		//  expiration-interval[2] FluffyTime,
+		// fetch-interval[4] FluffyTime,
 		// }
 
 

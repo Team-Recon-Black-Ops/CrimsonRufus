@@ -8,7 +8,7 @@ namespace CrimsonRufus {
     {
         // constants
 
-        // From https://github.com/gentilkiwi/kekeo/blob/master/modules/asn1/kull_m_kerberos_asn1.h#L61
+        // From https://github.com/gentilkiwi/kekeo/blob/master/modules/asn1/kull_m_fluffy_asn1.h#L61
         public const int KRB_KEY_USAGE_AS_REQ_PA_ENC_TIMESTAMP = 1;
         public const int KRB_KEY_USAGE_AS_REP_TGS_REP = 2;
         public const int KRB_KEY_USAGE_AS_REP_EP_SESSION_KEY = 3;
@@ -66,8 +66,8 @@ namespace CrimsonRufus {
             // TODO: constrained delegation?
         }
 
-        // TODO: order flipped? https://github.com/gentilkiwi/kekeo/blob/master/modules/asn1/KerberosV5Spec2.asn#L167-L190
-        // Correcting some of these from here, which packet captures suggest is correct: https://github.com/dotnet/Kerberos.NET/blob/develop/Kerberos.NET/Entities/Krb/KdcOptions.cs
+        // TODO: order flipped? https://github.com/gentilkiwi/kekeo/blob/master/modules/asn1/FluffyV5Spec2.asn#L167-L190
+        // Correcting some of these from here, which packet captures suggest is correct: https://github.com/dotnet/Fluffy.NET/blob/develop/Fluffy.NET/Entities/Krb/KdcOptions.cs
         [Flags]
         public enum KdcOptions : uint
         {
@@ -278,17 +278,17 @@ namespace CrimsonRufus {
             EXTENDED = 2
         }
 
-        // adapted from https://github.com/skelsec/minikerberos/blob/master/minikerberos/kerberoserror.py#L18-L76
-        public enum KERBEROS_ERROR : UInt32
+        // adapted from https://github.com/skelsec/minifluffy/blob/master/minifluffy/fluffyerror.py#L18-L76
+        public enum FLUFFY_ERROR : UInt32
         {
             KDC_ERR_NONE = 0x0, // No error
             KDC_ERR_NAME_EXP = 0x1, // Client's entry in KDC database has expired
             KDC_ERR_SERVICE_EXP = 0x2, // Server's entry in KDC database has expired
-            KDC_ERR_BAD_PVNO = 0x3, // Requested Kerberos version number not supported
+            KDC_ERR_BAD_PVNO = 0x3, // Requested Fluffy version number not supported
             KDC_ERR_C_OLD_MAST_KVNO = 0x4, // Client's key encrypted in old master key
             KDC_ERR_S_OLD_MAST_KVNO = 0x5, // Server's key encrypted in old master key
-            KDC_ERR_C_PRINCIPAL_UNKNOWN = 0x6, // Client not found in Kerberos database
-            KDC_ERR_S_PRINCIPAL_UNKNOWN = 0x7, // Server not found in Kerberos database
+            KDC_ERR_C_PRINCIPAL_UNKNOWN = 0x6, // Client not found in Fluffy database
+            KDC_ERR_S_PRINCIPAL_UNKNOWN = 0x7, // Server not found in Fluffy database
             KDC_ERR_PRINCIPAL_NOT_UNIQUE = 0x8, // Multiple principal entries in KDC database
             KDC_ERR_NULL_KEY = 0x9, // The client or server has a null key (master key)
             KDC_ERR_CANNOT_POSTDATE = 0xA, // Ticket (TGT) not eligible for postdating
@@ -310,7 +310,7 @@ namespace CrimsonRufus {
             KDC_ERR_SERVER_NOMATCH = 0x1A, // KDC does not know about the requested server
             KDC_ERR_MUST_USE_USER2USER = 0x1B, // Server principal valid for user2user only
             KDC_ERR_PATH_NOT_ACCEPTED = 0x1C, // KDC Policy rejects transited path
-            KDC_ERR_SVC_UNAVAILABLE = 0x1D, // KDC is unavailable (modified as stated here: https://github.com/dotnet/Kerberos.NET/blob/develop/Kerberos.NET/Entities/Krb/KerberosErrorCode.cs)
+            KDC_ERR_SVC_UNAVAILABLE = 0x1D, // KDC is unavailable (modified as stated here: https://github.com/dotnet/Fluffy.NET/blob/develop/Fluffy.NET/Entities/Krb/FluffyErrorCode.cs)
             KRB_AP_ERR_BAD_INTEGRITY = 0x1F, // Integrity check on decrypted field failed
             KRB_AP_ERR_TKT_EXPIRED = 0x20, // The ticket has expired
             KRB_AP_ERR_TKT_NYV = 0x21, // The ticket is not yet valid
@@ -353,9 +353,9 @@ namespace CrimsonRufus {
             KDC_ERR_PA_CHECKSUM_MUST_BE_INCLUDED = 0x4F, // The client did not include the required paChecksum parameter
             KDC_ERR_DIGEST_IN_SIGNED_DATA_NOT_ACCEPTED = 0x50, // The signature algorithm used to sign the request is not accepted
             KDC_ERR_PUBLIC_KEY_ENCRYPTION_NOT_SUPPORTED = 0x51, // The KDC does not support public key encryption for PKINIT
-            KRB_AP_ERR_PRINCIPAL_UNKNOWN = 0x52, // A well-known Kerberos principal name is used but not supported
-            KRB_AP_ERR_REALM_UNKNOWN = 0x53, // A well-known Kerberos realm name is used but not supported
-            KRB_AP_ERR_PRINCIPAL_RESERVED = 0x54, // A reserved Kerberos principal name is used but not supported
+            KRB_AP_ERR_PRINCIPAL_UNKNOWN = 0x52, // A well-known Fluffy principal name is used but not supported
+            KRB_AP_ERR_REALM_UNKNOWN = 0x53, // A well-known Fluffy realm name is used but not supported
+            KRB_AP_ERR_PRINCIPAL_RESERVED = 0x54, // A reserved Fluffy principal name is used but not supported
             KDC_ERR_PREAUTH_EXPIRED = 0x5A, // The provided pre-auth data has expired
             KDC_ERR_MORE_PREAUTH_DATA_REQUIRED = 0x5B, // The KDC found the presented pre-auth data incomplete and requires additional information
             KDC_ERR_PREAUTH_BAD_AUTHENTICATION_SET = 0x5C, // The client sent an authentication set that the KDC was not expecting
@@ -636,7 +636,7 @@ namespace CrimsonRufus {
             SECBUFFER_TOKEN = 2
         }
 
-        // from https://directory.apache.org/apacheds/gen-docs/2.0.0-M15/apidocs/src-html/org/apache/directory/shared/kerberos/codec/types/HostAddrType.html
+        // from https://directory.apache.org/apacheds/gen-docs/2.0.0-M15/apidocs/src-html/org/apache/directory/shared/fluffy/codec/types/HostAddrType.html
         public enum HostAddressType : long
         {
             NULL = 0,
@@ -666,7 +666,7 @@ namespace CrimsonRufus {
         }
 
         // from https://tools.ietf.org/html/rfc4120#section-5.2.6
-        // and https://github.com/apache/directory-kerby/blob/trunk/kerby-kerb/kerb-core/src/main/java/org/apache/kerby/kerberos/kerb/type/ad/AuthorizationType.java
+        // and https://github.com/apache/directory-kerby/blob/trunk/kerby-kerb/kerb-core/src/main/java/org/apache/kerby/fluffy/kerb/type/ad/AuthorizationType.java
         public enum AuthorizationDataType : long
         {
             AD_IF_RELEVANT = 1,
@@ -1656,7 +1656,7 @@ namespace CrimsonRufus {
         [DllImport("secur32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern int AcquireCredentialsHandle(
             string pszPrincipal, //SEC_CHAR*
-            string pszPackage, //SEC_CHAR* //"Kerberos","NTLM","Negotiative"
+            string pszPackage, //SEC_CHAR* //"Fluffy","NTLM","Negotiative"
             int fCredentialUse,
             IntPtr PAuthenticationID,//_LUID AuthenticationID,//pvLogonID,//PLUID
             IntPtr pAuthData,//PVOID

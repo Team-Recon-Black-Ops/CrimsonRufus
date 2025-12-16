@@ -6,9 +6,9 @@ using System.ComponentModel;
 namespace CrimsonRufus {
     public class Crypto
     {
-        public static void ComputeAllKerberosPasswordHashes(string password, string userName = "", string domainName = "")
+        public static void ComputeAllFluffyPasswordHashes(string password, string userName = "", string domainName = "")
         {
-            // use KerberosPasswordHash() to calculate rc4_hmac, aes128_cts_hmac_sha1, aes256_cts_hmac_sha1, and des_cbc_md5 hashes for a given password
+            // use FluffyPasswordHash() to calculate rc4_hmac, aes128_cts_hmac_sha1, aes256_cts_hmac_sha1, and des_cbc_md5 hashes for a given password
 
             Console.WriteLine("[*] Input password             : {0}", password);
 
@@ -27,7 +27,7 @@ namespace CrimsonRufus {
                 Console.WriteLine("[*] Salt                       : {0}", salt);
             }
 
-            string rc4Hash = KerberosPasswordHash(Interop.KERB_ETYPE.rc4_hmac, password);
+            string rc4Hash = FluffyPasswordHash(Interop.KERB_ETYPE.rc4_hmac, password);
             Console.WriteLine("[*]       rc4_hmac             : {0}", rc4Hash);
 
             if (String.IsNullOrEmpty(userName) || String.IsNullOrEmpty(domainName))
@@ -36,23 +36,23 @@ namespace CrimsonRufus {
             }
             else
             {
-                string aes128Hash = KerberosPasswordHash(Interop.KERB_ETYPE.aes128_cts_hmac_sha1, password, salt);
+                string aes128Hash = FluffyPasswordHash(Interop.KERB_ETYPE.aes128_cts_hmac_sha1, password, salt);
                 Console.WriteLine("[*]       aes128_cts_hmac_sha1 : {0}", aes128Hash);
 
-                string aes256Hash = KerberosPasswordHash(Interop.KERB_ETYPE.aes256_cts_hmac_sha1, password, salt);
+                string aes256Hash = FluffyPasswordHash(Interop.KERB_ETYPE.aes256_cts_hmac_sha1, password, salt);
                 Console.WriteLine("[*]       aes256_cts_hmac_sha1 : {0}", aes256Hash);
 
-                string desHash = KerberosPasswordHash(Interop.KERB_ETYPE.des_cbc_md5, String.Format("{0}{1}", password, salt), salt);
+                string desHash = FluffyPasswordHash(Interop.KERB_ETYPE.des_cbc_md5, String.Format("{0}{1}", password, salt), salt);
                 Console.WriteLine("[*]       des_cbc_md5          : {0}", desHash);
             }
 
             Console.WriteLine();
         }
 
-        public static string KerberosPasswordHash(Interop.KERB_ETYPE etype, string password, string salt = "", int count = 4096)
+        public static string FluffyPasswordHash(Interop.KERB_ETYPE etype, string password, string salt = "", int count = 4096)
         {
             // use the internal KERB_ECRYPT HashPassword() function to calculate a password hash of a given etype
-            // adapted from @gentilkiwi's Mimikatz "kerberos::hash" implementation
+            // adapted from @gentilkiwi's Mimikatz "fluffy::hash" implementation
 
             Interop.KERB_ECRYPT pCSystem;
             IntPtr pCSystemPtr;
@@ -80,7 +80,7 @@ namespace CrimsonRufus {
         }
 
         // Adapted from Vincent LE TOUX' "MakeMeEnterpriseAdmin"
-        public static byte[] KerberosChecksum(byte[] key, byte[] data, Interop.KERB_CHECKSUM_ALGORITHM cksumType = Interop.KERB_CHECKSUM_ALGORITHM.KERB_CHECKSUM_HMAC_MD5, int keyUsage = Interop.KRB_KEY_USAGE_KRB_NON_KERB_CKSUM_SALT)
+        public static byte[] FluffyChecksum(byte[] key, byte[] data, Interop.KERB_CHECKSUM_ALGORITHM cksumType = Interop.KERB_CHECKSUM_ALGORITHM.KERB_CHECKSUM_HMAC_MD5, int keyUsage = Interop.KRB_KEY_USAGE_KRB_NON_KERB_CKSUM_SALT)
         {
             Interop.KERB_CHECKSUM pCheckSum;
             IntPtr pCheckSumPtr;
@@ -118,7 +118,7 @@ namespace CrimsonRufus {
 
         // Adapted from Vincent LE TOUX' "MakeMeEnterpriseAdmin"
         //  https://github.com/vletoux/MakeMeEnterpriseAdmin/blob/master/MakeMeEnterpriseAdmin.ps1#L2235-L2262
-        public static byte[] KerberosDecrypt(Interop.KERB_ETYPE eType, int keyUsage, byte[] key, byte[] data)
+        public static byte[] FluffyDecrypt(Interop.KERB_ETYPE eType, int keyUsage, byte[] key, byte[] data)
         {
             Interop.KERB_ECRYPT pCSystem;
             IntPtr pCSystemPtr;
@@ -160,7 +160,7 @@ namespace CrimsonRufus {
 
         // Adapted from Vincent LE TOUX' "MakeMeEnterpriseAdmin"
         //  https://github.com/vletoux/MakeMeEnterpriseAdmin/blob/master/MakeMeEnterpriseAdmin.ps1#L2235-L2262
-        public static byte[] KerberosEncrypt(Interop.KERB_ETYPE eType, int keyUsage, byte[] key, byte[] data)
+        public static byte[] FluffyEncrypt(Interop.KERB_ETYPE eType, int keyUsage, byte[] key, byte[] data)
         {
             Interop.KERB_ECRYPT pCSystem;
             IntPtr pCSystemPtr;

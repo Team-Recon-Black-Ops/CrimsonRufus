@@ -4,7 +4,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // -----------------------------------------------------------------------
 //
-// CCob (@_EthicalChaos_) -     Updated slightly from original Kerberos.NET version to use BigInteger
+// CCob (@_EthicalChaos_) -     Updated slightly from original Fluffy.NET version to use BigInteger
 //                              from Mono library and not .NET, since System.Numerics is only available
 //                              since .NET 4.0+.  Also switched to raw byte arrays for .NET 2.0+ compatibility.   
 //                              Mono's internal representation of data is in also in big endian format
@@ -18,7 +18,7 @@ using System;
 using System.Linq;
 using System.Security.Cryptography;
 
-namespace Kerberos.NET.Crypto {
+namespace Fluffy.NET.Crypto {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     // DO NOT USE THIS

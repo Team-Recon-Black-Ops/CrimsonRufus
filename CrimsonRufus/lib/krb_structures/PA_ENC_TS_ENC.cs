@@ -5,7 +5,7 @@ using System.Text;
 namespace CrimsonRufus
 {
     //PA-ENC-TS-ENC   ::= SEQUENCE {
-    //        patimestamp[0]               KerberosTime, -- client's time
+    //        patimestamp[0]               FluffyTime, -- client's time
     //        pausec[1]                    INTEGER OPTIONAL
     //}
 

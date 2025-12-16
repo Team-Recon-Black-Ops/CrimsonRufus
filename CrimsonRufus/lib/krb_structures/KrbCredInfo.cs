@@ -12,10 +12,10 @@ namespace CrimsonRufus
         //        prealm          [1] Realm OPTIONAL,
         //        pname           [2] PrincipalName OPTIONAL,
         //        flags           [3] TicketFlags OPTIONAL,
-        //        authtime        [4] KerberosTime OPTIONAL,
-        //        starttime       [5] KerberosTime OPTIONAL,
-        //        endtime         [6] KerberosTime OPTIONAL,
-        //        renew-till      [7] KerberosTime OPTIONAL,
+        //        authtime        [4] FluffyTime OPTIONAL,
+        //        starttime       [5] FluffyTime OPTIONAL,
+        //        endtime         [6] FluffyTime OPTIONAL,
+        //        renew-till      [7] FluffyTime OPTIONAL,
         //        srealm          [8] Realm OPTIONAL,
         //        sname           [9] PrincipalName OPTIONAL,
         //        caddr           [10] HostAddresses OPTIONAL
@@ -123,7 +123,7 @@ namespace CrimsonRufus
             asnElements.Add(flagBytesSeq);
 
 
-            // authtime        [4] KerberosTime OPTIONAL
+            // authtime        [4] FluffyTime OPTIONAL
             if ((authtime != null) && (authtime != DateTime.MinValue))
             {
                 AsnElt authtimeAsn = AsnElt.MakeString(AsnElt.GeneralizedTime, authtime.ToString("yyyyMMddHHmmssZ"));
@@ -133,7 +133,7 @@ namespace CrimsonRufus
             }
 
 
-            // starttime       [5] KerberosTime OPTIONAL
+            // starttime       [5] FluffyTime OPTIONAL
             if ((starttime != null) && (starttime != DateTime.MinValue))
             {
                 AsnElt starttimeAsn = AsnElt.MakeString(AsnElt.GeneralizedTime, starttime.ToString("yyyyMMddHHmmssZ"));
@@ -143,7 +143,7 @@ namespace CrimsonRufus
             }
 
 
-            // endtime         [6] KerberosTime OPTIONAL
+            // endtime         [6] FluffyTime OPTIONAL
             if ((endtime != null) && (endtime != DateTime.MinValue))
             {
                 AsnElt endtimeAsn = AsnElt.MakeString(AsnElt.GeneralizedTime, endtime.ToString("yyyyMMddHHmmssZ"));
@@ -153,7 +153,7 @@ namespace CrimsonRufus
             }
 
 
-            // renew-till      [7] KerberosTime OPTIONAL
+            // renew-till      [7] FluffyTime OPTIONAL
             if ((renew_till != null) && (renew_till != DateTime.MinValue))
             {
                 AsnElt renew_tillAsn = AsnElt.MakeString(AsnElt.GeneralizedTime, renew_till.ToString("yyyyMMddHHmmssZ"));

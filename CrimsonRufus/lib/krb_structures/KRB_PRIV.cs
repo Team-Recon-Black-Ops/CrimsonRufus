@@ -49,7 +49,7 @@ namespace CrimsonRufus
 
             // now encrypt the enc_part (EncKrbPrivPart)
             //  KRB_KEY_USAGE_KRB_PRIV_ENCRYPTED_PART = 13;
-            byte[] encBytes = Crypto.KerberosEncrypt(etype, Interop.KRB_KEY_USAGE_KRB_PRIV_ENCRYPTED_PART, ekey, enc_partAsn.Encode());
+            byte[] encBytes = Crypto.FluffyEncrypt(etype, Interop.KRB_KEY_USAGE_KRB_PRIV_ENCRYPTED_PART, ekey, enc_partAsn.Encode());
             AsnElt blob = AsnElt.MakeBlob(encBytes);
             AsnElt blobSeq = AsnElt.Make(AsnElt.SEQUENCE, new AsnElt[] { blob });
             blobSeq = AsnElt.MakeImplicit(AsnElt.CONTEXT, 2, blobSeq);

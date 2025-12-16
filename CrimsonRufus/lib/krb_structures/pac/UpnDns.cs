@@ -3,7 +3,7 @@ using System.IO;
 using System.Security.Principal;
 using System.Text;
 
-namespace CrimsonRufus.Kerberos.PAC
+namespace CrimsonRufus.Fluffy.PAC
 {
     public class UpnDns : PacInfoBuffer
     {

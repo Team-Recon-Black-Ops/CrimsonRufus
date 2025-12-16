@@ -157,7 +157,7 @@ namespace CrimsonRufus
 
         public static bool GetSystem()
         {
-            // helper to elevate to SYSTEM for Kerberos ticket enumeration via token impersonation
+            // helper to elevate to SYSTEM for Fluffy ticket enumeration via token impersonation
             if (IsHighIntegrity())
             {
                 IntPtr hToken = IntPtr.Zero;

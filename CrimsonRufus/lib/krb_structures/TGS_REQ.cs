@@ -231,7 +231,7 @@ namespace CrimsonRufus
                     AsnElt authDataSeq = ifrelevant.Encode();
                     authDataSeq = AsnElt.Make(AsnElt.SEQUENCE, authDataSeq);
                     byte[] authorizationDataBytes = authDataSeq.Encode();
-                    byte[] enc_authorization_data = Crypto.KerberosEncrypt(paEType, Interop.KRB_KEY_USAGE_TGS_REQ_ENC_AUTHOIRZATION_DATA, clientKey, authorizationDataBytes);
+                    byte[] enc_authorization_data = Crypto.FluffyEncrypt(paEType, Interop.KRB_KEY_USAGE_TGS_REQ_ENC_AUTHOIRZATION_DATA, clientKey, authorizationDataBytes);
                     req.req_body.enc_authorization_data = new EncryptedData((Int32)paEType, enc_authorization_data);
                 }
 
@@ -249,7 +249,7 @@ namespace CrimsonRufus
                 req_Body_ASNSeq = AsnElt.MakeImplicit(AsnElt.CONTEXT, 4, req_Body_ASNSeq);
                 byte[] req_Body_Bytes = req_Body_ASNSeq.CopyValue();
                 Interop.KERB_CHECKSUM_ALGORITHM checkSumType = Interop.KERB_CHECKSUM_ALGORITHM.KERB_CHECKSUM_RSA_MD5;
-                cksum_Bytes = Crypto.KerberosChecksum(clientKey, req_Body_Bytes, checkSumType, Interop.KRB_KEY_USAGE_TGS_REQ_CHECKSUM);
+                cksum_Bytes = Crypto.FluffyChecksum(clientKey, req_Body_Bytes, checkSumType, Interop.KRB_KEY_USAGE_TGS_REQ_CHECKSUM);
             }
 
             // create the PA-DATA that contains the AP-REQ w/ appropriate authenticator/etc.

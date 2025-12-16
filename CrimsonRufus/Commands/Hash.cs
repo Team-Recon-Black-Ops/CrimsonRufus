@@ -45,7 +45,7 @@ namespace CrimsonRufus.Commands
                 return;
             }
 
-            Crypto.ComputeAllKerberosPasswordHashes(password, user, domain);
+            Crypto.ComputeAllFluffyPasswordHashes(password, user, domain);
         }
     }
 }

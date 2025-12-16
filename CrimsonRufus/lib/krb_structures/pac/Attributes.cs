@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace CrimsonRufus.Kerberos.PAC
+namespace CrimsonRufus.Fluffy.PAC
 {
     public class Attributes : PacInfoBuffer
     {

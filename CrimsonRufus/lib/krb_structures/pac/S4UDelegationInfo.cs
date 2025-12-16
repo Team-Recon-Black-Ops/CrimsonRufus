@@ -6,7 +6,7 @@ using System.Text;
 using CrimsonRufus.Ndr;
 using CrimsonRufus.Ndr.Marshal;
 
-namespace CrimsonRufus.Kerberos.PAC {
+namespace CrimsonRufus.Fluffy.PAC {
     public class S4UDelegationInfo : PacInfoBuffer {
 
         public _S4U_DELEGATION_INFO s4u { get; set; }

@@ -39,7 +39,7 @@ namespace CrimsonRufus.Commands
 
         public void Execute(Dictionary<string, string> arguments)
         {
-            Console.WriteLine("\r\n[] Action: Perform Kerberos Brute Force\r\n");
+            Console.WriteLine("\r\n[] Action: Perform Fluffy Brute Force\r\n");
             try
             {
                 this.ParseArguments(arguments);
@@ -344,7 +344,7 @@ namespace CrimsonRufus.Commands
             this.saveTicket = saveTicket;
         }
 
-        public void ReportValidPassword(string domain, string username, string password, byte[] ticket, Interop.KERBEROS_ERROR err = Interop.KERBEROS_ERROR.KDC_ERR_NONE)
+        public void ReportValidPassword(string domain, string username, string password, byte[] ticket, Interop.FLUFFY_ERROR err = Interop.FLUFFY_ERROR.KDC_ERR_NONE)
         {
             this.WriteUserPasswordToFile(username, password);
             if (ticket != null)
@@ -382,7 +382,7 @@ namespace CrimsonRufus.Commands
         public void ReportKrbError(string domain, string username, KRB_ERROR krbError)
         {
             Console.WriteLine("\r\n[X] {0} KRB-ERROR ({1}) : {2}\r\n", username, 
-                    krbError.error_code, (Interop.KERBEROS_ERROR)krbError.error_code);
+                    krbError.error_code, (Interop.FLUFFY_ERROR)krbError.error_code);
         }
 
 

@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace CrimsonRufus.Kerberos.PAC {
+namespace CrimsonRufus.Fluffy.PAC {
     class PacCredentialInfo : PacInfoBuffer {
 
         public int Version { get; set; }
@@ -32,7 +32,7 @@ namespace CrimsonRufus.Kerberos.PAC {
             _Marshal_Helper mh = new _Marshal_Helper();
             mh.WriteReferent(CredentialInfo, new Action<_PAC_CREDENTIAL_DATA>(mh.WriteStruct));
             byte[] plainText = mh.ToPickledType().ToArray();
-            var encData = Crypto.KerberosEncrypt(EncryptionType, Interop.KRB_KEY_USAGE_KRB_NON_KERB_SALT, key, plainText);
+            var encData = Crypto.FluffyEncrypt(EncryptionType, Interop.KRB_KEY_USAGE_KRB_NON_KERB_SALT, key, plainText);
             bw.Write(encData);
 
             long alignment = ((bw.BaseStream.Position + 7) / 8) * 8;
@@ -50,7 +50,7 @@ namespace CrimsonRufus.Kerberos.PAC {
             }
 
             var encCredData = br.ReadBytes((int)(br.BaseStream.Length - br.BaseStream.Position));
-            var plainCredData = Crypto.KerberosDecrypt(EncryptionType, Interop.KRB_KEY_USAGE_KRB_NON_KERB_SALT, key, encCredData);
+            var plainCredData = Crypto.FluffyDecrypt(EncryptionType, Interop.KRB_KEY_USAGE_KRB_NON_KERB_SALT, key, encCredData);
 
             NdrPickledType npt = new NdrPickledType(plainCredData);
             _Unmarshal_Helper uh = new _Unmarshal_Helper(npt.Data);

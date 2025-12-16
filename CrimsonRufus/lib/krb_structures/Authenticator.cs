@@ -13,7 +13,7 @@ namespace CrimsonRufus
         //        cname                   [2] PrincipalName,
         //        cksum                   [3] Checksum OPTIONAL,
         //        cusec                   [4] Microseconds,
-        //        ctime                   [5] KerberosTime,
+        //        ctime                   [5] FluffyTime,
         //        subkey                  [6] EncryptionKey OPTIONAL,
         //        seq-number              [7] UInt32 OPTIONAL,
         //        authorization-data      [8] AuthorizationData OPTIONAL
@@ -87,7 +87,7 @@ namespace CrimsonRufus
             allNodes.Add(nonceSeq);
 
 
-            // ctime                   [5] KerberosTime
+            // ctime                   [5] FluffyTime
             AsnElt tillAsn = AsnElt.MakeString(AsnElt.GeneralizedTime, ctime.ToString("yyyyMMddHHmmssZ"));
             AsnElt tillSeq = AsnElt.Make(AsnElt.SEQUENCE, new[] { tillAsn });
             tillSeq = AsnElt.MakeImplicit(AsnElt.CONTEXT, 5, tillSeq);

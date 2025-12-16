@@ -10,7 +10,7 @@ namespace CrimsonRufus
         /*
         ETYPE-INFO2-ENTRY::= SEQUENCE {
         etype [0] Int32 -- EncryptionType --,
-        salt [1] KerberosString OPTIONAL,
+        salt [1] FluffyString OPTIONAL,
         s2kparams [2] INTEGER OPTIONAL
         }
         */

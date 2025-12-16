@@ -7,7 +7,7 @@ namespace CrimsonRufus
     //EncKrbCredPart  ::= [APPLICATION 29] SEQUENCE {
     //        ticket-info     [0] SEQUENCE OF KrbCredInfo,
     //        nonce           [1] UInt32 OPTIONAL,
-    //        timestamp       [2] KerberosTime OPTIONAL,
+    //        timestamp       [2] FluffyTime OPTIONAL,
     //        usec            [3] Microseconds OPTIONAL,
     //        s-address       [4] HostAddress OPTIONAL,
     //        r-address       [5] HostAddress OPTIONAL

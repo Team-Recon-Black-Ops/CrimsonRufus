@@ -13,11 +13,11 @@ namespace CrimsonRufus.Commands
         {
             if (Helpers.IsHighIntegrity())
             {
-                Console.WriteLine("\r\nAction: Dump Kerberos Ticket Data (All Users)\r\n");
+                Console.WriteLine("\r\nAction: Dump Fluffy Ticket Data (All Users)\r\n");
             }
             else
             {
-                Console.WriteLine("\r\nAction: Dump Kerberos Ticket Data (Current User)\r\n");
+                Console.WriteLine("\r\nAction: Dump Fluffy Ticket Data (Current User)\r\n");
             }
 
             LUID targetLuid = new LUID();

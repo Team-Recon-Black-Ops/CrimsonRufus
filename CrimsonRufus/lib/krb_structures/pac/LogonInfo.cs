@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using CrimsonRufus.Ndr;
 
-namespace CrimsonRufus.Kerberos.PAC {
+namespace CrimsonRufus.Fluffy.PAC {
     public class LogonInfo : PacInfoBuffer {
 
         public _KERB_VALIDATION_INFO KerbValidationInfo { get; set; }

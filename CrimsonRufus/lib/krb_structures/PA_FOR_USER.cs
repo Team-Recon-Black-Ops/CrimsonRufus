@@ -9,7 +9,7 @@ namespace CrimsonRufus
 	   // userName[0] PrincipalName,
 	   // userRealm[1] Realm,
 	   // cksum[2] Checksum,
-	   // auth-package[3] KerberosString
+	   // auth-package[3] FluffyString
     //}
 
     public class PA_FOR_USER
@@ -22,7 +22,7 @@ namespace CrimsonRufus
 
             // now build the checksum
 
-            auth_package = "Kerberos";
+            auth_package = "Fluffy";
 
             byte[] nameTypeBytes = new byte[4];
             nameTypeBytes[0] = 0xa;
@@ -38,7 +38,7 @@ namespace CrimsonRufus
             Array.Copy(realmBytes, 0, finalBytes, nameTypeBytes.Length + nameBytes.Length, realmBytes.Length);
             Array.Copy(authPackageBytes, 0, finalBytes, nameTypeBytes.Length + nameBytes.Length + realmBytes.Length, authPackageBytes.Length);
 
-            byte[] outBytes = Crypto.KerberosChecksum(key, finalBytes);
+            byte[] outBytes = Crypto.FluffyChecksum(key, finalBytes);
 
             Checksum checksum = new Checksum(outBytes);
 
@@ -66,7 +66,7 @@ namespace CrimsonRufus
             checksumAsn = AsnElt.MakeImplicit(AsnElt.CONTEXT, 2, checksumAsn);
             allNodes.Add(checksumAsn);
 
-            // auth-package[3] KerberosString
+            // auth-package[3] FluffyString
             AsnElt auth_packageAsn = AsnElt.MakeString(AsnElt.IA5String, auth_package);
             auth_packageAsn = AsnElt.MakeImplicit(AsnElt.UNIVERSAL, AsnElt.GeneralString, auth_packageAsn);
             AsnElt auth_packageSeq = AsnElt.Make(AsnElt.SEQUENCE, new[] { auth_packageAsn });

