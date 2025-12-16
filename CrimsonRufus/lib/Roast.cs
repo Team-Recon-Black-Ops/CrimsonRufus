@@ -647,7 +647,7 @@ namespace CrimsonRufus
                                 Helpers.RandomDelayWithJitter(delay, jitter);
                                 if (!result && autoenterprise)
                                 {
-                                    Console.WriteLine("\r\n[-] Retrieving service ticket with SPN failed and '/autoenterprise' passed, retrying with the enterprise principal");
+                                    Console.WriteLine("\r\n[-] Abrufen des Service-Tickets mit SPN fehlgeschlagen und '/autoenterprise' übergeben, erneuter Versuch mit Enterprise Principal");
                                     servicePrincipalName = String.Format("{0}@{1}", samAccountName, domain);
                                     GetTGSRepHash(TGT, servicePrincipalName, samAccountName, distinguishedName, outFile, simpleOutput, true, dc, etype);
                                     Helpers.RandomDelayWithJitter(delay, jitter);
@@ -660,7 +660,7 @@ namespace CrimsonRufus
                                 Helpers.RandomDelayWithJitter(delay, jitter);
                                 if (!result && autoenterprise)
                                 {
-                                    Console.WriteLine("\r\n[-] Retrieving service ticket with SPN failed and '/autoenterprise' passed, retrying with the enterprise principal");
+                                    Console.WriteLine("\r\n[-] Abrufen des Service-Tickets mit SPN fehlgeschlagen und '/autoenterprise' übergeben, erneuter Versuch mit Enterprise Principal");
                                     servicePrincipalName = String.Format("{0}@{1}", samAccountName, domain);
                                     GetTGSRepHash(servicePrincipalName, samAccountName, distinguishedName, cred, outFile, simpleOutput);
                                     Helpers.RandomDelayWithJitter(delay, jitter);
@@ -733,7 +733,7 @@ namespace CrimsonRufus
 
                 if (!((requestBytes[15] == 1) && (requestBytes[16] == 0)))
                 {
-                    Console.WriteLine("\r\n[X] GSSAPI inner token is not an AP_REQ.\r\n");
+                    Console.WriteLine("\r\n[X] GSSAPI inneres Token ist kein AP_REQ.\r\n");
                     return false;
                 }
 
@@ -745,7 +745,7 @@ namespace CrimsonRufus
 
                 if (apRep.TagValue != 14)
                 {
-                    Console.WriteLine("\r\n[X] Incorrect ASN application tag.  Expected 14, but got {0}.\r\n", apRep.TagValue);
+                    Console.WriteLine("\r\n[X] Falscher ASN Anwendungs-Tag. Erwartet 14, aber {0} erhalten.\r\n", apRep.TagValue);
                 }
 
                 long encType = 0;

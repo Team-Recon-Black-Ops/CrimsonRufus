@@ -561,7 +561,7 @@ namespace CrimsonRufus
                 // if we want to use the s4u2self change the sname here too
                 if (!String.IsNullOrEmpty(altService) && self)
                 {
-                    Console.WriteLine("[*] Substituting alternative service name '{0}'", altService);
+                    Console.WriteLine("[*] Ersetze alternativen Dienstnamen '{0}'", altService);
                     info.sname.name_string[0] = altService.Split('/')[0];
                     info.sname.name_string.Add(altService.Split('/')[1]);
                 }
@@ -759,7 +759,7 @@ namespace CrimsonRufus
                 // if we're rewriting the S4U2Self sname, change it here too
                 if (!String.IsNullOrEmpty(altService) && self)
                 {
-                    Console.WriteLine("[*] Substituting alternative service name '{0}'", altService);
+                    Console.WriteLine("[*] Ersetze alternativen Dienstnamen '{0}'", altService);
                     info.sname.name_type = Interop.PRINCIPAL_TYPE.NT_SRV_INST;
                     info.sname.name_string[0] = altService.Split('/')[0];
                     info.sname.name_string.Add(altService.Split('/')[1]);
@@ -790,7 +790,7 @@ namespace CrimsonRufus
             }
             else
             {
-                Console.WriteLine("\r\n[X] Unknown application tag: {0}", responseTag);
+                Console.WriteLine("\r\n[X] Unbekannter Anwendungs-Tag: {0}", responseTag);
             }
             return null;
         }
