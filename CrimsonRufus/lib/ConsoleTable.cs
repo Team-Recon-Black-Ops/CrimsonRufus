@@ -47,11 +47,11 @@ namespace ConsoleTables
                 throw new ArgumentNullException(nameof(values));
 
             if (!Columns.Any())
-                throw new Exception("Please set the columns first");
+                throw new Exception("Bitte setzen Sie zuerst die Spalten");
 
             if (Columns.Count != values.Length)
                 throw new Exception(
-                    $"The number columns in the row ({Columns.Count}) does not match the values ({values.Length}");
+                    $"Die Anzahl der Spalten in der Zeile ({Columns.Count}) stimmt nicht mit den Werten überein ({values.Length}");
 
             Rows.Add(values);
             return this;

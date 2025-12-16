@@ -453,7 +453,7 @@ namespace CrimsonRufus
                 {
                     if (File.Exists(filePath))
                     {
-                        throw new Exception(String.Format("{0} already exists! Data not written to file.\r\n", filePath));
+                        throw new Exception(String.Format("{0} existiert bereits! Daten wurden nicht in Datei geschrieben.\r\n", filePath));
                     }
                 }
                 File.WriteAllBytes(filePath, data);

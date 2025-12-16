@@ -292,7 +292,7 @@ namespace CrimsonRufus
             }
             else
             {
-                Console.WriteLine("\r\n[X] Unknown application tag: {0}", responseTag);
+                Console.WriteLine("\r\n[X] Unbekannter Anwendungs-Tag: {0}", responseTag);
             }
         }
 
@@ -396,7 +396,7 @@ namespace CrimsonRufus
                         }
                         else
                         {
-                            Console.WriteLine("[*] Target User            : {0}", userName);
+                            Console.WriteLine("[*] Ziel-Benutzer            : {0}", userName);
                         }
                     }
                     if (!String.IsNullOrEmpty(domain))

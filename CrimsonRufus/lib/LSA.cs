@@ -74,7 +74,7 @@ namespace CrimsonRufus {
                 // elevated but not SYSTEM, so gotta GetSystem() first
                 if (!Helpers.GetSystem())
                 {
-                    throw new Exception("Could not elevate to system");
+                    throw new Exception("Konnte nicht zu SYSTEM erhöhen");
                 }
 
                 Interop.LsaConnectUntrusted(out lsaHandle);

@@ -414,7 +414,7 @@ namespace CrimsonRufus
                         filename = Helpers.MakeValidFileName(filename);
                         if (Helpers.WriteBytesToFile(filename, kirbiBytes))
                         {
-                            Console.WriteLine("\r\n[] Ticket written to {0}\r\n", filename);
+                            Console.WriteLine("\r\n[] Ticket geschrieben nach {0}\r\n", filename);
                         }
                     }
 
@@ -597,7 +597,7 @@ namespace CrimsonRufus
                     filename = Helpers.MakeValidFileName(filename);
                     if (Helpers.WriteBytesToFile(filename, kirbiBytes))
                     {
-                        Console.WriteLine("\r\n[] Ticket written to {0}\r\n", filename);
+                        Console.WriteLine("\r\n[] Ticket geschrieben nach {0}\r\n", filename);
                     }
                 }
 

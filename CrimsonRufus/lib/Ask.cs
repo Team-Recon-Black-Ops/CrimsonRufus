@@ -453,7 +453,7 @@ namespace CrimsonRufus {
             }
             catch(Exception e)
             {
-               throw new Exception($"Error parsing response AS-REQ: {e}.  Base64 response: {Convert.ToBase64String(response)}");
+               throw new Exception($"Fehler beim Parsen der AS-REQ Antwort: {e}.  Base64 Antwort: {Convert.ToBase64String(response)}");
             }
 
             // check the response value
