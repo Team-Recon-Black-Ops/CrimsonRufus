@@ -172,7 +172,7 @@ namespace CrimsonRufus
                 }
                 else
                 {
-                    Console.WriteLine("[X] Error: invalid TGS_REQ sname '{0}'", sname);
+                    Console.WriteLine("[X] Fehler: ungültiger TGS_REQ sname '{0}'", sname);
                 }
             }
 

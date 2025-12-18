@@ -68,7 +68,7 @@ namespace CrimsonRufus.Commands
             {
                 Console.WriteLine("\r\n" + ex.Message + "\r\n");
             }
-            catch (RubeusException ex)
+            catch (Exception ex)
             {
                 Console.WriteLine("\r\n" + ex.Message + "\r\n");
             }

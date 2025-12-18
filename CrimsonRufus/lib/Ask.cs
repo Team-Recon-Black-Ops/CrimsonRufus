@@ -711,11 +711,11 @@ namespace CrimsonRufus {
             {
                 // parse the response to an KRB-ERROR
                 KRB_ERROR error = new KRB_ERROR(responseAsn.Sub[0]);
-                Console.WriteLine("\r\n[X] KRB-ERROR ({0}) : {1}\r\n", error.error_code, (Interop.FLUFFY_ERROR)error.error_code);
+                Console.WriteLine("\r\n[X] KIRBI-ERROR ({0}) : {1}\r\n", error.error_code, (Interop.FLUFFY_ERROR)error.error_code);
             }
             else
             {
-                Console.WriteLine("\r\n[X] Unknown application tag: {0}", responseTag);
+                Console.WriteLine("\r\n[X] Unbekannter Anwendungstag: {0}", responseTag);
             }
             return null;
         }
@@ -816,7 +816,7 @@ namespace CrimsonRufus {
                     }
                 }
 
-                Console.WriteLine("\r\n[] Printing argument list for use with Rubeus' 'golden' or 'silver' commands:\r\n\r\n{0}\r\n", outArgs);
+                Console.WriteLine("\r\n[] Drucke Argumentliste für Verwendung mit CrimsonRufus' 'golden' oder 'silver' Befehlen:\r\n\r\n{0}\r\n", outArgs);
             }
 
             return kirbiBytes;
@@ -881,7 +881,7 @@ namespace CrimsonRufus {
             }
             else
             {
-                throw new RubeusException("[X] Encryption type \"" + etype + "\" not currently supported");
+                throw new Exception("[X] Encryption type \"" + etype + "\" not currently supported");
             }
 
             AsnElt ae = null;

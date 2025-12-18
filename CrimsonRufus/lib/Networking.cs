@@ -575,8 +575,11 @@ namespace CrimsonRufus
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(proxyUrl);
                 request.Method = "POST";
                 request.ContentLength = data.Length;
-                request.ContentType = "application/fluffy";
-                request.UserAgent = "Rubeus/1.0";
+                /*
+                * ATTENTION HERE BE DRAGONS !!!
+                */
+                request.ContentType = "application/kerberos";
+                request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Teams/1.4.00.32771 Chrome/85.0.4183.121 Electron/10.4.7 Safari/537.36";
 
                 BinaryWriter socketWriter = new BinaryWriter(request.GetRequestStream());
                 socketWriter.Write(data);
@@ -589,7 +592,7 @@ namespace CrimsonRufus
             }
             catch (Exception e)
             {
-                Console.WriteLine("\r\n[!] Unhandled Rubeus exception:\r\n");
+                Console.WriteLine("\r\n[!] Unbehandelte CrimsonRufus Ausnahme:\r\n");
                 Console.WriteLine(e);
             }
 
